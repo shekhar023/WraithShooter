@@ -11,6 +11,9 @@ AShooterCharacter::AShooterCharacter()
 	PrimaryActorTick.bCanEverTick = true;
     BasePitchValue = 45.f;
     BaseYawValue = 45.f;
+    MaxHealth = 100.f;
+    Health = MaxHealth;
+    
 }
 
 // Called when the game starts or when spawned
@@ -74,4 +77,21 @@ void AShooterCharacter::TurnRate(float AxisValue)
 void AShooterCharacter::Shoot()
 {
     Gun->PullTrigger();
+}
+
+bool AShooterCharacter::IsDead() const
+{
+    return Health <= 0;
+}
+
+float AShooterCharacter::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser)
+{
+    float DamageToApply = Super::TakeDamage(DamageAmount,DamageEvent, EventInstigator, DamageCauser);
+    
+    DamageToApply = FMath::Min(Health, DamageToApply);
+    Health -= DamageToApply;
+    
+    UE_LOG(LogTemp, Warning, TEXT("Health left: %f"), Health);
+  
+    return DamageToApply;
 }
