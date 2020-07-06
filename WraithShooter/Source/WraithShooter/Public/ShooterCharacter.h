@@ -6,6 +6,8 @@
 #include "GameFramework/Character.h"
 #include "ShooterCharacter.generated.h"
 
+class AGun;
+
 UCLASS()
 class WRAITHSHOOTER_API AShooterCharacter : public ACharacter
 {
@@ -27,11 +29,19 @@ protected:
     
     void TurnRate(float AxisValue);
     
+    void Shoot();
+    
     UPROPERTY(EditAnywhere)
     float BasePitchValue;
     
     UPROPERTY(EditAnywhere)
     float BaseYawValue;
+    
+    UPROPERTY(EditDefaultsOnly)
+    TSubclassOf<AGun> GunClass;
+    
+    UPROPERTY()
+    AGun* Gun;
 
 public:	
 	// Called every frame

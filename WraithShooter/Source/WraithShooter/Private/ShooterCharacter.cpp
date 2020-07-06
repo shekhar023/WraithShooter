@@ -2,6 +2,7 @@
 
 
 #include "ShooterCharacter.h"
+#include "Gun.h"
 
 // Sets default values
 AShooterCharacter::AShooterCharacter()
@@ -10,13 +11,18 @@ AShooterCharacter::AShooterCharacter()
 	PrimaryActorTick.bCanEverTick = true;
     BasePitchValue = 45.f;
     BaseYawValue = 45.f;
-
 }
 
 // Called when the game starts or when spawned
 void AShooterCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+    
+    GetMesh()->HideBoneByName(TEXT("weapon_r"), EPhysBodyOp::PBO_None);
+    
+    Gun = GetWorld()->SpawnActor<AGun>(GunClass);
+    Gun->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("WeaponSocket"));
+    Gun->SetOwner(this);
 	
 }
 
@@ -24,7 +30,6 @@ void AShooterCharacter::BeginPlay()
 void AShooterCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 // Called to bind functionality to input
@@ -41,6 +46,8 @@ void AShooterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
     PlayerInputComponent->BindAxis("TurnRate", this, &AShooterCharacter::TurnRate);
     
     PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &AShooterCharacter::Jump);
+    
+    PlayerInputComponent->BindAction("Shoot", IE_Pressed, this, &AShooterCharacter::Shoot);
     
 }
 
@@ -64,4 +71,7 @@ void AShooterCharacter::TurnRate(float AxisValue)
     AddControllerYawInput(AxisValue * BaseYawValue * GetWorld()->GetDeltaSeconds());
 }
 
-
+void AShooterCharacter::Shoot()
+{
+    Gun->PullTrigger();
+}
