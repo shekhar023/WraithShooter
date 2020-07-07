@@ -6,12 +6,23 @@
 #include "AIController.h"
 #include "ShooterAIController.generated.h"
 
-/**
- * 
- */
+class UBehaviorTree;
+
 UCLASS()
 class WRAITHSHOOTER_API AShooterAIController : public AAIController
 {
 	GENERATED_BODY()
 	
+protected:
+    
+    virtual void BeginPlay() override;
+    
+public:
+    
+    virtual void Tick(float DeltaTime) override;
+
+private:
+    
+    UPROPERTY(EditAnywhere)
+    UBehaviorTree* AIBehavior;
 };

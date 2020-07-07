@@ -29,7 +29,7 @@ protected:
     
     void TurnRate(float AxisValue);
     
-    void Shoot();
+    
     
     UPROPERTY(EditAnywhere)
     float BasePitchValue;
@@ -60,5 +60,7 @@ public:
     
     UFUNCTION(BlueprintPure)
     bool IsDead() const;
+    
+    void Shoot();
 
 };

@@ -21,8 +21,8 @@ void EmptyLinkFunctionForGeneratedCodeWraithShooter_init() {}
 				nullptr,
 				0,
 				PKG_CompiledIn | 0x00000000,
-				0x91D4DE81,
-				0xFA378581,
+				0x92939D04,
+				0x7CD1F96E,
 				METADATA_PARAMS(nullptr, 0)
 			};
 			UE4CodeGen_Private::ConstructUPackage(ReturnPackage, PackageParams);
