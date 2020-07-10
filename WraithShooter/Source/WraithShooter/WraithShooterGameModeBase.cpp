@@ -3,3 +3,7 @@
 
 #include "WraithShooterGameModeBase.h"
 
+void AWraithShooterGameModeBase::PawnKilled(APawn* PawnKilled)
+{
+    
+}

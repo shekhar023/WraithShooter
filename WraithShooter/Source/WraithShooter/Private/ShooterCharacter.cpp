@@ -3,6 +3,8 @@
 
 #include "ShooterCharacter.h"
 #include "Gun.h"
+#include "Components/CapsuleComponent.h"
+#include "WraithShooter/WraithShooterGameModeBase.h"
 
 // Sets default values
 AShooterCharacter::AShooterCharacter()
@@ -92,6 +94,21 @@ float AShooterCharacter::TakeDamage(float DamageAmount, struct FDamageEvent cons
     Health -= DamageToApply;
     
     UE_LOG(LogTemp, Warning, TEXT("Health left: %f"), Health);
-  
+    
+    if(IsDead())
+    {
+        
+        AWraithShooterGameModeBase* GameMode = GetWorld()->GetAuthGameMode<AWraithShooterGameModeBase>();
+        
+        if(GameMode != nullptr)
+        {
+            GameMode->PawnKilled(this);
+        }
+        
+        DetachFromControllerPendingDestroy();
+        GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+           
+    }
+    
     return DamageToApply;
 }
