@@ -17,7 +17,15 @@ public:
     
     virtual void GameHasEnded(class AActor* EndGameFocus = nullptr, bool bIsWinner = false) override;
     
+protected:
+    
+    virtual void BeginPlay() override;
+    
 private:
+    
+    UPROPERTY(EditAnywhere)
+    TSubclassOf<UUserWidget> HUDClass;
+    
     UPROPERTY(EditAnywhere)
     TSubclassOf<UUserWidget> LoseScreenClass;
     
@@ -28,5 +36,7 @@ private:
     float RestartDelay = 5;
     
     FTimerHandle RestartTimer;
+    
+    UUserWidget* HUD;
 	
 };

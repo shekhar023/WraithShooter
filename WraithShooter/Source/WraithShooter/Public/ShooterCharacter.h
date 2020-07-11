@@ -38,10 +38,10 @@ protected:
     float BaseYawValue;
     
     UPROPERTY(EditDefaultsOnly)
-    float MaxHealth;
+    float MaxHealth = 100.f;
     
     UPROPERTY(VisibleAnywhere)
-    float Health;
+    float Health = MaxHealth;
     
     UPROPERTY(EditDefaultsOnly)
     TSubclassOf<AGun> GunClass;
@@ -60,6 +60,9 @@ public:
     
     UFUNCTION(BlueprintPure)
     bool IsDead() const;
+    
+    UFUNCTION(BlueprintPure)
+    float GetHealthPercent() const;
     
     void Shoot();
 

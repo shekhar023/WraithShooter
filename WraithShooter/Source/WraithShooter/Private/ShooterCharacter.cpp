@@ -13,8 +13,6 @@ AShooterCharacter::AShooterCharacter()
 	PrimaryActorTick.bCanEverTick = true;
     BasePitchValue = 45.f;
     BaseYawValue = 45.f;
-    MaxHealth = 100.f;
-    Health = MaxHealth;
     
 }
 
@@ -84,6 +82,11 @@ void AShooterCharacter::Shoot()
 bool AShooterCharacter::IsDead() const
 {
     return Health <= 0;
+}
+
+float AShooterCharacter::GetHealthPercent() const
+{
+    return Health / MaxHealth;
 }
 
 float AShooterCharacter::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser)
