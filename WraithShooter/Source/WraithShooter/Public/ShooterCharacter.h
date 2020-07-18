@@ -29,7 +29,15 @@ protected:
     
     void TurnRate(float AxisValue);
     
+    void CanJump();
     
+    
+    UPROPERTY(EditAnywhere)
+    bool bIsAiming;
+    
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+    FName GunAttachSocket;
+       
     
     UPROPERTY(EditAnywhere)
     float BasePitchValue;
@@ -41,14 +49,11 @@ protected:
     float MaxHealth = 100.f;
     
     UPROPERTY(VisibleAnywhere)
-    float Health = MaxHealth;
+    float Health;
     
-    UPROPERTY(EditDefaultsOnly)
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gun)
     TSubclassOf<AGun> GunClass;
     
-    UPROPERTY()
-    AGun* Gun;
-
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -58,12 +63,31 @@ public:
     
     virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
     
+   
     UFUNCTION(BlueprintPure)
     bool IsDead() const;
     
     UFUNCTION(BlueprintPure)
+    bool GetbIsAiming() const;
+    
+    UFUNCTION(BlueprintPure)
     float GetHealthPercent() const;
     
+    void StartShoot();
+    
     void Shoot();
+    
+    UFUNCTION(BlueprintCallable)
+    void StopShoot();
+    
+    UPROPERTY(BlueprintReadOnly)
+    AGun* Gun;
+    
+    void Aim();
+    
+    void StopAim();
+    
+    UFUNCTION(BlueprintCallable)
+    void StopAiming();
 
 };

@@ -13,6 +13,10 @@ AShooterCharacter::AShooterCharacter()
 	PrimaryActorTick.bCanEverTick = true;
     BasePitchValue = 45.f;
     BaseYawValue = 45.f;
+    Health = MaxHealth;
+    GunAttachSocket = "WeaponSocket";
+    bIsAiming = false;
+    
     
 }
 
@@ -24,7 +28,7 @@ void AShooterCharacter::BeginPlay()
     GetMesh()->HideBoneByName(TEXT("weapon_r"), EPhysBodyOp::PBO_None);
     
     Gun = GetWorld()->SpawnActor<AGun>(GunClass);
-    Gun->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("WeaponSocket"));
+    Gun->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, GunAttachSocket);
     Gun->SetOwner(this);
 	
 }
@@ -48,9 +52,13 @@ void AShooterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
     PlayerInputComponent->BindAxis("Turn", this, &AShooterCharacter::AddControllerYawInput);
     PlayerInputComponent->BindAxis("TurnRate", this, &AShooterCharacter::TurnRate);
     
-    PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &AShooterCharacter::Jump);
+    PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &AShooterCharacter::CanJump);
     
-    PlayerInputComponent->BindAction("Shoot", IE_Pressed, this, &AShooterCharacter::Shoot);
+    PlayerInputComponent->BindAction("Shoot", IE_Pressed, this, &AShooterCharacter::StartShoot);
+    PlayerInputComponent->BindAction("Shoot", IE_Released, this, &AShooterCharacter::StopShoot);
+    
+    PlayerInputComponent->BindAction("Aim", IE_Pressed, this, &AShooterCharacter::Aim);
+    PlayerInputComponent->BindAction("Aim", IE_Released, this, &AShooterCharacter::StopAim);
     
 }
 
@@ -62,6 +70,14 @@ void AShooterCharacter::moveForward(float AxisValue)
 void AShooterCharacter::moveRight(float AxisValue)
 {
     AddMovementInput(GetActorRightVector() * AxisValue);
+}
+
+void AShooterCharacter::CanJump()
+{
+    if(GetbIsAiming() == false)
+    {
+        Jump();
+    }
 }
 
 void AShooterCharacter::LookUpRate(float AxisValue)
@@ -76,7 +92,43 @@ void AShooterCharacter::TurnRate(float AxisValue)
 
 void AShooterCharacter::Shoot()
 {
-    Gun->PullTrigger();
+    if(Gun)
+    {
+        Gun->PullTrigger();
+    }
+}
+
+void AShooterCharacter::StartShoot()
+{
+    if(Gun)
+    {
+        Gun->StartAutomaticFire();
+    }
+}
+
+void AShooterCharacter::StopShoot()
+{
+    if(Gun)
+    {
+        Gun->StopAutomaticFire();
+    }
+}
+
+void AShooterCharacter::Aim()
+{
+
+    bIsAiming = true;
+}
+
+void AShooterCharacter::StopAim()
+{
+    bIsAiming = false;
+}
+
+
+void AShooterCharacter::StopAiming()
+{
+    bIsAiming = false;
 }
 
 bool AShooterCharacter::IsDead() const
@@ -84,6 +136,10 @@ bool AShooterCharacter::IsDead() const
     return Health <= 0;
 }
 
+bool AShooterCharacter::GetbIsAiming() const
+{
+    return bIsAiming;
+}
 float AShooterCharacter::GetHealthPercent() const
 {
     return Health / MaxHealth;

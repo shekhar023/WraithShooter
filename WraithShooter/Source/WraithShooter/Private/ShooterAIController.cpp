@@ -27,7 +27,9 @@ bool AShooterAIController::IsDead() const
     
     if(ControlledCharacter != nullptr)
     {
+        
         return ControlledCharacter->IsDead();
+        
     }
     
     return true;
