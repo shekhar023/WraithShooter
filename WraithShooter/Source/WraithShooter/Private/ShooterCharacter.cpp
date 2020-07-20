@@ -16,8 +16,6 @@ AShooterCharacter::AShooterCharacter()
     Health = MaxHealth;
     GunAttachSocket = "WeaponSocket";
     bIsAiming = false;
-    
-    
 }
 
 // Called when the game starts or when spawned
@@ -59,6 +57,8 @@ void AShooterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
     
     PlayerInputComponent->BindAction("Aim", IE_Pressed, this, &AShooterCharacter::Aim);
     PlayerInputComponent->BindAction("Aim", IE_Released, this, &AShooterCharacter::StopAim);
+    
+    PlayerInputComponent->BindAction("Reload", IE_Pressed, this, &AShooterCharacter::Reload);
     
 }
 
@@ -143,6 +143,11 @@ bool AShooterCharacter::GetbIsAiming() const
 float AShooterCharacter::GetHealthPercent() const
 {
     return Health / MaxHealth;
+}
+
+void AShooterCharacter::Reload()
+{
+    Gun->Reload();
 }
 
 float AShooterCharacter::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser)

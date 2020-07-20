@@ -18,6 +18,7 @@ PRAGMA_DISABLE_DEPRECATION_WARNINGS
  \
 	DECLARE_FUNCTION(execStopAiming); \
 	DECLARE_FUNCTION(execStopShoot); \
+	DECLARE_FUNCTION(execReload); \
 	DECLARE_FUNCTION(execGetHealthPercent); \
 	DECLARE_FUNCTION(execGetbIsAiming); \
 	DECLARE_FUNCTION(execIsDead);
@@ -27,6 +28,7 @@ PRAGMA_DISABLE_DEPRECATION_WARNINGS
  \
 	DECLARE_FUNCTION(execStopAiming); \
 	DECLARE_FUNCTION(execStopShoot); \
+	DECLARE_FUNCTION(execReload); \
 	DECLARE_FUNCTION(execGetHealthPercent); \
 	DECLARE_FUNCTION(execGetbIsAiming); \
 	DECLARE_FUNCTION(execIsDead);

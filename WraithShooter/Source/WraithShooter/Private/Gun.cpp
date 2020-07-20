@@ -175,3 +175,31 @@ void AGun::StopAutomaticFire()
 {
     GetWorldTimerManager().ClearTimer(TimerHandle_TimeBetweenShots);
 }
+
+bool AGun::GetbCanReload() const
+{
+    return bCanReload;
+}
+
+void AGun::Reload()
+{
+    if(bCanReload == false){return;}
+    
+    if(MaxAmmo != 0 && AmmoInClip < ClipSize)
+    {
+        int AmmoDifference = ClipSize - AmmoInClip;
+        
+        AmmoInClip += AmmoDifference;
+        
+        if(MaxAmmo > 0 && MaxAmmo >= AmmoDifference)
+        {
+            MaxAmmo -= AmmoDifference;
+        }
+        
+        bCanReload = true;
+    }
+    else
+    {
+        bCanReload = false;
+    }
+}

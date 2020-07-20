@@ -17,6 +17,7 @@ PRAGMA_DISABLE_DEPRECATION_WARNINGS
 #define WraithShooter_Source_WraithShooter_Public_Gun_h_14_RPC_WRAPPERS \
  \
 	DECLARE_FUNCTION(execGetbCanFire); \
+	DECLARE_FUNCTION(execGetbCanReload); \
 	DECLARE_FUNCTION(execGetMaxAmmo); \
 	DECLARE_FUNCTION(execGetCurrentAmmoInClip);
 
@@ -24,6 +25,7 @@ PRAGMA_DISABLE_DEPRECATION_WARNINGS
 #define WraithShooter_Source_WraithShooter_Public_Gun_h_14_RPC_WRAPPERS_NO_PURE_DECLS \
  \
 	DECLARE_FUNCTION(execGetbCanFire); \
+	DECLARE_FUNCTION(execGetbCanReload); \
 	DECLARE_FUNCTION(execGetMaxAmmo); \
 	DECLARE_FUNCTION(execGetCurrentAmmoInClip);
 

@@ -30,7 +30,5 @@ EBTNodeResult::Type UBTTask_StopShoot::ExecuteTask(UBehaviorTreeComponent& Owner
     Character->StopAim();
     Character->StopShoot();
     
-    
-    
     return EBTNodeResult::Succeeded;
 }

@@ -31,13 +31,11 @@ protected:
     
     void CanJump();
     
-    
     UPROPERTY(EditAnywhere)
     bool bIsAiming;
     
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
     FName GunAttachSocket;
-       
     
     UPROPERTY(EditAnywhere)
     float BasePitchValue;
@@ -72,10 +70,13 @@ public:
     
     UFUNCTION(BlueprintPure)
     float GetHealthPercent() const;
-    
+
     void StartShoot();
     
     void Shoot();
+    
+    UFUNCTION(BlueprintCallable)
+    void Reload();
     
     UFUNCTION(BlueprintCallable)
     void StopShoot();

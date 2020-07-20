@@ -22,11 +22,12 @@ public:
     void StartAutomaticFire();
     
     void StopAutomaticFire();
+    
+    void Reload();
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-    
     
 public:	
 	// Called every frame
@@ -39,9 +40,14 @@ public:
     int GetMaxAmmo() const;
     
     UFUNCTION(BlueprintPure)
+    bool GetbCanReload() const;
+    
+    UFUNCTION(BlueprintPure)
     bool GetbCanFire() const;
     
     bool bCanFire = true;
+    
+    bool bCanReload = true;
     
     UPROPERTY(VisibleAnywhere)
     AShooterCharacter* SCharacter;

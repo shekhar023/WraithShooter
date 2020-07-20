@@ -34,6 +34,13 @@ void EmptyLinkFunctionForGeneratedCodeShooterCharacter() {}
 		P_THIS->StopShoot();
 		P_NATIVE_END;
 	}
+	DEFINE_FUNCTION(AShooterCharacter::execReload)
+	{
+		P_FINISH;
+		P_NATIVE_BEGIN;
+		P_THIS->Reload();
+		P_NATIVE_END;
+	}
 	DEFINE_FUNCTION(AShooterCharacter::execGetHealthPercent)
 	{
 		P_FINISH;
@@ -62,6 +69,7 @@ void EmptyLinkFunctionForGeneratedCodeShooterCharacter() {}
 			{ "GetbIsAiming", &AShooterCharacter::execGetbIsAiming },
 			{ "GetHealthPercent", &AShooterCharacter::execGetHealthPercent },
 			{ "IsDead", &AShooterCharacter::execIsDead },
+			{ "Reload", &AShooterCharacter::execReload },
 			{ "StopAiming", &AShooterCharacter::execStopAiming },
 			{ "StopShoot", &AShooterCharacter::execStopShoot },
 		};
@@ -173,6 +181,28 @@ void EmptyLinkFunctionForGeneratedCodeShooterCharacter() {}
 		}
 		return ReturnFunction;
 	}
+	struct Z_Construct_UFunction_AShooterCharacter_Reload_Statics
+	{
+#if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam Function_MetaDataParams[];
+#endif
+		static const UE4CodeGen_Private::FFunctionParams FuncParams;
+	};
+#if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_AShooterCharacter_Reload_Statics::Function_MetaDataParams[] = {
+		{ "ModuleRelativePath", "Public/ShooterCharacter.h" },
+	};
+#endif
+	const UE4CodeGen_Private::FFunctionParams Z_Construct_UFunction_AShooterCharacter_Reload_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_AShooterCharacter, nullptr, "Reload", nullptr, nullptr, 0, nullptr, 0, RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x04020401, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_AShooterCharacter_Reload_Statics::Function_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UFunction_AShooterCharacter_Reload_Statics::Function_MetaDataParams)) };
+	UFunction* Z_Construct_UFunction_AShooterCharacter_Reload()
+	{
+		static UFunction* ReturnFunction = nullptr;
+		if (!ReturnFunction)
+		{
+			UE4CodeGen_Private::ConstructUFunction(ReturnFunction, Z_Construct_UFunction_AShooterCharacter_Reload_Statics::FuncParams);
+		}
+		return ReturnFunction;
+	}
 	struct Z_Construct_UFunction_AShooterCharacter_StopAiming_Statics
 	{
 #if WITH_METADATA
@@ -273,6 +303,7 @@ void EmptyLinkFunctionForGeneratedCodeShooterCharacter() {}
 		{ &Z_Construct_UFunction_AShooterCharacter_GetbIsAiming, "GetbIsAiming" }, // 1742479005
 		{ &Z_Construct_UFunction_AShooterCharacter_GetHealthPercent, "GetHealthPercent" }, // 3949565419
 		{ &Z_Construct_UFunction_AShooterCharacter_IsDead, "IsDead" }, // 2180583953
+		{ &Z_Construct_UFunction_AShooterCharacter_Reload, "Reload" }, // 1124058244
 		{ &Z_Construct_UFunction_AShooterCharacter_StopAiming, "StopAiming" }, // 3563492382
 		{ &Z_Construct_UFunction_AShooterCharacter_StopShoot, "StopShoot" }, // 428848005
 	};
@@ -380,7 +411,7 @@ void EmptyLinkFunctionForGeneratedCodeShooterCharacter() {}
 		}
 		return OuterClass;
 	}
-	IMPLEMENT_CLASS(AShooterCharacter, 2626233028);
+	IMPLEMENT_CLASS(AShooterCharacter, 3534609903);
 	template<> WRAITHSHOOTER_API UClass* StaticClass<AShooterCharacter>()
 	{
 		return AShooterCharacter::StaticClass();
