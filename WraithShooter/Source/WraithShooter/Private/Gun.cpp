@@ -7,6 +7,8 @@
 #include "DrawDebugHelpers.h"
 #include "TimerManager.h"
 #include "ShooterCharacter.h"
+#include "Animation/AnimationAsset.h"
+#include "Components/SkeletalMeshComponent.h"
 
 
 // Sets default values
@@ -146,11 +148,9 @@ void AGun::CalculateAmmo()
     
     if(MyCharacter->GetbIsAiming() == true)
     {
-    
         if(GetCurrentAmmoInClip() > 0)
         {
             bCanFire = true;
-            
             AmmoInClip--;
         }
         else
@@ -167,7 +167,6 @@ void AGun::CalculateAmmo()
 void AGun::StartAutomaticFire()
 {
     float FirstDelay = FMath::Max(LastFireTime + TimeBetweenShots - GetWorld()->TimeSeconds, 0.0f);
-    
     GetWorldTimerManager().SetTimer(TimerHandle_TimeBetweenShots, this, &AGun::PullTrigger, TimeBetweenShots, true, FirstDelay);
 }
 
@@ -176,30 +175,14 @@ void AGun::StopAutomaticFire()
     GetWorldTimerManager().ClearTimer(TimerHandle_TimeBetweenShots);
 }
 
-bool AGun::GetbCanReload() const
-{
-    return bCanReload;
-}
-
 void AGun::Reload()
 {
-    if(bCanReload == false){return;}
+    int AmmoDifference = FMath::Clamp(ClipSize - AmmoInClip, 0, ClipSize);
     
-    if(MaxAmmo != 0 && AmmoInClip < ClipSize)
+    if(MaxAmmo != 0 && AmmoInClip < ClipSize && AmmoDifference <= MaxAmmo)
     {
-        int AmmoDifference = ClipSize - AmmoInClip;
-        
         AmmoInClip += AmmoDifference;
-        
-        if(MaxAmmo > 0 && MaxAmmo >= AmmoDifference)
-        {
-            MaxAmmo -= AmmoDifference;
-        }
-        
-        bCanReload = true;
+        MaxAmmo -=AmmoDifference;
     }
-    else
-    {
-        bCanReload = false;
-    }
+
 }

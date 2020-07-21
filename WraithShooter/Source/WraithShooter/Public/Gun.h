@@ -8,6 +8,7 @@
 
 class AShooterCharacter;
 
+
 UCLASS()
 class WRAITHSHOOTER_API AGun : public AActor
 {
@@ -40,14 +41,9 @@ public:
     int GetMaxAmmo() const;
     
     UFUNCTION(BlueprintPure)
-    bool GetbCanReload() const;
-    
-    UFUNCTION(BlueprintPure)
     bool GetbCanFire() const;
     
     bool bCanFire = true;
-    
-    bool bCanReload = true;
     
     UPROPERTY(VisibleAnywhere)
     AShooterCharacter* SCharacter;
@@ -102,5 +98,5 @@ private:
     
     // Derived from RateOfFire
     float TimeBetweenShots;
-
+    
 };

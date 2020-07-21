@@ -5,6 +5,8 @@
 #include "Gun.h"
 #include "Components/CapsuleComponent.h"
 #include "WraithShooter/WraithShooterGameModeBase.h"
+#include "Components/SkeletalMeshComponent.h"
+#include "GameFramework/Actor.h"
 
 // Sets default values
 AShooterCharacter::AShooterCharacter()
@@ -140,9 +142,10 @@ bool AShooterCharacter::GetbIsAiming() const
 {
     return bIsAiming;
 }
+
 float AShooterCharacter::GetHealthPercent() const
 {
-    return Health / MaxHealth;
+    return Health/ MaxHealth;
 }
 
 void AShooterCharacter::Reload()
@@ -171,8 +174,9 @@ float AShooterCharacter::TakeDamage(float DamageAmount, struct FDamageEvent cons
         
         DetachFromControllerPendingDestroy();
         GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-           
+        
     }
     
     return DamageToApply;
 }
+
