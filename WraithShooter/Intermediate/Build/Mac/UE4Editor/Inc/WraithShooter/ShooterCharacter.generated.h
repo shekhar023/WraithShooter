@@ -16,22 +16,18 @@ PRAGMA_DISABLE_DEPRECATION_WARNINGS
 #define WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_14_SPARSE_DATA
 #define WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_14_RPC_WRAPPERS \
  \
-	DECLARE_FUNCTION(execStopAiming); \
-	DECLARE_FUNCTION(execStopShoot); \
-	DECLARE_FUNCTION(execReload); \
 	DECLARE_FUNCTION(execGetHealthPercent); \
 	DECLARE_FUNCTION(execGetbIsAiming); \
-	DECLARE_FUNCTION(execIsDead);
+	DECLARE_FUNCTION(execIsDead); \
+	DECLARE_FUNCTION(execStopShoot);
 
 
 #define WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_14_RPC_WRAPPERS_NO_PURE_DECLS \
  \
-	DECLARE_FUNCTION(execStopAiming); \
-	DECLARE_FUNCTION(execStopShoot); \
-	DECLARE_FUNCTION(execReload); \
 	DECLARE_FUNCTION(execGetHealthPercent); \
 	DECLARE_FUNCTION(execGetbIsAiming); \
-	DECLARE_FUNCTION(execIsDead);
+	DECLARE_FUNCTION(execIsDead); \
+	DECLARE_FUNCTION(execStopShoot);
 
 
 #define WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_14_INCLASS_NO_PURE_DECLS \
@@ -83,7 +79,9 @@ DEFINE_VTABLE_PTR_HELPER_CTOR_CALLER(AShooterCharacter); \
 	FORCEINLINE static uint32 __PPO__BaseYawValue() { return STRUCT_OFFSET(AShooterCharacter, BaseYawValue); } \
 	FORCEINLINE static uint32 __PPO__MaxHealth() { return STRUCT_OFFSET(AShooterCharacter, MaxHealth); } \
 	FORCEINLINE static uint32 __PPO__Health() { return STRUCT_OFFSET(AShooterCharacter, Health); } \
-	FORCEINLINE static uint32 __PPO__GunClass() { return STRUCT_OFFSET(AShooterCharacter, GunClass); }
+	FORCEINLINE static uint32 __PPO__Gun() { return STRUCT_OFFSET(AShooterCharacter, Gun); } \
+	FORCEINLINE static uint32 __PPO__GunClass() { return STRUCT_OFFSET(AShooterCharacter, GunClass); } \
+	FORCEINLINE static uint32 __PPO__Inventory() { return STRUCT_OFFSET(AShooterCharacter, Inventory); }
 
 
 #define WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_11_PROLOG

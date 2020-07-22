@@ -14,15 +14,13 @@
 // Sets default values
 AGun::AGun()
 {
-    // Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-    PrimaryActorTick.bCanEverTick = true;
-    
     Root = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
     SetRootComponent(Root);
     
     Mesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Mesh"));
     Mesh->SetupAttachment(Root);
     
+    MuzzleFlashSocketName = TEXT("MuzzleFlashSocket");
     MaxRange = 10000.f;
     RateOfFire = 600;
     Damage = 10.f;
@@ -36,19 +34,10 @@ AGun::AGun()
 void AGun::BeginPlay()
 {
     Super::BeginPlay();
-    
     TimeBetweenShots = 60 / RateOfFire;
-    
 }
 
-// Called every frame
-void AGun::Tick(float DeltaTime)
-{
-    Super::Tick(DeltaTime);
-    
-}
-
- bool AGun::GetbCanFire() const
+bool AGun::GetbCanFire() const
 {
     return bCanFire;
 }
@@ -62,12 +51,12 @@ void AGun::PullTrigger()
     {
         if(MuzzleFlash)
         {
-            UGameplayStatics::SpawnEmitterAttached(MuzzleFlash, Mesh, TEXT("MuzzleFlashSocket"));
+            UGameplayStatics::SpawnEmitterAttached(MuzzleFlash, Mesh, MuzzleFlashSocketName);
         }
         
         if(MuzzleSound)
         {
-            UGameplayStatics::SpawnSoundAttached(MuzzleSound, Mesh, TEXT("MuzzleFlashSocket"));
+            UGameplayStatics::SpawnSoundAttached(MuzzleSound, Mesh, MuzzleFlashSocketName);
         }
         
         FHitResult Hit;
@@ -181,8 +170,51 @@ void AGun::Reload()
     
     if(MaxAmmo != 0 && AmmoInClip < ClipSize && AmmoDifference <= MaxAmmo)
     {
+        UE_LOG(LogTemp, Warning, TEXT("AmmoDifference : %d"), AmmoDifference);
         AmmoInClip += AmmoDifference;
         MaxAmmo -=AmmoDifference;
     }
-
 }
+
+void AGun::OnEquip(const AGun* LastWeapon)
+{
+    UE_LOG(LogTemp, Warning, TEXT("OnEquip"));
+    AttachMeshToPawn();
+}
+
+void AGun::OnUnEquip()
+{
+    DetachMeshFromPawn();
+    StopAutomaticFire();
+}
+
+void AGun::AttachMeshToPawn()
+{
+    DetachMeshFromPawn();
+    
+    AShooterCharacter* MyCharacter = Cast<AShooterCharacter>(GetOwner());
+    
+    if(MyCharacter == nullptr){return;}
+    
+    FName GunAttachPoint = MyCharacter->GetWeaponAttachPoint();
+    Mesh->AttachToComponent(MyCharacter->GetPawnMesh(), FAttachmentTransformRules::KeepRelativeTransform, GunAttachPoint);
+    Mesh->SetHiddenInGame(false);
+    
+    UE_LOG(LogTemp, Warning, TEXT("AttachMeshToPawnCompleted"));
+}
+
+void AGun::DetachMeshFromPawn()
+{
+    UE_LOG(LogTemp, Warning, TEXT("DetachMeshFromPawn"));
+    Mesh->DetachFromComponent(FDetachmentTransformRules::KeepRelativeTransform);
+    Mesh->SetHiddenInGame(true);
+}
+
+void AGun::SetOwningPawn(AShooterCharacter* MyPawn)
+{
+    if (MyPawn)
+    {
+        SetOwner(MyPawn);
+    }
+}
+

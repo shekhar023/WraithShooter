@@ -21,7 +21,7 @@ void EmptyLinkFunctionForGeneratedCodeWraithShooter_init() {}
 				nullptr,
 				0,
 				PKG_CompiledIn | 0x00000000,
-				0x6AB6DEA4,
+				0xE49C1ACC,
 				0x67988163,
 				METADATA_PARAMS(nullptr, 0)
 			};

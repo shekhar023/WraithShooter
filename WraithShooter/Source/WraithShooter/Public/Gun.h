@@ -12,11 +12,11 @@ class AShooterCharacter;
 UCLASS()
 class WRAITHSHOOTER_API AGun : public AActor
 {
-	GENERATED_BODY()
-	
+    GENERATED_BODY()
+    
 public:	
-	// Sets default values for this actor's properties
-	AGun();
+    // Sets default values for this actor's properties
+    AGun();
     
     void PullTrigger();
     
@@ -25,14 +25,30 @@ public:
     void StopAutomaticFire();
     
     void Reload();
-
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
     
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+protected:
+    // Called when the game starts or when spawned
+    virtual void BeginPlay() override;
+    
+    bool bCanFire = true;
+    
+    UPROPERTY()
+    AShooterCharacter* SCharacter;
+    
+    AController* GetOwnerController() const;
+    
+    FTimerHandle TimerHandle_TimeBetweenShots;
+    
+    float LastFireTime;
+    
+    // Derived from RateOfFire
+    float TimeBetweenShots;
+    
+    bool GunTrace(FHitResult& Hit, FVector& ShotDirection);
+    
+    void CalculateAmmo();
+    
+public:
     
     UFUNCTION(BlueprintPure)
     int GetCurrentAmmoInClip() const;
@@ -43,10 +59,16 @@ public:
     UFUNCTION(BlueprintPure)
     bool GetbCanFire() const;
     
-    bool bCanFire = true;
+    void OnEquip(const AGun* LastWeapon);
     
-    UPROPERTY(VisibleAnywhere)
-    AShooterCharacter* SCharacter;
+    void OnUnEquip();
+    
+    void AttachMeshToPawn();
+    
+    void DetachMeshFromPawn();
+    
+    void SetOwningPawn(AShooterCharacter* MyPawn);
+    
     
 private:
     
@@ -55,6 +77,9 @@ private:
     
     UPROPERTY(VisibleAnywhere)
     USkeletalMeshComponent* Mesh;
+    
+    UPROPERTY(VisibleAnywhere)
+    FName MuzzleFlashSocketName;
     
     UPROPERTY(EditAnywhere)
     UParticleSystem* MuzzleFlash;
@@ -85,18 +110,5 @@ private:
     
     UPROPERTY(EditAnywhere)
     int32 AmmoInClip;
-    
-    bool GunTrace(FHitResult& Hit, FVector& ShotDirection);
-    
-    AController* GetOwnerController() const;
-    
-    void CalculateAmmo();
-    
-    FTimerHandle TimerHandle_TimeBetweenShots;
-
-    float LastFireTime;
-    
-    // Derived from RateOfFire
-    float TimeBetweenShots;
     
 };
