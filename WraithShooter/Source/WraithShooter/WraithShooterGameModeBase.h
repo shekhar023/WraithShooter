@@ -9,6 +9,9 @@
 /**
  * 
  */
+//declare delegate
+DECLARE_DELEGATE(FStandardDelegateSignature);
+
 UCLASS()
 class WRAITHSHOOTER_API AWraithShooterGameModeBase : public AGameModeBase
 {
@@ -16,4 +19,8 @@ class WRAITHSHOOTER_API AWraithShooterGameModeBase : public AGameModeBase
 	
 public:
    virtual void PawnKilled(APawn* PawnKilled);
+    
+    FStandardDelegateSignature CharacterVisualEffectsDelegateStart;
+    
+    FStandardDelegateSignature CharacterVisualEffectsDelegateStop;
 };

@@ -7,6 +7,10 @@
 #include "ShooterCharacter.generated.h"
 
 class AGun;
+class UAnimMontage;
+class UParticleSystemComponent;
+class UParticleSystem;
+class UTextRenderComponent;
 
 UCLASS()
 class WRAITHSHOOTER_API AShooterCharacter : public ACharacter
@@ -20,6 +24,10 @@ public:
 protected:
     // Called when the game starts or when spawned
     virtual void BeginPlay() override;
+    
+    
+    
+    virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
     
     void moveForward(float AxisValue);
     
@@ -48,6 +56,8 @@ protected:
     
     UPROPERTY(VisibleAnywhere)
     float Health;
+    
+    
     
     
 //MARK: Gun and Inventory
@@ -93,6 +103,8 @@ public:
     
     //For AI to Stop Aiming
     void StopAiming();
+    
+    virtual float PlayAnimMontage(class UAnimMontage* AnimMontage, float InPlayRate = 1.f, FName StartSectionName = NAME_None) override;
  
 //MARK: Return Functions
 public:
@@ -110,5 +122,38 @@ public:
     
     USkeletalMeshComponent* GetPawnMesh() const;
     
+    bool PickupMode;
+    
+    void PickObjects();
+    
+    // Collision functionality setup
+    UFUNCTION(BlueprintNativeEvent, Category = Collision)
+    void OnOverlapBegin(UPrimitiveComponent* Comp, AActor* otherActor, UPrimitiveComponent* otherComp,
+                        int32 otherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+    
+    virtual void PostInitializeComponents() override;
+    
+    UTextRenderComponent* HealthText;
+    
+    
+    
+public:
+    
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Effects)
+    UParticleSystemComponent* VisualFX;
+    
+   
+//MARK: Binding these functions to delegate created in WraithShooterGameModeBase.h
+    UFUNCTION()
+    void MakeVFXVisible();
+    
+    UFUNCTION()
+    void MakeVFXInvisible();
+    
+    UFUNCTION()
+    void BindDelegates();
+    
+    UFUNCTION()
+    void UnBindDelegates();
     
 };

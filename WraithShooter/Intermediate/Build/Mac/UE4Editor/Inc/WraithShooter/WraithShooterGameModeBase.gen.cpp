@@ -40,7 +40,6 @@ void EmptyLinkFunctionForGeneratedCodeWraithShooterGameModeBase() {}
 	};
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AWraithShooterGameModeBase_Statics::Class_MetaDataParams[] = {
-		{ "Comment", "/**\n * \n */" },
 		{ "HideCategories", "Info Rendering MovementReplication Replication Actor Input Movement Collision Rendering Utilities|Transformation" },
 		{ "IncludePath", "WraithShooterGameModeBase.h" },
 		{ "ModuleRelativePath", "WraithShooterGameModeBase.h" },
@@ -74,7 +73,7 @@ void EmptyLinkFunctionForGeneratedCodeWraithShooterGameModeBase() {}
 		}
 		return OuterClass;
 	}
-	IMPLEMENT_CLASS(AWraithShooterGameModeBase, 2317223679);
+	IMPLEMENT_CLASS(AWraithShooterGameModeBase, 2057959502);
 	template<> WRAITHSHOOTER_API UClass* StaticClass<AWraithShooterGameModeBase>()
 	{
 		return AWraithShooterGameModeBase::StaticClass();

@@ -7,7 +7,9 @@
 #include "Gun.generated.h"
 
 class AShooterCharacter;
-
+class UCameraShake;
+class UParticleSystem;
+class UAnimMontage;
 
 UCLASS()
 class WRAITHSHOOTER_API AGun : public AActor
@@ -35,6 +37,9 @@ protected:
     UPROPERTY()
     AShooterCharacter* SCharacter;
     
+    UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
+    FName TracerTargetName;
+    
     AController* GetOwnerController() const;
     
     FTimerHandle TimerHandle_TimeBetweenShots;
@@ -47,6 +52,14 @@ protected:
     bool GunTrace(FHitResult& Hit, FVector& ShotDirection);
     
     void CalculateAmmo();
+    
+    void PlayFireEffects(FVector TraceEnd);
+    
+    void PlayImpactEffects(EPhysicalSurface MySurfaceType, FVector ImpactPoint);
+    
+    UPROPERTY()
+    TEnumAsByte<EPhysicalSurface> SurfaceType;
+    
     
 public:
     
@@ -69,6 +82,37 @@ public:
     
     void SetOwningPawn(AShooterCharacter* MyPawn);
     
+    UPROPERTY(EditDefaultsOnly, Category = "Weapon")
+    TSubclassOf<UCameraShake> FireCamShake;
+    
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
+    UParticleSystem* TracerEffect;
+    
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
+    UParticleSystem* ImpactEffect;
+
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
+    UParticleSystem* BodyImpactEffect;
+    
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
+    UParticleSystem* MetalImpactEffect;
+    
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
+    UParticleSystem* MuzzleFlash;
+    
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
+    USoundBase* MuzzleSound;
+    
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
+    USoundBase* ImpactSound;
+    
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
+    UAnimMontage* GunFireMontage;
+    
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
+    UAnimMontage* ReloadAnim;
+    
+    float PlayWeaponAnimation(UAnimMontage* WeaponFireMontage);
     
 private:
     
@@ -82,22 +126,13 @@ private:
     FName MuzzleFlashSocketName;
     
     UPROPERTY(EditAnywhere)
-    UParticleSystem* MuzzleFlash;
-    
-    UPROPERTY(EditAnywhere)
-    UParticleSystem* ImpactEffect;
-    
-    UPROPERTY(EditAnywhere)
-    USoundBase* MuzzleSound;
-    
-    UPROPERTY(EditAnywhere)
-    USoundBase* ImpactSound;
-    
-    UPROPERTY(EditAnywhere)
     float MaxRange;
     
     UPROPERTY(EditAnywhere)
     float RateOfFire;
+    
+    UPROPERTY(EditDefaultsOnly, Category = "Weapon", meta = (ClampMin=0.0f))
+    float BulletSpread;
     
     UPROPERTY(EditAnywhere)
     float Damage;

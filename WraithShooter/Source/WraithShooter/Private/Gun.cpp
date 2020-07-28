@@ -1,15 +1,14 @@
 // Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "Gun.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "DrawDebugHelpers.h"
 #include "TimerManager.h"
 #include "ShooterCharacter.h"
-#include "Animation/AnimationAsset.h"
 #include "Components/SkeletalMeshComponent.h"
-
+#include "Particles/ParticleSystemComponent.h"
+#include "PhysicalMaterials/PhysicalMaterial.h"
+#include "Animation/AnimMontage.h"
 
 // Sets default values
 AGun::AGun()
@@ -21,8 +20,10 @@ AGun::AGun()
     Mesh->SetupAttachment(Root);
     
     MuzzleFlashSocketName = TEXT("MuzzleFlashSocket");
+    TracerTargetName = "Target";
     MaxRange = 10000.f;
     RateOfFire = 600;
+    BulletSpread = 2.0f;
     Damage = 10.f;
     MaxAmmo = 250;
     ClipSize = 30;
@@ -42,80 +43,6 @@ bool AGun::GetbCanFire() const
     return bCanFire;
 }
 
-void AGun::PullTrigger()
-{
-    
-    CalculateAmmo();
-    
-    if(bCanFire)
-    {
-        if(MuzzleFlash)
-        {
-            UGameplayStatics::SpawnEmitterAttached(MuzzleFlash, Mesh, MuzzleFlashSocketName);
-        }
-        
-        if(MuzzleSound)
-        {
-            UGameplayStatics::SpawnSoundAttached(MuzzleSound, Mesh, MuzzleFlashSocketName);
-        }
-        
-        FHitResult Hit;
-        FVector ShotDirection;
-        
-        bool bSuccess = GunTrace(Hit, ShotDirection);
-        
-        if(ImpactSound)
-        {
-            UGameplayStatics::PlaySoundAtLocation(GetWorld(), ImpactSound, Hit.Location);
-        }
-        
-        if(bSuccess)
-        {
-            if(ImpactEffect)
-            {
-                UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ImpactEffect, Hit.Location, ShotDirection.Rotation());
-            }
-            
-            AActor* HitActor = Hit.GetActor();
-            if(HitActor != nullptr)
-            {
-                FPointDamageEvent DamageEvent(Damage, Hit, ShotDirection, nullptr);
-                AController* OwnerController = GetOwnerController();
-                HitActor->TakeDamage(Damage, DamageEvent, OwnerController, this);
-            }
-        }
-    }
-}
-
-bool AGun::GunTrace(FHitResult& Hit, FVector& ShotDirection)
-{
-    AController* OwnerController = GetOwnerController();
-    if(!OwnerController){return false;}
-    
-    FVector Location;
-    FRotator Rotation;
-    
-    OwnerController->GetPlayerViewPoint(Location, Rotation);
-    
-    ShotDirection = -Rotation.Vector();
-    
-    FVector EndPoint = Location + Rotation.Vector() * MaxRange;
-    
-    FCollisionQueryParams Params;
-    Params.AddIgnoredActor(this);
-    Params.AddIgnoredActor(GetOwner());
-    
-    return GetWorld()->LineTraceSingleByChannel(Hit, Location, EndPoint, ECollisionChannel::ECC_GameTraceChannel1, Params);
-}
-
-AController* AGun::GetOwnerController() const
-{
-    APawn* OwnerPawn = Cast<APawn>(GetOwner());
-    if (OwnerPawn == nullptr)
-        return nullptr;
-    return OwnerPawn->GetController();
-}
-
 int AGun::GetCurrentAmmoInClip() const
 {
     return AmmoInClip;
@@ -126,31 +53,21 @@ int AGun::GetMaxAmmo() const
     return MaxAmmo;
 }
 
-void AGun::CalculateAmmo()
+void AGun::SetOwningPawn(AShooterCharacter* MyPawn)
 {
-    AShooterCharacter* MyCharacter = Cast<AShooterCharacter>(GetOwner());
-    
-    if(MyCharacter == nullptr)
+    if (MyPawn)
     {
-        return;
+        SetOwner(MyPawn);
     }
-    
-    if(MyCharacter->GetbIsAiming() == true)
-    {
-        if(GetCurrentAmmoInClip() > 0)
-        {
-            bCanFire = true;
-            AmmoInClip--;
-        }
-        else
-        {
-            bCanFire = false;
-        }
-    }
-    else
-    {
-        bCanFire = false;
-    }
+}
+
+
+AController* AGun::GetOwnerController() const
+{
+    APawn* OwnerPawn = Cast<APawn>(GetOwner());
+    if (OwnerPawn == nullptr)
+        return nullptr;
+    return OwnerPawn->GetController();
 }
 
 void AGun::StartAutomaticFire()
@@ -164,21 +81,176 @@ void AGun::StopAutomaticFire()
     GetWorldTimerManager().ClearTimer(TimerHandle_TimeBetweenShots);
 }
 
+
+bool AGun::GunTrace(FHitResult& Hit, FVector& ShotDirection)
+{
+    AController* OwnerController = GetOwnerController();
+    if(!OwnerController){return false;}
+    
+    FVector Location;
+    FRotator Rotation;
+    
+    OwnerController->GetPlayerViewPoint(Location, Rotation);
+    
+    ShotDirection = -Rotation.Vector();
+    
+    float HalfRad = FMath::DegreesToRadians(BulletSpread);
+    ShotDirection = FMath::VRandCone(ShotDirection, HalfRad, HalfRad);
+    
+    FVector EndPoint = Location + Rotation.Vector() * MaxRange;
+    
+    FCollisionQueryParams Params;
+    Params.AddIgnoredActor(GetOwner());
+    Params.AddIgnoredActor(this);
+    Params.bTraceComplex = true;
+    Params.bReturnPhysicalMaterial = true;
+    
+    return GetWorld()->LineTraceSingleByChannel(Hit, Location, EndPoint, ECollisionChannel::ECC_GameTraceChannel1, Params);
+}
+
+void AGun::PullTrigger()
+{
+    CalculateAmmo();
+    
+    if(bCanFire)
+    {
+        FHitResult Hit;
+        FVector ShotDirection;
+        bool bSuccess = GunTrace(Hit, ShotDirection);
+        SurfaceType = SurfaceType_Default;
+        
+        if(bSuccess)
+        {
+            PlayFireEffects(Hit.ImpactPoint);
+            PlayWeaponAnimation(GunFireMontage);
+            SurfaceType = UPhysicalMaterial::DetermineSurfaceType(Hit.PhysMaterial.Get());
+            PlayImpactEffects(SurfaceType, Hit.ImpactPoint);
+            AActor* HitActor = Hit.GetActor();
+            
+            if(HitActor != nullptr)
+            {
+                
+                FPointDamageEvent DamageEvent(Damage, Hit, ShotDirection, nullptr);
+                AController* OwnerController = GetOwnerController();
+                HitActor->TakeDamage(Damage, DamageEvent, OwnerController, this);
+            }
+        }
+    }
+}
+
+void AGun::PlayFireEffects(FVector TraceEnd)
+{
+    if(MuzzleSound)
+    {
+        UGameplayStatics::SpawnSoundAttached(MuzzleSound, Mesh, MuzzleFlashSocketName);
+    }
+    
+    if(ImpactSound)
+    {
+        UGameplayStatics::PlaySoundAtLocation(GetWorld(), ImpactSound, TraceEnd);
+    }
+    if(MuzzleFlash)
+    {
+        UGameplayStatics::SpawnEmitterAttached(MuzzleFlash, Mesh, MuzzleFlashSocketName);
+    }
+    
+    if (TracerEffect)
+    {
+        FVector MuzzleLocation = Mesh->GetSocketLocation(MuzzleFlashSocketName);
+        UParticleSystemComponent* TracerComp = UGameplayStatics::SpawnEmitterAttached(TracerEffect, Mesh, MuzzleFlashSocketName);
+        if (TracerComp)
+        {
+            TracerComp->SetVectorParameter(TracerTargetName, TraceEnd);
+        }
+    }
+    
+    APawn* MyOwner = Cast<APawn>(GetOwner());
+    if (MyOwner)
+    {
+        APlayerController* PlayerController = Cast<APlayerController>(MyOwner->GetController());
+        if (PlayerController)
+        {
+            PlayerController->ClientPlayCameraShake(FireCamShake);
+        }
+    }
+}
+
+void AGun::PlayImpactEffects(EPhysicalSurface MySurfaceType, FVector ImpactPoint)
+{
+    UParticleSystem* SelectedEffect = nullptr;
+    switch (MySurfaceType)
+    {
+        case SurfaceType1: "BodyImpact";
+            SelectedEffect = BodyImpactEffect;
+            break;
+        case SurfaceType2: "Metal";
+            SelectedEffect = MetalImpactEffect;
+            break;
+        default:
+            SelectedEffect = ImpactEffect;
+            break;
+    }
+    
+    if (SelectedEffect)
+    {
+        FVector MuzzleLocation = Mesh->GetSocketLocation(MuzzleFlashSocketName);
+        
+        FVector ShotDirection = ImpactPoint - MuzzleLocation;
+        ShotDirection.Normalize();
+        
+        UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), SelectedEffect, ImpactPoint, ShotDirection.Rotation());
+    }
+}
+
+
+
+void AGun::CalculateAmmo()
+{
+    AShooterCharacter* MyCharacter = Cast<AShooterCharacter>(GetOwner());
+    if(MyCharacter == nullptr){return;}
+    
+    if(MyCharacter->GetbIsAiming() == true)
+    {
+        if(GetCurrentAmmoInClip() > 0)
+        {
+            bCanFire = true;
+            AmmoInClip--;
+        }
+        else
+        {
+            bCanFire = false;
+        }
+    }
+    
+    if(MyCharacter->GetbIsAiming() == false) {bCanFire = false;}
+}
+
 void AGun::Reload()
 {
-    int AmmoDifference = FMath::Clamp(ClipSize - AmmoInClip, 0, ClipSize);
+    AShooterCharacter* MyCharacter = Cast<AShooterCharacter>(GetOwner());
+    if(MyCharacter == nullptr){return;}
+    
+    int AmmoDifference = FMath::Min(ClipSize - AmmoInClip, MaxAmmo - AmmoInClip);
     
     if(MaxAmmo != 0 && AmmoInClip < ClipSize && AmmoDifference <= MaxAmmo)
     {
+        
+        if(ReloadAnim)
+        {
+            MyCharacter->StopAim();
+            MyCharacter->PlayAnimMontage(ReloadAnim);
+        }
+        
         UE_LOG(LogTemp, Warning, TEXT("AmmoDifference : %d"), AmmoDifference);
         AmmoInClip += AmmoDifference;
         MaxAmmo -=AmmoDifference;
+        UE_LOG(LogTemp, Warning, TEXT("MaxAmmo : %d"), MaxAmmo);
     }
+    
 }
 
 void AGun::OnEquip(const AGun* LastWeapon)
 {
-    UE_LOG(LogTemp, Warning, TEXT("OnEquip"));
     AttachMeshToPawn();
 }
 
@@ -197,24 +269,27 @@ void AGun::AttachMeshToPawn()
     if(MyCharacter == nullptr){return;}
     
     FName GunAttachPoint = MyCharacter->GetWeaponAttachPoint();
-    Mesh->AttachToComponent(MyCharacter->GetPawnMesh(), FAttachmentTransformRules::KeepRelativeTransform, GunAttachPoint);
+    Mesh->AttachToComponent(MyCharacter->GetPawnMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, GunAttachPoint);
     Mesh->SetHiddenInGame(false);
     
-    UE_LOG(LogTemp, Warning, TEXT("AttachMeshToPawnCompleted"));
 }
 
 void AGun::DetachMeshFromPawn()
 {
-    UE_LOG(LogTemp, Warning, TEXT("DetachMeshFromPawn"));
-    Mesh->DetachFromComponent(FDetachmentTransformRules::KeepRelativeTransform);
+    Mesh->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
     Mesh->SetHiddenInGame(true);
 }
 
-void AGun::SetOwningPawn(AShooterCharacter* MyPawn)
+float AGun::PlayWeaponAnimation(UAnimMontage* WeaponFireMontage)
 {
-    if (MyPawn)
+     AShooterCharacter* MyCharacter = Cast<AShooterCharacter>(GetOwner());
+    float Duration = 0.0f;
+    UAnimMontage* UseAnim = WeaponFireMontage;
+    if(WeaponFireMontage)
     {
-        SetOwner(MyPawn);
+        UE_LOG(LogTemp, Warning, TEXT("WeaponFireMontage"));
+        Duration = MyCharacter->PlayAnimMontage(WeaponFireMontage);
     }
+    
+    return Duration;
 }
-

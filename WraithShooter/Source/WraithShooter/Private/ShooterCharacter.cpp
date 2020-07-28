@@ -4,20 +4,71 @@
 #include "ShooterCharacter.h"
 #include "Gun.h"
 #include "Components/CapsuleComponent.h"
+#include "Components/TextRenderComponent.h"
 #include "WraithShooter/WraithShooterGameModeBase.h"
 #include "Components/SkeletalMeshComponent.h"
+#include "Kismet/GameplayStatics.h"
 #include "GameFramework/Actor.h"
+#include "Particles/ParticleSystem.h"
+#include "Particles/ParticleSystemComponent.h"
+#include "Animation/AnimMontage.h"
+#include "Animation/AnimInstance.h"
 #include "ShooterPlayerController.h"
+#include "MagicPill.h"
+
 
 // Sets default values
 AShooterCharacter::AShooterCharacter()
-{
+{    
     BasePitchValue = 45.f;
     BaseYawValue = 45.f;
     MaxHealth = 100;
-    Health = MaxHealth;
+    
     GunAttachSocket = "WeaponSocket";
     bIsAiming = false;
+    
+    //Sets up particle system of the character.
+    VisualFX = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("VFX"));
+    VisualFX->SetupAttachment(RootComponent);
+    
+    HealthText = CreateDefaultSubobject<UTextRenderComponent>(TEXT("HealhText"));
+    HealthText->SetupAttachment(RootComponent);
+    
+    
+    auto ParticleSystem = ConstructorHelpers::FObjectFinder<UParticleSystem>(TEXT("ParticleSystem'/Game/ParagonWraith/FX/Particles/Abilities/TeleportTarget/FX/P_Wraith_Teleport_Residual.P_Wraith_Teleport_Residual'"));
+    
+    if(ParticleSystem.Object)
+    {
+        VisualFX->SetTemplate(ParticleSystem.Object);
+    }
+    
+    PickupMode = false;
+}
+
+void AShooterCharacter::BindDelegates()
+{
+    if(GetWorld())
+    {
+        AWraithShooterGameModeBase* MyGameMode = Cast<AWraithShooterGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
+        if(MyGameMode)
+        {
+            MyGameMode->CharacterVisualEffectsDelegateStart.BindUObject(this, &AShooterCharacter::MakeVFXVisible);
+            MyGameMode->CharacterVisualEffectsDelegateStop.BindUObject(this, &AShooterCharacter::MakeVFXInvisible);
+        }
+    }
+}
+
+void AShooterCharacter::UnBindDelegates()
+{
+    if(GetWorld())
+    {
+        AWraithShooterGameModeBase* MyGameMode = GetWorld()->GetAuthGameMode<AWraithShooterGameModeBase>();
+        if(MyGameMode)
+        {
+            MyGameMode->CharacterVisualEffectsDelegateStart.Unbind();
+            MyGameMode->CharacterVisualEffectsDelegateStop.Unbind();
+        }
+    }
 }
 
 // Called when the game starts or when spawned
@@ -26,7 +77,38 @@ void AShooterCharacter::BeginPlay()
     Super::BeginPlay();
     
     GetMesh()->HideBoneByName(TEXT("weapon_r"), EPhysBodyOp::PBO_None);
+    
     SpawnInventory();
+    
+    BindDelegates();
+    
+    Health = MaxHealth;
+    
+    HealthText->SetRelativeLocation(FVector(0, -30, 75));
+    HealthText->SetRelativeRotation(FRotator(0, 180.f, 0));
+    HealthText->SetXScale(1.f);
+    HealthText->SetYScale(1.f);
+    HealthText->SetWorldSize(15);
+    HealthText->SetText(FText::FromString(FString::Printf(TEXT("HP: %f "), GetHealthPercent())));
+}
+
+
+void AShooterCharacter::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+    Super::EndPlay(EndPlayReason);
+    
+    UnBindDelegates();
+}
+
+void AShooterCharacter::MakeVFXVisible()
+{
+    VisualFX->ActivateSystem(true);
+    
+}
+
+void AShooterCharacter::MakeVFXInvisible()
+{
+    VisualFX->DeactivateSystem();
 }
 
 void AShooterCharacter::SpawnInventory()
@@ -64,7 +146,7 @@ bool AShooterCharacter::GetbIsAiming() const
 //MARK: GetHealthPercent
 float AShooterCharacter::GetHealthPercent() const
 {
-    return Health/ MaxHealth;
+    return Health;
 }
 
 //MARK:GetWeaponAttachPoint
@@ -102,6 +184,8 @@ void AShooterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
     PlayerInputComponent->BindAction("Reload", IE_Pressed, this, &AShooterCharacter::Reload);
     
     PlayerInputComponent->BindAction("SwitchWeapon", IE_Pressed, this, &AShooterCharacter::OnNextWeapon);
+    
+    PlayerInputComponent->BindAction("PickingUp", IE_Pressed, this, &AShooterCharacter::PickObjects);
     
 }
 
@@ -187,6 +271,7 @@ float AShooterCharacter::TakeDamage(float DamageAmount, struct FDamageEvent cons
     
     DamageToApply = FMath::Min(Health, DamageToApply);
     Health -= DamageToApply;
+    HealthText->SetText(FText::FromString(FString::Printf(TEXT("HP: %f "), GetHealthPercent())));
     
     UE_LOG(LogTemp, Warning, TEXT("Health left: %f"), Health);
     
@@ -260,4 +345,56 @@ void AShooterCharacter::SetCurrentWeapon(AGun* NewWeapon, AGun* LastWeapon)
         NewWeapon->SetOwningPawn(this);
         NewWeapon->OnEquip(LastWeapon);
     }
+}
+
+float AShooterCharacter::PlayAnimMontage(class UAnimMontage* AnimMontage, float InPlayRate, FName StartSectionName)
+{
+    
+    USkeletalMeshComponent* UseMesh = GetPawnMesh();
+    if(AnimMontage && UseMesh && UseMesh->AnimScriptInstance)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("PlayAnimMontage"));
+        return UseMesh->AnimScriptInstance->Montage_Play(AnimMontage, InPlayRate);
+    }
+    
+    return 0.0f;
+}
+
+void AShooterCharacter::PickObjects()
+{
+    PickupMode = !PickupMode;
+    if(PickupMode)
+    {
+        GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Green, TEXT("Pick Up ON"));
+    }
+    else
+    {
+         GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Green, TEXT("Pick Up OFF"));
+    }
+}
+
+
+void AShooterCharacter::OnOverlapBegin_Implementation(UPrimitiveComponent* Comp,
+    AActor* otherActor, UPrimitiveComponent* otherComp, int32 otherBodyIndex,
+    bool bFromSweep, const FHitResult& SweepResult) {
+    
+    AMagicPill* isPill= Cast<AMagicPill>(otherActor);
+
+    if (isPill != nullptr) {
+        if (PickupMode) {
+            GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Blue,
+                FString::Printf(TEXT("Colliding with %s!!!"), *(otherActor->GetName())));
+            Health += isPill->GetPillEffect();
+            isPill->Destroy();
+           HealthText->SetText(FText::FromString(FString::Printf(TEXT("HP: %f "), GetHealthPercent())));
+        }
+    }
+}
+
+void AShooterCharacter::PostInitializeComponents() {
+    Super::PostInitializeComponents();
+    if (RootComponent) {
+        GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &AShooterCharacter::OnOverlapBegin);
+    }
+
 }
