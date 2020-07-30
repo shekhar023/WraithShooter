@@ -112,7 +112,8 @@ public:
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
     UAnimMontage* ReloadAnim;
     
-    float PlayWeaponAnimation(UAnimMontage* WeaponFireMontage);
+    UFUNCTION()
+    void PlayFireAnimation(UAnimMontage* FireAnim);
     
 private:
     

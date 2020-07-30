@@ -3,19 +3,29 @@
 
 #include "PillSpawner.h"
 #include "MagicPill.h"
-#include "Components/BoxComponent.h"
+#include "Components/SphereComponent.h"
+#include "Components/DecalComponent.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "ShooterCharacter.h"
+#include "EngineUtils.h"
+#include "TimerManager.h"
 #include "WraithShooter/WraithShooterGameModeBase.h"
 
 // Sets default values
 APillSpawner::APillSpawner()
 {
-    // Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-    PrimaryActorTick.bCanEverTick = true;
     
-    SpawningVolume = CreateDefaultSubobject<UBoxComponent>(TEXT("SpawningVolume"));
-    SetRootComponent(SpawningVolume);
+    
+    SphereComp = CreateDefaultSubobject<USphereComponent>(TEXT("SphereComp"));
+    SphereComp->SetSphereRadius(75.0f);
+    RootComponent = SphereComp;
+    
+    DecalComp = CreateDefaultSubobject<UDecalComponent>(TEXT("DecalComp"));
+    DecalComp->SetRelativeRotation(FRotator(90, 0.0f, 0.0f));
+    DecalComp->DecalSize = FVector(64, 75, 75);
+    DecalComp->SetupAttachment(RootComponent);
+    
+    CooldownDuration = 10.0f;
 }
 
 // Called when the game starts or when spawned
@@ -25,60 +35,45 @@ void APillSpawner::BeginPlay()
     SpawnPill();
 }
 
-// Called every frame
-void APillSpawner::Tick(float DeltaTime)
-{
-    Super::Tick(DeltaTime);
-    
-}
-
-FVector APillSpawner::GetRandomPointInValue()
-{
-    FVector Origin = SpawningVolume->Bounds.Origin;
-    FVector Extent = SpawningVolume->Bounds.BoxExtent;
-    
-    return UKismetMathLibrary::RandomPointInBoundingBox(Origin, Extent);
-}
-
 void APillSpawner::SpawnPill()
 {
-    if(ItemToSpawn != nullptr)
-    {
-        if(GetWorld())
-        {
-            FVector SpawnLocation = GetRandomPointInValue();
-            FRotator SpawnRotation;
-            SpawnRotation.Pitch = FMath::FRand()*360.0f;
-            SpawnRotation.Roll = FMath::FRand()*360.0f;
-            SpawnRotation.Yaw = FMath::FRand()*360.0f;
-            
-            AMagicPill* SpawnedPill = GetWorld()->SpawnActor<AMagicPill>(ItemToSpawn, SpawnLocation, SpawnRotation);
-        }
-    }
+    if(ItemToSpawn == nullptr) {return;}
+    
+    FActorSpawnParameters SpawnParams;
+    SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+    
+    PillInstance = GetWorld()->SpawnActor<AMagicPill>(ItemToSpawn, GetTransform(), SpawnParams);
+    
 }
 
 void APillSpawner::NotifyActorBeginOverlap(AActor* otherActor)
 {
+    Super::NotifyActorBeginOverlap(otherActor);
+    
     AShooterCharacter* SCharacter = Cast<AShooterCharacter>(otherActor);
     
-    if(SCharacter)
+    if(SCharacter && PillInstance->GetIsPowerupActive() == false)
     {
-        SpawnPill();
-        if(GetWorld() != nullptr)
+        
+        AWraithShooterGameModeBase* MyGameMode = GetWorld()->GetAuthGameMode<AWraithShooterGameModeBase>();
+        if(MyGameMode != nullptr)
         {
-            AWraithShooterGameModeBase* MyGameMode = GetWorld()->GetAuthGameMode<AWraithShooterGameModeBase>();
-            if(MyGameMode != nullptr)
-            {
-                MyGameMode->CharacterVisualEffectsDelegateStart.ExecuteIfBound();
-            }
+            MyGameMode->CharacterVisualEffectsDelegateStart.ExecuteIfBound();
         }
+        
         //Broadcast the player entered event so that pill can randomize
         OnPlayerEntered.Broadcast();
+        
+        PillInstance->ActivatePowerup(SCharacter);
+    
+        GetWorldTimerManager().SetTimer(TimerHandle_RespawnTimer, this, &APillSpawner::SpawnPill, CooldownDuration);
     }
 }
 
 void APillSpawner::NotifyActorEndOverlap(AActor* otherActor)
 {
+    Super::NotifyActorEndOverlap(otherActor);
+    
     AShooterCharacter* SCharacter = Cast<AShooterCharacter>(otherActor);
     
     if(SCharacter)
@@ -90,6 +85,7 @@ void APillSpawner::NotifyActorEndOverlap(AActor* otherActor)
             {
                 MyGameMode->CharacterVisualEffectsDelegateStop.ExecuteIfBound();
             }
+            
         }
     }
 }

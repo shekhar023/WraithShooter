@@ -8,6 +8,7 @@
 #include "UObject/ScriptMacros.h"
 
 PRAGMA_DISABLE_DEPRECATION_WARNINGS
+class UAnimMontage;
 #ifdef WRAITHSHOOTER_Gun_generated_h
 #error "Gun.generated.h already included, missing '#pragma once' in Gun.h"
 #endif
@@ -16,6 +17,7 @@ PRAGMA_DISABLE_DEPRECATION_WARNINGS
 #define WraithShooter_Source_WraithShooter_Public_Gun_h_17_SPARSE_DATA
 #define WraithShooter_Source_WraithShooter_Public_Gun_h_17_RPC_WRAPPERS \
  \
+	DECLARE_FUNCTION(execPlayFireAnimation); \
 	DECLARE_FUNCTION(execGetbCanFire); \
 	DECLARE_FUNCTION(execGetMaxAmmo); \
 	DECLARE_FUNCTION(execGetCurrentAmmoInClip);
@@ -23,6 +25,7 @@ PRAGMA_DISABLE_DEPRECATION_WARNINGS
 
 #define WraithShooter_Source_WraithShooter_Public_Gun_h_17_RPC_WRAPPERS_NO_PURE_DECLS \
  \
+	DECLARE_FUNCTION(execPlayFireAnimation); \
 	DECLARE_FUNCTION(execGetbCanFire); \
 	DECLARE_FUNCTION(execGetMaxAmmo); \
 	DECLARE_FUNCTION(execGetCurrentAmmoInClip);

@@ -5,51 +5,62 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "PillSpawner.generated.h"
+
 class AMagicPill;
-class UBoxComponent;
 class UParticleSystem;
+class UDecalComponent;
+class USphereComponent;
 
 UCLASS()
 class WRAITHSHOOTER_API APillSpawner : public AActor
 {
-	GENERATED_BODY()
-	
+    GENERATED_BODY()
+    
 public:	
-	// Sets default values for this actor's properties
-	APillSpawner();
-    
-    //Declare custom Event for pill spawner
-    DECLARE_EVENT(APillSpawner, FPlayerEntered);
-    
-    //Declare an event using above Signature
-    FPlayerEntered OnPlayerEntered;
-
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-    
-    UPROPERTY(EditAnywhere, Category = Spawning)
-    TSubclassOf<AMagicPill> ItemToSpawn;
-
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-    
-    UFUNCTION(Blueprintpure, Category = Spawning)
-    FVector GetRandomPointInValue();
-    
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Spawning)
-    UParticleSystem* PillFX;
+    // Sets default values for this actor's properties
+    APillSpawner();
     
 private:
     
-    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Spawning, meta = (AllowPrivateAccess = "true"))
-    UBoxComponent* SpawningVolume;
+    UPROPERTY()
+    AMagicPill* PillInstance;
+    
+    UPROPERTY(VisibleAnywhere, Category = Spawning)
+    USphereComponent* SphereComp;
+    
+    UPROPERTY(VisibleAnywhere, Category = Spawning)
+    UDecalComponent* DecalComp;
+    
+    UPROPERTY(EditInstanceOnly, Category = "PickupActor")
+    float CooldownDuration;
+    
+    FTimerHandle TimerHandle_RespawnTimer;
     
     void SpawnPill();
     
     virtual void NotifyActorBeginOverlap(AActor* otherActor) override;
     
     virtual void NotifyActorEndOverlap(AActor* otherActor) override;
+    
+protected:
+    // Called when the game starts or when spawned
+    virtual void BeginPlay() override;
+    
+    UPROPERTY(EditAnywhere, Category = Spawning)
+    TSubclassOf<AMagicPill> ItemToSpawn;
+    
+public:
+    
+    //MARK: Custom Events
+    //Declare custom Event for pill spawner
+    DECLARE_EVENT(APillSpawner, FPlayerEntered);
+    
+    //Declare an event using above Signature
+    FPlayerEntered OnPlayerEntered;
+
+public:
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Spawning)
+    UParticleSystem* PillFX;
     
 };

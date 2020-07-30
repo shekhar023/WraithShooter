@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>logFormatVersion</key>
+	<integer>10</integer>
+	<key>logs</key>
+	<dict>
+		<key>A885C6D1-D6B3-4650-9730-6B5FCFF7C7E4</key>
+		<dict>
+			<key>className</key>
+			<string>IDEActivityLogSection</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
+			<key>fileName</key>
+			<string>A885C6D1-D6B3-4650-9730-6B5FCFF7C7E4.xcactivitylog</string>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>S</string>
+			</dict>
+			<key>schemeIdentifier-containerName</key>
+			<string>WraithShooter project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>WraithShooter</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>1</integer>
+			<key>signature</key>
+			<string>Build WraithShooter</string>
+			<key>timeStartedRecording</key>
+			<real>617656225.23671305</real>
+			<key>timeStoppedRecording</key>
+			<real>617656777.19790602</real>
+			<key>title</key>
+			<string>Build WraithShooter</string>
+			<key>uniqueIdentifier</key>
+			<string>A885C6D1-D6B3-4650-9730-6B5FCFF7C7E4</string>
+		</dict>
+		<key>C1169EED-8863-4E31-B384-36458846A0BB</key>
+		<dict>
+			<key>className</key>
+			<string>IDEActivityLogSection</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
+			<key>fileName</key>
+			<string>C1169EED-8863-4E31-B384-36458846A0BB.xcactivitylog</string>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>S</string>
+			</dict>
+			<key>schemeIdentifier-containerName</key>
+			<string>WraithShooter project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>WraithShooter</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>1</integer>
+			<key>signature</key>
+			<string>Build WraithShooter</string>
+			<key>timeStartedRecording</key>
+			<real>617649775.73442602</real>
+			<key>timeStoppedRecording</key>
+			<real>617649785.466223</real>
+			<key>title</key>
+			<string>Build WraithShooter</string>
+			<key>uniqueIdentifier</key>
+			<string>C1169EED-8863-4E31-B384-36458846A0BB</string>
+		</dict>
+		<key>EBC55642-3B72-4C71-93EC-389DA888B97A</key>
+		<dict>
+			<key>className</key>
+			<string>IDEActivityLogSection</string>
+			<key>documentTypeString</key>
+			<string>&lt;nil&gt;</string>
+			<key>domainType</key>
+			<string>Xcode.IDEActivityLogDomainType.BuildLog</string>
+			<key>fileName</key>
+			<string>EBC55642-3B72-4C71-93EC-389DA888B97A.xcactivitylog</string>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>S</string>
+			</dict>
+			<key>schemeIdentifier-containerName</key>
+			<string>WraithShooter project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>WraithShooter</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>1</integer>
+			<key>signature</key>
+			<string>Build WraithShooter</string>
+			<key>timeStartedRecording</key>
+			<real>617656799.57744396</real>
+			<key>timeStoppedRecording</key>
+			<real>617656820.53292799</real>
+			<key>title</key>
+			<string>Build WraithShooter</string>
+			<key>uniqueIdentifier</key>
+			<string>EBC55642-3B72-4C71-93EC-389DA888B97A</string>
+		</dict>
+	</dict>
+</dict>
+</plist>

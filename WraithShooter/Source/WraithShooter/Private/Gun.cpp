@@ -9,6 +9,7 @@
 #include "Particles/ParticleSystemComponent.h"
 #include "PhysicalMaterials/PhysicalMaterial.h"
 #include "Animation/AnimMontage.h"
+#include "Animation/AnimInstance.h"
 
 // Sets default values
 AGun::AGun()
@@ -122,7 +123,7 @@ void AGun::PullTrigger()
         if(bSuccess)
         {
             PlayFireEffects(Hit.ImpactPoint);
-            PlayWeaponAnimation(GunFireMontage);
+            PlayFireAnimation(GunFireMontage);
             SurfaceType = UPhysicalMaterial::DetermineSurfaceType(Hit.PhysMaterial.Get());
             PlayImpactEffects(SurfaceType, Hit.ImpactPoint);
             AActor* HitActor = Hit.GetActor();
@@ -280,16 +281,21 @@ void AGun::DetachMeshFromPawn()
     Mesh->SetHiddenInGame(true);
 }
 
-float AGun::PlayWeaponAnimation(UAnimMontage* WeaponFireMontage)
+void AGun::PlayFireAnimation(UAnimMontage* FireAnim)
 {
      AShooterCharacter* MyCharacter = Cast<AShooterCharacter>(GetOwner());
-    float Duration = 0.0f;
-    UAnimMontage* UseAnim = WeaponFireMontage;
-    if(WeaponFireMontage)
-    {
-        UE_LOG(LogTemp, Warning, TEXT("WeaponFireMontage"));
-        Duration = MyCharacter->PlayAnimMontage(WeaponFireMontage);
-    }
+    if(MyCharacter == nullptr){return;}
     
-    return Duration;
+    if(FireAnim)
+    {
+         MyCharacter->PlayAnimMontage(FireAnim);
+       /* GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Blue, FString::Printf(TEXT("FireAnimeReturned")));
+        UAnimInstance* AnimInstance = MyCharacter->GetMesh()->GetAnimInstance();
+        if (AnimInstance != NULL)
+        {
+            GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Blue, FString::Printf(TEXT("AnimeInstace is okay")));
+            AnimInstance->Montage_Play(FireAnim, 1.f);
+        }*/
+}
+    
 }

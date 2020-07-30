@@ -17,9 +17,9 @@ void EmptyLinkFunctionForGeneratedCodeGun() {}
 	WRAITHSHOOTER_API UClass* Z_Construct_UClass_AGun();
 	ENGINE_API UClass* Z_Construct_UClass_AActor();
 	UPackage* Z_Construct_UPackage__Script_WraithShooter();
+	ENGINE_API UClass* Z_Construct_UClass_UAnimMontage_NoRegister();
 	ENGINE_API UClass* Z_Construct_UClass_USkeletalMeshComponent_NoRegister();
 	ENGINE_API UClass* Z_Construct_UClass_USceneComponent_NoRegister();
-	ENGINE_API UClass* Z_Construct_UClass_UAnimMontage_NoRegister();
 	ENGINE_API UClass* Z_Construct_UClass_USoundBase_NoRegister();
 	ENGINE_API UClass* Z_Construct_UClass_UParticleSystem_NoRegister();
 	ENGINE_API UClass* Z_Construct_UClass_UCameraShake_NoRegister();
@@ -27,6 +27,14 @@ void EmptyLinkFunctionForGeneratedCodeGun() {}
 	ENGINE_API UEnum* Z_Construct_UEnum_Engine_EPhysicalSurface();
 	WRAITHSHOOTER_API UClass* Z_Construct_UClass_AShooterCharacter_NoRegister();
 // End Cross Module References
+	DEFINE_FUNCTION(AGun::execPlayFireAnimation)
+	{
+		P_GET_OBJECT(UAnimMontage,Z_Param_FireAnim);
+		P_FINISH;
+		P_NATIVE_BEGIN;
+		P_THIS->PlayFireAnimation(Z_Param_FireAnim);
+		P_NATIVE_END;
+	}
 	DEFINE_FUNCTION(AGun::execGetbCanFire)
 	{
 		P_FINISH;
@@ -55,6 +63,7 @@ void EmptyLinkFunctionForGeneratedCodeGun() {}
 			{ "GetbCanFire", &AGun::execGetbCanFire },
 			{ "GetCurrentAmmoInClip", &AGun::execGetCurrentAmmoInClip },
 			{ "GetMaxAmmo", &AGun::execGetMaxAmmo },
+			{ "PlayFireAnimation", &AGun::execPlayFireAnimation },
 		};
 		FNativeFunctionRegistrar::RegisterFunctions(Class, Funcs, UE_ARRAY_COUNT(Funcs));
 	}
@@ -156,6 +165,38 @@ void EmptyLinkFunctionForGeneratedCodeGun() {}
 		if (!ReturnFunction)
 		{
 			UE4CodeGen_Private::ConstructUFunction(ReturnFunction, Z_Construct_UFunction_AGun_GetMaxAmmo_Statics::FuncParams);
+		}
+		return ReturnFunction;
+	}
+	struct Z_Construct_UFunction_AGun_PlayFireAnimation_Statics
+	{
+		struct Gun_eventPlayFireAnimation_Parms
+		{
+			UAnimMontage* FireAnim;
+		};
+		static const UE4CodeGen_Private::FObjectPropertyParams NewProp_FireAnim;
+		static const UE4CodeGen_Private::FPropertyParamsBase* const PropPointers[];
+#if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam Function_MetaDataParams[];
+#endif
+		static const UE4CodeGen_Private::FFunctionParams FuncParams;
+	};
+	const UE4CodeGen_Private::FObjectPropertyParams Z_Construct_UFunction_AGun_PlayFireAnimation_Statics::NewProp_FireAnim = { "FireAnim", nullptr, (EPropertyFlags)0x0010000000000080, UE4CodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(Gun_eventPlayFireAnimation_Parms, FireAnim), Z_Construct_UClass_UAnimMontage_NoRegister, METADATA_PARAMS(nullptr, 0) };
+	const UE4CodeGen_Private::FPropertyParamsBase* const Z_Construct_UFunction_AGun_PlayFireAnimation_Statics::PropPointers[] = {
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_AGun_PlayFireAnimation_Statics::NewProp_FireAnim,
+	};
+#if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_AGun_PlayFireAnimation_Statics::Function_MetaDataParams[] = {
+		{ "ModuleRelativePath", "Public/Gun.h" },
+	};
+#endif
+	const UE4CodeGen_Private::FFunctionParams Z_Construct_UFunction_AGun_PlayFireAnimation_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_AGun, nullptr, "PlayFireAnimation", nullptr, nullptr, sizeof(Gun_eventPlayFireAnimation_Parms), Z_Construct_UFunction_AGun_PlayFireAnimation_Statics::PropPointers, UE_ARRAY_COUNT(Z_Construct_UFunction_AGun_PlayFireAnimation_Statics::PropPointers), RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x00020401, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_AGun_PlayFireAnimation_Statics::Function_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UFunction_AGun_PlayFireAnimation_Statics::Function_MetaDataParams)) };
+	UFunction* Z_Construct_UFunction_AGun_PlayFireAnimation()
+	{
+		static UFunction* ReturnFunction = nullptr;
+		if (!ReturnFunction)
+		{
+			UE4CodeGen_Private::ConstructUFunction(ReturnFunction, Z_Construct_UFunction_AGun_PlayFireAnimation_Statics::FuncParams);
 		}
 		return ReturnFunction;
 	}
@@ -274,6 +315,7 @@ void EmptyLinkFunctionForGeneratedCodeGun() {}
 		{ &Z_Construct_UFunction_AGun_GetbCanFire, "GetbCanFire" }, // 268761114
 		{ &Z_Construct_UFunction_AGun_GetCurrentAmmoInClip, "GetCurrentAmmoInClip" }, // 691344743
 		{ &Z_Construct_UFunction_AGun_GetMaxAmmo, "GetMaxAmmo" }, // 2526484654
+		{ &Z_Construct_UFunction_AGun_PlayFireAnimation, "PlayFireAnimation" }, // 1095887268
 	};
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AGun_Statics::Class_MetaDataParams[] = {
@@ -495,7 +537,7 @@ void EmptyLinkFunctionForGeneratedCodeGun() {}
 		}
 		return OuterClass;
 	}
-	IMPLEMENT_CLASS(AGun, 457682567);
+	IMPLEMENT_CLASS(AGun, 40021236);
 	template<> WRAITHSHOOTER_API UClass* StaticClass<AGun>()
 	{
 		return AGun::StaticClass();

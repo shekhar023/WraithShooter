@@ -3,17 +3,20 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "WraithUIInterface.h"
 #include "GameFramework/Character.h"
 #include "ShooterCharacter.generated.h"
 
+//MARK: Classes forward Declerations
 class AGun;
 class UAnimMontage;
-class UParticleSystemComponent;
+class UBehaviorTree;
 class UParticleSystem;
+class UParticleSystemComponent;
 class UTextRenderComponent;
 
 UCLASS()
-class WRAITHSHOOTER_API AShooterCharacter : public ACharacter
+class WRAITHSHOOTER_API AShooterCharacter : public ACharacter, public IWraithUIInterface // inherited IWraithUIInterface
 {
     GENERATED_BODY()
     
@@ -25,9 +28,10 @@ protected:
     // Called when the game starts or when spawned
     virtual void BeginPlay() override;
     
-    
-    
     virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+    
+protected:
+    //MARK: Axis Bindings Declerations
     
     void moveForward(float AxisValue);
     
@@ -37,13 +41,28 @@ protected:
     
     void TurnRate(float AxisValue);
     
+public:
+    //MARK:Action Bindind Decleration
     void CanJump();
     
-    UPROPERTY(EditAnywhere)
-    bool bIsAiming;
+    void Aim();
     
-    UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-    FName GunAttachSocket;
+    void StopAim();
+    
+    void StartShoot();
+    
+    void StopShoot();
+    
+    void Reload();
+    
+    //AI Shooting
+    void Shoot();
+    
+    //For AI to Stop Aiming
+    void StopAiming();
+    
+public:
+    //MARK:Variables
     
     UPROPERTY(EditAnywhere)
     float BasePitchValue;
@@ -51,26 +70,21 @@ protected:
     UPROPERTY(EditAnywhere)
     float BaseYawValue;
     
-    UPROPERTY(EditDefaultsOnly)
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+    FName GunAttachSocket;
+    
+    UPROPERTY(EditAnywhere)
+    bool bIsAiming;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
     float MaxHealth;
     
     UPROPERTY(VisibleAnywhere)
     float Health;
     
-    
-    
-    
-//MARK: Gun and Inventory
 protected:
     
-    void SpawnInventory();
-    
-    void OnNextWeapon();
-    
-    void EquipWeapon(AGun* Weapon);
-    
-    void SetCurrentWeapon(AGun* NewWeapon, AGun* LastWeapon);
-    
+    //MARK: Gun Variables and Data Structures
     UPROPERTY(BlueprintReadOnly)
     AGun* Gun;
     
@@ -80,34 +94,32 @@ protected:
     UPROPERTY(Transient)
     TArray<AGun*> Inventory;
     
+protected:
+    
+    //MARK: Gun Functions
+    void SpawnInventory();
+    
+    void SwitchWeapon();
+    
+    void EquipWeapon(AGun* Weapon);
+    
+    void SetCurrentWeapon(AGun* NewWeapon, AGun* LastWeapon);
+    
 public:
     
-    // Called to bind functionality to input
-    virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+    //MARK: Components
+    UPROPERTY(EditAnywhere,BlueprintReadWrite, Category = Interface)
+    UTextRenderComponent* HealthText;
     
-    virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Effects)
+    UParticleSystemComponent* VisualFX;
     
-    void StartShoot();
+    UPROPERTY(EditAnywhere, Category = "AI Behavior")
+    UBehaviorTree* ShooterBT;
     
-    UFUNCTION(BlueprintCallable)
-    void StopShoot();
     
-    //AI Shooting
-    void Shoot();
-    
-    void Reload();
-    
-    void Aim();
-    
-    void StopAim();
-    
-    //For AI to Stop Aiming
-    void StopAiming();
-    
-    virtual float PlayAnimMontage(class UAnimMontage* AnimMontage, float InPlayRate = 1.f, FName StartSectionName = NAME_None) override;
- 
-//MARK: Return Functions
 public:
+    //MARK: Return Functions
     
     UFUNCTION(BlueprintPure)
     bool IsDead() const;
@@ -116,44 +128,50 @@ public:
     bool GetbIsAiming() const;
     
     UFUNCTION(BlueprintPure)
-    float GetHealthPercent() const;
+    float GetHealth() const;
     
+    UFUNCTION()
     FName GetWeaponAttachPoint() const;
     
+    UFUNCTION()
     USkeletalMeshComponent* GetPawnMesh() const;
-    
-    bool PickupMode;
-    
-    void PickObjects();
-    
-    // Collision functionality setup
-    UFUNCTION(BlueprintNativeEvent, Category = Collision)
-    void OnOverlapBegin(UPrimitiveComponent* Comp, AActor* otherActor, UPrimitiveComponent* otherComp,
-                        int32 otherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
-    
-    virtual void PostInitializeComponents() override;
-    
-    UTextRenderComponent* HealthText;
-    
-    
     
 public:
     
-    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Effects)
-    UParticleSystemComponent* VisualFX;
-    
-   
-//MARK: Binding these functions to delegate created in WraithShooterGameModeBase.h
-    UFUNCTION()
-    void MakeVFXVisible();
-    
-    UFUNCTION()
-    void MakeVFXInvisible();
-    
+    //MARK: Function for Binding Delegates created in WraithShooterGameModeBase.h
     UFUNCTION()
     void BindDelegates();
     
     UFUNCTION()
     void UnBindDelegates();
     
+public:
+    
+    //MARK: VFX function Decleration
+    UFUNCTION()
+    void MakeVFXVisible();
+    
+    UFUNCTION()
+    void MakeVFXInvisible();
+    
+    
+public:
+    //MARK: Virtual function Take Damage, GetTestName, PostInitializeComponents, ReactToPlayerEntered, ReactToPlayerEntered_Implementation
+    
+    //damage function
+    virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
+    
+    //Declare override of interface
+    virtual FString GetTestName() override;
+    
+    virtual void PostInitializeComponents() override;
+    
+    //Declared function must be implmented in c++
+    bool ReactToPlayerEntered();
+    bool ReactToPlayerEntered_Implementation() override;
+    
+    
+public:
+    // Called to bind functionality to input
+    virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 };

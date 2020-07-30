@@ -23,20 +23,27 @@ protected:
     
 private:
     
+    //UUserWidget Instance
+    UPROPERTY()
+    UUserWidget* HUD;
+    
+    //Main HUD
     UPROPERTY(EditAnywhere)
     TSubclassOf<UUserWidget> HUDClass;
     
+    //Lose Screen
     UPROPERTY(EditAnywhere)
     TSubclassOf<UUserWidget> LoseScreenClass;
     
+    //Win Screen
     UPROPERTY(EditAnywhere)
     TSubclassOf<UUserWidget> WinScreenClass;
     
+    //Restart Delay
     UPROPERTY(EditAnywhere)
     float RestartDelay = 5;
     
+    //Timer to restart
     FTimerHandle RestartTimer;
     
-    UUserWidget* HUD;
-	
 };

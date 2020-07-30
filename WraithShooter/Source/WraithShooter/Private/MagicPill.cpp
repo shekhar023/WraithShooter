@@ -10,17 +10,14 @@
 // Sets default values
 AMagicPill::AMagicPill()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
-    PillEffect = 0.0f;
-    
+    PowerupInterval = 2.0f;
+    TotalNoOfTicks = 2;
+
+    bIsPowerupActive = false;
+
     PillMesh = CreateDefaultSubobject<UStaticMeshComponent>("BaseMeshComponent");
-    auto MeshAsset = ConstructorHelpers::FObjectFinder<UStaticMesh>(TEXT("StaticMesh'/Engine/BasicShapes/Sphere.Sphere'"));
-    
-    if(MeshAsset.Object != nullptr)
-    {
-        PillMesh->SetStaticMesh(MeshAsset.Object);
-    }
+    PillMesh->SetSimulatePhysics(false);
+    PillMesh->SetupAttachment(RootComponent);
 
 }
 
@@ -28,36 +25,65 @@ AMagicPill::AMagicPill()
 void AMagicPill::BeginPlay()
 {
 	Super::BeginPlay();
-    PillMesh->SetSimulatePhysics(true);
     
-    //setting up trigger event source
-    auto Itr = TActorIterator<APillSpawner>(GetWorld());
-    TriggerEventSource = *Itr;
+    auto iterator = TActorIterator<APillSpawner>(GetWorld());
+    TriggerEventSource = *iterator;
     
-    GEngine->AddOnScreenDebugMessage(-1, 1, FColor::Red, TEXT("%s is assigned to me"), *(TriggerEventSource->GetName()));
-	
-    if(TriggerEventSource != nullptr)
+    if(TriggerEventSource)
     {
         TriggerEventSource->OnPlayerEntered.AddUObject(this, &AMagicPill::OnTriggerEvent);
     }
-}
-
-// Called every frame
-void AMagicPill::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
+    
 }
 
 void AMagicPill::OnTriggerEvent()
 {
-    PillEffect = FMath::RandRange(-150.f, 150.f);
-    
-    GEngine->AddOnScreenDebugMessage(-1, 5, FColor::Green, FString::Printf(TEXT("%f is my new value!!!"), PillEffect));
+    UE_LOG(LogTemp, Warning, TEXT("Custom Event from pill spawner to magic pill executed!!"));
 }
 
-float AMagicPill::GetPillEffect()
+void AMagicPill::OnTickPowerup()
 {
-    return PillEffect;
+    TicksProcessed++;
+
+    OnPowerupTicked();
+
+    if (TicksProcessed >= TotalNoOfTicks)
+    {
+        OnExpired();
+
+        bIsPowerupActive = false;
+        OnRep_PowerupActive();
+
+        // Delete timer
+        GetWorldTimerManager().ClearTimer(TimerHandle_PowerupTick);
+    }
 }
+
+void AMagicPill::OnRep_PowerupActive()
+{
+    OnPowerupStateChanged(bIsPowerupActive);
+}
+
+void AMagicPill::ActivatePowerup(AActor* ActiveFor)
+{
+    OnActivated(ActiveFor);
+
+    bIsPowerupActive = true;
+    OnRep_PowerupActive();
+
+    if (PowerupInterval > 0.0f)
+    {
+        GetWorldTimerManager().SetTimer(TimerHandle_PowerupTick, this, &AMagicPill::OnTickPowerup, PowerupInterval, true);
+    }
+    else
+    {
+        OnTickPowerup();
+    }
+}
+
+bool AMagicPill::GetIsPowerupActive() const
+{
+    return bIsPowerupActive;
+}
+
 

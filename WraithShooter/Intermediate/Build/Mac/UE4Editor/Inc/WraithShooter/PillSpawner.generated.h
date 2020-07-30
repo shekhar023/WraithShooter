@@ -8,24 +8,15 @@
 #include "UObject/ScriptMacros.h"
 
 PRAGMA_DISABLE_DEPRECATION_WARNINGS
-struct FVector;
 #ifdef WRAITHSHOOTER_PillSpawner_generated_h
 #error "PillSpawner.generated.h already included, missing '#pragma once' in PillSpawner.h"
 #endif
 #define WRAITHSHOOTER_PillSpawner_generated_h
 
-#define WraithShooter_Source_WraithShooter_Public_PillSpawner_h_15_SPARSE_DATA
-#define WraithShooter_Source_WraithShooter_Public_PillSpawner_h_15_RPC_WRAPPERS \
- \
-	DECLARE_FUNCTION(execGetRandomPointInValue);
-
-
-#define WraithShooter_Source_WraithShooter_Public_PillSpawner_h_15_RPC_WRAPPERS_NO_PURE_DECLS \
- \
-	DECLARE_FUNCTION(execGetRandomPointInValue);
-
-
-#define WraithShooter_Source_WraithShooter_Public_PillSpawner_h_15_INCLASS_NO_PURE_DECLS \
+#define WraithShooter_Source_WraithShooter_Public_PillSpawner_h_17_SPARSE_DATA
+#define WraithShooter_Source_WraithShooter_Public_PillSpawner_h_17_RPC_WRAPPERS
+#define WraithShooter_Source_WraithShooter_Public_PillSpawner_h_17_RPC_WRAPPERS_NO_PURE_DECLS
+#define WraithShooter_Source_WraithShooter_Public_PillSpawner_h_17_INCLASS_NO_PURE_DECLS \
 private: \
 	static void StaticRegisterNativesAPillSpawner(); \
 	friend struct Z_Construct_UClass_APillSpawner_Statics; \
@@ -34,7 +25,7 @@ public: \
 	DECLARE_SERIALIZER(APillSpawner)
 
 
-#define WraithShooter_Source_WraithShooter_Public_PillSpawner_h_15_INCLASS \
+#define WraithShooter_Source_WraithShooter_Public_PillSpawner_h_17_INCLASS \
 private: \
 	static void StaticRegisterNativesAPillSpawner(); \
 	friend struct Z_Construct_UClass_APillSpawner_Statics; \
@@ -43,7 +34,7 @@ public: \
 	DECLARE_SERIALIZER(APillSpawner)
 
 
-#define WraithShooter_Source_WraithShooter_Public_PillSpawner_h_15_STANDARD_CONSTRUCTORS \
+#define WraithShooter_Source_WraithShooter_Public_PillSpawner_h_17_STANDARD_CONSTRUCTORS \
 	/** Standard constructor, called after all reflected properties have been initialized */ \
 	NO_API APillSpawner(const FObjectInitializer& ObjectInitializer); \
 	DEFINE_DEFAULT_OBJECT_INITIALIZER_CONSTRUCTOR_CALL(APillSpawner) \
@@ -56,7 +47,7 @@ private: \
 public:
 
 
-#define WraithShooter_Source_WraithShooter_Public_PillSpawner_h_15_ENHANCED_CONSTRUCTORS \
+#define WraithShooter_Source_WraithShooter_Public_PillSpawner_h_17_ENHANCED_CONSTRUCTORS \
 private: \
 	/** Private move- and copy-constructors, should never be used */ \
 	NO_API APillSpawner(APillSpawner&&); \
@@ -67,32 +58,35 @@ DEFINE_VTABLE_PTR_HELPER_CTOR_CALLER(APillSpawner); \
 	DEFINE_DEFAULT_CONSTRUCTOR_CALL(APillSpawner)
 
 
-#define WraithShooter_Source_WraithShooter_Public_PillSpawner_h_15_PRIVATE_PROPERTY_OFFSET \
-	FORCEINLINE static uint32 __PPO__ItemToSpawn() { return STRUCT_OFFSET(APillSpawner, ItemToSpawn); } \
-	FORCEINLINE static uint32 __PPO__SpawningVolume() { return STRUCT_OFFSET(APillSpawner, SpawningVolume); }
+#define WraithShooter_Source_WraithShooter_Public_PillSpawner_h_17_PRIVATE_PROPERTY_OFFSET \
+	FORCEINLINE static uint32 __PPO__PillInstance() { return STRUCT_OFFSET(APillSpawner, PillInstance); } \
+	FORCEINLINE static uint32 __PPO__SphereComp() { return STRUCT_OFFSET(APillSpawner, SphereComp); } \
+	FORCEINLINE static uint32 __PPO__DecalComp() { return STRUCT_OFFSET(APillSpawner, DecalComp); } \
+	FORCEINLINE static uint32 __PPO__CooldownDuration() { return STRUCT_OFFSET(APillSpawner, CooldownDuration); } \
+	FORCEINLINE static uint32 __PPO__ItemToSpawn() { return STRUCT_OFFSET(APillSpawner, ItemToSpawn); }
 
 
-#define WraithShooter_Source_WraithShooter_Public_PillSpawner_h_12_PROLOG
-#define WraithShooter_Source_WraithShooter_Public_PillSpawner_h_15_GENERATED_BODY_LEGACY \
+#define WraithShooter_Source_WraithShooter_Public_PillSpawner_h_14_PROLOG
+#define WraithShooter_Source_WraithShooter_Public_PillSpawner_h_17_GENERATED_BODY_LEGACY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \
 public: \
-	WraithShooter_Source_WraithShooter_Public_PillSpawner_h_15_PRIVATE_PROPERTY_OFFSET \
-	WraithShooter_Source_WraithShooter_Public_PillSpawner_h_15_SPARSE_DATA \
-	WraithShooter_Source_WraithShooter_Public_PillSpawner_h_15_RPC_WRAPPERS \
-	WraithShooter_Source_WraithShooter_Public_PillSpawner_h_15_INCLASS \
-	WraithShooter_Source_WraithShooter_Public_PillSpawner_h_15_STANDARD_CONSTRUCTORS \
+	WraithShooter_Source_WraithShooter_Public_PillSpawner_h_17_PRIVATE_PROPERTY_OFFSET \
+	WraithShooter_Source_WraithShooter_Public_PillSpawner_h_17_SPARSE_DATA \
+	WraithShooter_Source_WraithShooter_Public_PillSpawner_h_17_RPC_WRAPPERS \
+	WraithShooter_Source_WraithShooter_Public_PillSpawner_h_17_INCLASS \
+	WraithShooter_Source_WraithShooter_Public_PillSpawner_h_17_STANDARD_CONSTRUCTORS \
 public: \
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
 
 
-#define WraithShooter_Source_WraithShooter_Public_PillSpawner_h_15_GENERATED_BODY \
+#define WraithShooter_Source_WraithShooter_Public_PillSpawner_h_17_GENERATED_BODY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \
 public: \
-	WraithShooter_Source_WraithShooter_Public_PillSpawner_h_15_PRIVATE_PROPERTY_OFFSET \
-	WraithShooter_Source_WraithShooter_Public_PillSpawner_h_15_SPARSE_DATA \
-	WraithShooter_Source_WraithShooter_Public_PillSpawner_h_15_RPC_WRAPPERS_NO_PURE_DECLS \
-	WraithShooter_Source_WraithShooter_Public_PillSpawner_h_15_INCLASS_NO_PURE_DECLS \
-	WraithShooter_Source_WraithShooter_Public_PillSpawner_h_15_ENHANCED_CONSTRUCTORS \
+	WraithShooter_Source_WraithShooter_Public_PillSpawner_h_17_PRIVATE_PROPERTY_OFFSET \
+	WraithShooter_Source_WraithShooter_Public_PillSpawner_h_17_SPARSE_DATA \
+	WraithShooter_Source_WraithShooter_Public_PillSpawner_h_17_RPC_WRAPPERS_NO_PURE_DECLS \
+	WraithShooter_Source_WraithShooter_Public_PillSpawner_h_17_INCLASS_NO_PURE_DECLS \
+	WraithShooter_Source_WraithShooter_Public_PillSpawner_h_17_ENHANCED_CONSTRUCTORS \
 private: \
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
 

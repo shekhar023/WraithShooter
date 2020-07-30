@@ -61,6 +61,7 @@ DEFINE_VTABLE_PTR_HELPER_CTOR_CALLER(AShooterPlayerController); \
 
 
 #define WraithShooter_Source_WraithShooter_Public_ShooterPlayerController_h_14_PRIVATE_PROPERTY_OFFSET \
+	FORCEINLINE static uint32 __PPO__HUD() { return STRUCT_OFFSET(AShooterPlayerController, HUD); } \
 	FORCEINLINE static uint32 __PPO__HUDClass() { return STRUCT_OFFSET(AShooterPlayerController, HUDClass); } \
 	FORCEINLINE static uint32 __PPO__LoseScreenClass() { return STRUCT_OFFSET(AShooterPlayerController, LoseScreenClass); } \
 	FORCEINLINE static uint32 __PPO__WinScreenClass() { return STRUCT_OFFSET(AShooterPlayerController, WinScreenClass); } \

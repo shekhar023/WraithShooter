@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>logFormatVersion</key>
+	<integer>10</integer>
+	<key>logs</key>
+	<dict>
+		<key>3D2C7E39-8169-46D0-9559-EA282ECD7F5B</key>
+		<dict>
+			<key>className</key>
+			<string>DBGConsoleLog</string>
+			<key>documentTypeString</key>
+			<string>com.apple.dt.IDE.DebuggerLogContentType</string>
+			<key>domainType</key>
+			<string>Xcode.IDEActivityLogDomainType.DebugLog</string>
+			<key>fileName</key>
+			<string>3D2C7E39-8169-46D0-9559-EA282ECD7F5B.xcactivitylog</string>
+			<key>hasPrimaryLog</key>
+			<true/>
+			<key>primaryObservable</key>
+			<dict>
+				<key>highLevelStatus</key>
+				<string>S</string>
+			</dict>
+			<key>schemeIdentifier-containerName</key>
+			<string>WraithShooter project</string>
+			<key>schemeIdentifier-schemeName</key>
+			<string>WraithShooter</string>
+			<key>schemeIdentifier-sharedScheme</key>
+			<integer>1</integer>
+			<key>signature</key>
+			<string>Run UE4Editor</string>
+			<key>timeStartedRecording</key>
+			<real>617656820.60764897</real>
+			<key>timeStoppedRecording</key>
+			<real>617658105.06336796</real>
+			<key>title</key>
+			<string>Run UE4Editor</string>
+			<key>uniqueIdentifier</key>
+			<string>3D2C7E39-8169-46D0-9559-EA282ECD7F5B</string>
+		</dict>
+	</dict>
+</dict>
+</plist>
