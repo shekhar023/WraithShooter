@@ -13,11 +13,47 @@
 PRAGMA_DISABLE_DEPRECATION_WARNINGS
 void EmptyLinkFunctionForGeneratedCodeWraithShooterGameModeBase() {}
 // Cross Module References
+	WRAITHSHOOTER_API UFunction* Z_Construct_UDelegateFunction_WraithShooter_OnActorKilled__DelegateSignature();
+	UPackage* Z_Construct_UPackage__Script_WraithShooter();
+	ENGINE_API UClass* Z_Construct_UClass_AActor_NoRegister();
 	WRAITHSHOOTER_API UClass* Z_Construct_UClass_AWraithShooterGameModeBase_NoRegister();
 	WRAITHSHOOTER_API UClass* Z_Construct_UClass_AWraithShooterGameModeBase();
 	ENGINE_API UClass* Z_Construct_UClass_AGameModeBase();
-	UPackage* Z_Construct_UPackage__Script_WraithShooter();
+	WRAITHSHOOTER_API UClass* Z_Construct_UClass_AShooterCharacter_NoRegister();
 // End Cross Module References
+	struct Z_Construct_UDelegateFunction_WraithShooter_OnActorKilled__DelegateSignature_Statics
+	{
+		struct _Script_WraithShooter_eventOnActorKilled_Parms
+		{
+			AActor* KilledPawn;
+		};
+		static const UE4CodeGen_Private::FObjectPropertyParams NewProp_KilledPawn;
+		static const UE4CodeGen_Private::FPropertyParamsBase* const PropPointers[];
+#if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam Function_MetaDataParams[];
+#endif
+		static const UE4CodeGen_Private::FFunctionParams FuncParams;
+	};
+	const UE4CodeGen_Private::FObjectPropertyParams Z_Construct_UDelegateFunction_WraithShooter_OnActorKilled__DelegateSignature_Statics::NewProp_KilledPawn = { "KilledPawn", nullptr, (EPropertyFlags)0x0010000000000080, UE4CodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(_Script_WraithShooter_eventOnActorKilled_Parms, KilledPawn), Z_Construct_UClass_AActor_NoRegister, METADATA_PARAMS(nullptr, 0) };
+	const UE4CodeGen_Private::FPropertyParamsBase* const Z_Construct_UDelegateFunction_WraithShooter_OnActorKilled__DelegateSignature_Statics::PropPointers[] = {
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UDelegateFunction_WraithShooter_OnActorKilled__DelegateSignature_Statics::NewProp_KilledPawn,
+	};
+#if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UDelegateFunction_WraithShooter_OnActorKilled__DelegateSignature_Statics::Function_MetaDataParams[] = {
+		{ "Comment", "/**\n * \n */" },
+		{ "ModuleRelativePath", "WraithShooterGameModeBase.h" },
+	};
+#endif
+	const UE4CodeGen_Private::FFunctionParams Z_Construct_UDelegateFunction_WraithShooter_OnActorKilled__DelegateSignature_Statics::FuncParams = { (UObject*(*)())Z_Construct_UPackage__Script_WraithShooter, nullptr, "OnActorKilled__DelegateSignature", nullptr, nullptr, sizeof(_Script_WraithShooter_eventOnActorKilled_Parms), Z_Construct_UDelegateFunction_WraithShooter_OnActorKilled__DelegateSignature_Statics::PropPointers, UE_ARRAY_COUNT(Z_Construct_UDelegateFunction_WraithShooter_OnActorKilled__DelegateSignature_Statics::PropPointers), RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x00130000, 0, 0, METADATA_PARAMS(Z_Construct_UDelegateFunction_WraithShooter_OnActorKilled__DelegateSignature_Statics::Function_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UDelegateFunction_WraithShooter_OnActorKilled__DelegateSignature_Statics::Function_MetaDataParams)) };
+	UFunction* Z_Construct_UDelegateFunction_WraithShooter_OnActorKilled__DelegateSignature()
+	{
+		static UFunction* ReturnFunction = nullptr;
+		if (!ReturnFunction)
+		{
+			UE4CodeGen_Private::ConstructUFunction(ReturnFunction, Z_Construct_UDelegateFunction_WraithShooter_OnActorKilled__DelegateSignature_Statics::FuncParams);
+		}
+		return ReturnFunction;
+	}
 	void AWraithShooterGameModeBase::StaticRegisterNativesAWraithShooterGameModeBase()
 	{
 	}
@@ -31,6 +67,15 @@ void EmptyLinkFunctionForGeneratedCodeWraithShooterGameModeBase() {}
 #if WITH_METADATA
 		static const UE4CodeGen_Private::FMetaDataPairParam Class_MetaDataParams[];
 #endif
+#if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_OnActorKilled_MetaData[];
+#endif
+		static const UE4CodeGen_Private::FMulticastDelegatePropertyParams NewProp_OnActorKilled;
+#if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_SCharacter_MetaData[];
+#endif
+		static const UE4CodeGen_Private::FObjectPropertyParams NewProp_SCharacter;
+		static const UE4CodeGen_Private::FPropertyParamsBase* const PropPointers[];
 		static const FCppClassTypeInfoStatic StaticCppClassTypeInfo;
 		static const UE4CodeGen_Private::FClassParams ClassParams;
 	};
@@ -46,6 +91,24 @@ void EmptyLinkFunctionForGeneratedCodeWraithShooterGameModeBase() {}
 		{ "ShowCategories", "Input|MouseInput Input|TouchInput" },
 	};
 #endif
+#if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AWraithShooterGameModeBase_Statics::NewProp_OnActorKilled_MetaData[] = {
+		{ "Category", "GameMode" },
+		{ "ModuleRelativePath", "WraithShooterGameModeBase.h" },
+	};
+#endif
+	const UE4CodeGen_Private::FMulticastDelegatePropertyParams Z_Construct_UClass_AWraithShooterGameModeBase_Statics::NewProp_OnActorKilled = { "OnActorKilled", nullptr, (EPropertyFlags)0x0010000010080000, UE4CodeGen_Private::EPropertyGenFlags::InlineMulticastDelegate, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AWraithShooterGameModeBase, OnActorKilled), Z_Construct_UDelegateFunction_WraithShooter_OnActorKilled__DelegateSignature, METADATA_PARAMS(Z_Construct_UClass_AWraithShooterGameModeBase_Statics::NewProp_OnActorKilled_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AWraithShooterGameModeBase_Statics::NewProp_OnActorKilled_MetaData)) };
+#if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AWraithShooterGameModeBase_Statics::NewProp_SCharacter_MetaData[] = {
+		{ "Category", "Player" },
+		{ "ModuleRelativePath", "WraithShooterGameModeBase.h" },
+	};
+#endif
+	const UE4CodeGen_Private::FObjectPropertyParams Z_Construct_UClass_AWraithShooterGameModeBase_Statics::NewProp_SCharacter = { "SCharacter", nullptr, (EPropertyFlags)0x0010000000000005, UE4CodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AWraithShooterGameModeBase, SCharacter), Z_Construct_UClass_AShooterCharacter_NoRegister, METADATA_PARAMS(Z_Construct_UClass_AWraithShooterGameModeBase_Statics::NewProp_SCharacter_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AWraithShooterGameModeBase_Statics::NewProp_SCharacter_MetaData)) };
+	const UE4CodeGen_Private::FPropertyParamsBase* const Z_Construct_UClass_AWraithShooterGameModeBase_Statics::PropPointers[] = {
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AWraithShooterGameModeBase_Statics::NewProp_OnActorKilled,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AWraithShooterGameModeBase_Statics::NewProp_SCharacter,
+	};
 	const FCppClassTypeInfoStatic Z_Construct_UClass_AWraithShooterGameModeBase_Statics::StaticCppClassTypeInfo = {
 		TCppClassTypeTraits<AWraithShooterGameModeBase>::IsAbstract,
 	};
@@ -55,11 +118,11 @@ void EmptyLinkFunctionForGeneratedCodeWraithShooterGameModeBase() {}
 		&StaticCppClassTypeInfo,
 		DependentSingletons,
 		nullptr,
-		nullptr,
+		Z_Construct_UClass_AWraithShooterGameModeBase_Statics::PropPointers,
 		nullptr,
 		UE_ARRAY_COUNT(DependentSingletons),
 		0,
-		0,
+		UE_ARRAY_COUNT(Z_Construct_UClass_AWraithShooterGameModeBase_Statics::PropPointers),
 		0,
 		0x009002ACu,
 		METADATA_PARAMS(Z_Construct_UClass_AWraithShooterGameModeBase_Statics::Class_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UClass_AWraithShooterGameModeBase_Statics::Class_MetaDataParams))
@@ -73,7 +136,7 @@ void EmptyLinkFunctionForGeneratedCodeWraithShooterGameModeBase() {}
 		}
 		return OuterClass;
 	}
-	IMPLEMENT_CLASS(AWraithShooterGameModeBase, 2057959502);
+	IMPLEMENT_CLASS(AWraithShooterGameModeBase, 2558442072);
 	template<> WRAITHSHOOTER_API UClass* StaticClass<AWraithShooterGameModeBase>()
 	{
 		return AWraithShooterGameModeBase::StaticClass();

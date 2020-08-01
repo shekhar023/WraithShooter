@@ -4,6 +4,7 @@
 #include "KillemAllGameMode.h"
 #include "EngineUtils.h"
 #include "GameFramework/Controller.h"
+#include "WraithShooter/WraithShooterGameModeBase.h"
 #include "ShooterAIController.h"
 
 void AKillemAllGameMode::PawnKilled(APawn* PawnKilled)
@@ -12,9 +13,19 @@ void AKillemAllGameMode::PawnKilled(APawn* PawnKilled)
     
     UE_LOG(LogTemp, Warning, TEXT("A Pawn is been killed!"));
     
-    APlayerController* PlayerController = Cast<APlayerController>(PawnKilled->GetController());
+     APlayerController* PlayerController = Cast<APlayerController>(PawnKilled->GetController());
+    
+    AWraithShooterGameModeBase* MyGameMode = Cast<AWraithShooterGameModeBase>(GetWorld()->GetAuthGameMode());
+    if(MyGameMode)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("Bradcasting"));
+        MyGameMode->OnActorKilled.Broadcast(PawnKilled);
+    }
+    
+   
     if(PlayerController != nullptr)
     {
+
         EndGame(false);
     }
     
@@ -25,7 +36,7 @@ void AKillemAllGameMode::PawnKilled(APawn* PawnKilled)
             return;
         }
     }
-    
+
     EndGame(true);
 }
 

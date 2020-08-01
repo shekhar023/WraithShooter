@@ -14,6 +14,7 @@
 #include "Animation/AnimMontage.h"
 #include "Animation/AnimInstance.h"
 #include "ShooterPlayerController.h"
+#include "ShooterPlayerState.h"
 #include "MagicPill.h"
 
 
@@ -25,6 +26,7 @@ AShooterCharacter::AShooterCharacter()
     MaxHealth = 100;
     GunAttachSocket = "WeaponSocket";
     bIsAiming = false;
+    CharacterScore = 100.f;
     
     //Sets up particle system of the character.
     VisualFX = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("VFX"));
@@ -47,7 +49,7 @@ void AShooterCharacter::BindDelegates()
 {
     if(GetWorld())
     {
-        AWraithShooterGameModeBase* MyGameMode = Cast<AWraithShooterGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
+        AWraithShooterGameModeBase* MyGameMode = GetWorld()->GetAuthGameMode<AWraithShooterGameModeBase>();
         if(MyGameMode)
         {
             MyGameMode->CharacterVisualEffectsDelegateStart.BindUObject(this, &AShooterCharacter::MakeVFXVisible);
@@ -79,14 +81,24 @@ void AShooterCharacter::PostInitializeComponents() {
     }
 }
 
+void AShooterCharacter::SetTextComponents()
+{
+    //Setup for AI widget
+    HealthText->SetXScale(1.f);
+    HealthText->SetYScale(1.f);
+    HealthText->SetWorldSize(15);
+    HealthText->SetText(FText::FromString(FString::Printf(TEXT("HP:%0.f "), GetHealth())));
+}
+
 
 //MARK:Begin Play
 void AShooterCharacter::BeginPlay()
 {
     Super::BeginPlay();
-    
     //Set Health Default Value
     Health = MaxHealth;
+    
+    SetTextComponents();
     
     GetMesh()->HideBoneByName(TEXT("weapon_r"), EPhysBodyOp::PBO_None);
     
@@ -95,17 +107,7 @@ void AShooterCharacter::BeginPlay()
     
     // Call BindDelegates
     BindDelegates();
-    
-    //Setup for AI widget
-    if(!IsPlayerControlled())
-    {
-        HealthText->SetRelativeRotation(FRotator(0, 180.f, 0));
-        HealthText->SetXScale(1.f);
-        HealthText->SetYScale(1.f);
-        HealthText->SetWorldSize(15);
-        HealthText->SetText(FText::FromString(FString::Printf(TEXT("HP: %0.f "), GetHealth())));
-    }
-    
+
 }
 
 //MARK:EndPlay to free Delegates
@@ -341,6 +343,11 @@ bool AShooterCharacter::IsDead() const
 bool AShooterCharacter::GetbIsAiming() const
 {
     return bIsAiming;
+}
+
+float AShooterCharacter::GetScoreValue() const
+{
+    return CharacterScore;
 }
 
 //MARK: TakeDamage

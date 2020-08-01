@@ -14,6 +14,7 @@ class UBehaviorTree;
 class UParticleSystem;
 class UParticleSystemComponent;
 class UTextRenderComponent;
+class AShooterPlayerState;
 
 UCLASS()
 class WRAITHSHOOTER_API AShooterCharacter : public ACharacter, public IWraithUIInterface // inherited IWraithUIInterface
@@ -29,6 +30,8 @@ protected:
     virtual void BeginPlay() override;
     
     virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+    
+    void SetTextComponents();
     
 protected:
     //MARK: Axis Bindings Declerations
@@ -79,8 +82,11 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     float MaxHealth;
     
-    UPROPERTY(VisibleAnywhere)
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
     float Health;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Score)
+    float CharacterScore;
     
 protected:
     
@@ -116,7 +122,7 @@ public:
     
     UPROPERTY(EditAnywhere, Category = "AI Behavior")
     UBehaviorTree* ShooterBT;
-    
+
     
 public:
     //MARK: Return Functions
@@ -135,6 +141,9 @@ public:
     
     UFUNCTION()
     USkeletalMeshComponent* GetPawnMesh() const;
+    
+    UFUNCTION()
+    float GetScoreValue() const;
     
 public:
     
@@ -168,8 +177,7 @@ public:
     
     //Declared function must be implmented in c++
     bool ReactToPlayerEntered();
-    bool ReactToPlayerEntered_Implementation() override;
-    
+    bool ReactToPlayerEntered_Implementation() override;    
     
 public:
     // Called to bind functionality to input
