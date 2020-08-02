@@ -10,6 +10,7 @@ class AMagicPill;
 class UParticleSystem;
 class UDecalComponent;
 class USphereComponent;
+class USoundBase;
 
 UCLASS()
 class WRAITHSHOOTER_API APillSpawner : public AActor
@@ -62,5 +63,11 @@ public:
     
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Spawning)
     UParticleSystem* PillFX;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Spawning)
+    USoundBase* PickUpSound;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Spawning)
+    USoundBase* RespawnSound;
     
 };

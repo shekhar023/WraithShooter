@@ -15,6 +15,7 @@ class UParticleSystem;
 class UParticleSystemComponent;
 class UTextRenderComponent;
 class AShooterPlayerState;
+class USoundBase;
 
 UCLASS()
 class WRAITHSHOOTER_API AShooterCharacter : public ACharacter, public IWraithUIInterface // inherited IWraithUIInterface
@@ -43,6 +44,8 @@ protected:
     void LookUpRate(float AxisValue);
     
     void TurnRate(float AxisValue);
+    
+    virtual void Landed(const FHitResult& Hit);
     
 public:
     //MARK:Action Bindind Decleration
@@ -76,8 +79,17 @@ public:
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
     FName GunAttachSocket;
     
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+    FName GunHostlerSocket;
+    
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+    FName FootSocketName;
+    
     UPROPERTY(EditAnywhere)
     bool bIsAiming;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    float Energy;
     
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     float MaxHealth;
@@ -85,8 +97,17 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     float Health;
     
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Score)
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
     float CharacterScore;
+    
+   UPROPERTY(EditAnywhere, BlueprintReadWrite)
+   USoundBase* JumpSound;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    USoundBase* LandSound;
+    
+    UFUNCTION()
+    void PlaySoundEffects();
     
 protected:
     
@@ -136,13 +157,19 @@ public:
     UFUNCTION(BlueprintPure)
     float GetHealth() const;
     
+    UFUNCTION(BlueprintPure)
+    float GetEnergy() const;
+    
     UFUNCTION()
     FName GetWeaponAttachPoint() const;
     
     UFUNCTION()
-    USkeletalMeshComponent* GetPawnMesh() const;
+    FName GetGunHostlerPoint() const;
     
     UFUNCTION()
+    USkeletalMeshComponent* GetPawnMesh() const;
+    
+    UFUNCTION(BlueprintPure)
     float GetScoreValue() const;
     
 public:

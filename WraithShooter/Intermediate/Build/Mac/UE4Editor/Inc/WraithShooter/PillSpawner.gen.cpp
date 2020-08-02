@@ -17,6 +17,7 @@ void EmptyLinkFunctionForGeneratedCodePillSpawner() {}
 	WRAITHSHOOTER_API UClass* Z_Construct_UClass_APillSpawner();
 	ENGINE_API UClass* Z_Construct_UClass_AActor();
 	UPackage* Z_Construct_UPackage__Script_WraithShooter();
+	ENGINE_API UClass* Z_Construct_UClass_USoundBase_NoRegister();
 	ENGINE_API UClass* Z_Construct_UClass_UParticleSystem_NoRegister();
 	WRAITHSHOOTER_API UClass* Z_Construct_UClass_AMagicPill_NoRegister();
 	COREUOBJECT_API UClass* Z_Construct_UClass_UClass();
@@ -36,6 +37,14 @@ void EmptyLinkFunctionForGeneratedCodePillSpawner() {}
 #if WITH_METADATA
 		static const UE4CodeGen_Private::FMetaDataPairParam Class_MetaDataParams[];
 #endif
+#if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_RespawnSound_MetaData[];
+#endif
+		static const UE4CodeGen_Private::FObjectPropertyParams NewProp_RespawnSound;
+#if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_PickUpSound_MetaData[];
+#endif
+		static const UE4CodeGen_Private::FObjectPropertyParams NewProp_PickUpSound;
 #if WITH_METADATA
 		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_PillFX_MetaData[];
 #endif
@@ -74,6 +83,20 @@ void EmptyLinkFunctionForGeneratedCodePillSpawner() {}
 		{ "ModuleRelativePath", "Public/PillSpawner.h" },
 	};
 #endif
+#if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_APillSpawner_Statics::NewProp_RespawnSound_MetaData[] = {
+		{ "Category", "Spawning" },
+		{ "ModuleRelativePath", "Public/PillSpawner.h" },
+	};
+#endif
+	const UE4CodeGen_Private::FObjectPropertyParams Z_Construct_UClass_APillSpawner_Statics::NewProp_RespawnSound = { "RespawnSound", nullptr, (EPropertyFlags)0x0010000000000005, UE4CodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(APillSpawner, RespawnSound), Z_Construct_UClass_USoundBase_NoRegister, METADATA_PARAMS(Z_Construct_UClass_APillSpawner_Statics::NewProp_RespawnSound_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_APillSpawner_Statics::NewProp_RespawnSound_MetaData)) };
+#if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_APillSpawner_Statics::NewProp_PickUpSound_MetaData[] = {
+		{ "Category", "Spawning" },
+		{ "ModuleRelativePath", "Public/PillSpawner.h" },
+	};
+#endif
+	const UE4CodeGen_Private::FObjectPropertyParams Z_Construct_UClass_APillSpawner_Statics::NewProp_PickUpSound = { "PickUpSound", nullptr, (EPropertyFlags)0x0010000000000005, UE4CodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(APillSpawner, PickUpSound), Z_Construct_UClass_USoundBase_NoRegister, METADATA_PARAMS(Z_Construct_UClass_APillSpawner_Statics::NewProp_PickUpSound_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_APillSpawner_Statics::NewProp_PickUpSound_MetaData)) };
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_APillSpawner_Statics::NewProp_PillFX_MetaData[] = {
 		{ "Category", "Spawning" },
@@ -118,6 +141,8 @@ void EmptyLinkFunctionForGeneratedCodePillSpawner() {}
 #endif
 	const UE4CodeGen_Private::FObjectPropertyParams Z_Construct_UClass_APillSpawner_Statics::NewProp_PillInstance = { "PillInstance", nullptr, (EPropertyFlags)0x0040000000000000, UE4CodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(APillSpawner, PillInstance), Z_Construct_UClass_AMagicPill_NoRegister, METADATA_PARAMS(Z_Construct_UClass_APillSpawner_Statics::NewProp_PillInstance_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_APillSpawner_Statics::NewProp_PillInstance_MetaData)) };
 	const UE4CodeGen_Private::FPropertyParamsBase* const Z_Construct_UClass_APillSpawner_Statics::PropPointers[] = {
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_APillSpawner_Statics::NewProp_RespawnSound,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_APillSpawner_Statics::NewProp_PickUpSound,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_APillSpawner_Statics::NewProp_PillFX,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_APillSpawner_Statics::NewProp_ItemToSpawn,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_APillSpawner_Statics::NewProp_CooldownDuration,
@@ -152,7 +177,7 @@ void EmptyLinkFunctionForGeneratedCodePillSpawner() {}
 		}
 		return OuterClass;
 	}
-	IMPLEMENT_CLASS(APillSpawner, 1264057280);
+	IMPLEMENT_CLASS(APillSpawner, 2882318699);
 	template<> WRAITHSHOOTER_API UClass* StaticClass<APillSpawner>()
 	{
 		return APillSpawner::StaticClass();

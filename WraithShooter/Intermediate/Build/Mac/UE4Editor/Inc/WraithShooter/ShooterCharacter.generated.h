@@ -14,8 +14,8 @@ class USkeletalMeshComponent;
 #endif
 #define WRAITHSHOOTER_ShooterCharacter_generated_h
 
-#define WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_22_SPARSE_DATA
-#define WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_22_RPC_WRAPPERS \
+#define WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_23_SPARSE_DATA
+#define WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_23_RPC_WRAPPERS \
  \
 	DECLARE_FUNCTION(execMakeVFXInvisible); \
 	DECLARE_FUNCTION(execMakeVFXVisible); \
@@ -23,13 +23,16 @@ class USkeletalMeshComponent;
 	DECLARE_FUNCTION(execBindDelegates); \
 	DECLARE_FUNCTION(execGetScoreValue); \
 	DECLARE_FUNCTION(execGetPawnMesh); \
+	DECLARE_FUNCTION(execGetGunHostlerPoint); \
 	DECLARE_FUNCTION(execGetWeaponAttachPoint); \
+	DECLARE_FUNCTION(execGetEnergy); \
 	DECLARE_FUNCTION(execGetHealth); \
 	DECLARE_FUNCTION(execGetbIsAiming); \
-	DECLARE_FUNCTION(execIsDead);
+	DECLARE_FUNCTION(execIsDead); \
+	DECLARE_FUNCTION(execPlaySoundEffects);
 
 
-#define WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_22_RPC_WRAPPERS_NO_PURE_DECLS \
+#define WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_23_RPC_WRAPPERS_NO_PURE_DECLS \
  \
 	DECLARE_FUNCTION(execMakeVFXInvisible); \
 	DECLARE_FUNCTION(execMakeVFXVisible); \
@@ -37,13 +40,16 @@ class USkeletalMeshComponent;
 	DECLARE_FUNCTION(execBindDelegates); \
 	DECLARE_FUNCTION(execGetScoreValue); \
 	DECLARE_FUNCTION(execGetPawnMesh); \
+	DECLARE_FUNCTION(execGetGunHostlerPoint); \
 	DECLARE_FUNCTION(execGetWeaponAttachPoint); \
+	DECLARE_FUNCTION(execGetEnergy); \
 	DECLARE_FUNCTION(execGetHealth); \
 	DECLARE_FUNCTION(execGetbIsAiming); \
-	DECLARE_FUNCTION(execIsDead);
+	DECLARE_FUNCTION(execIsDead); \
+	DECLARE_FUNCTION(execPlaySoundEffects);
 
 
-#define WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_22_INCLASS_NO_PURE_DECLS \
+#define WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_23_INCLASS_NO_PURE_DECLS \
 private: \
 	static void StaticRegisterNativesAShooterCharacter(); \
 	friend struct Z_Construct_UClass_AShooterCharacter_Statics; \
@@ -53,7 +59,7 @@ public: \
 	virtual UObject* _getUObject() const override { return const_cast<AShooterCharacter*>(this); }
 
 
-#define WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_22_INCLASS \
+#define WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_23_INCLASS \
 private: \
 	static void StaticRegisterNativesAShooterCharacter(); \
 	friend struct Z_Construct_UClass_AShooterCharacter_Statics; \
@@ -63,7 +69,7 @@ public: \
 	virtual UObject* _getUObject() const override { return const_cast<AShooterCharacter*>(this); }
 
 
-#define WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_22_STANDARD_CONSTRUCTORS \
+#define WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_23_STANDARD_CONSTRUCTORS \
 	/** Standard constructor, called after all reflected properties have been initialized */ \
 	NO_API AShooterCharacter(const FObjectInitializer& ObjectInitializer); \
 	DEFINE_DEFAULT_OBJECT_INITIALIZER_CONSTRUCTOR_CALL(AShooterCharacter) \
@@ -76,7 +82,7 @@ private: \
 public:
 
 
-#define WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_22_ENHANCED_CONSTRUCTORS \
+#define WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_23_ENHANCED_CONSTRUCTORS \
 private: \
 	/** Private move- and copy-constructors, should never be used */ \
 	NO_API AShooterCharacter(AShooterCharacter&&); \
@@ -87,33 +93,33 @@ DEFINE_VTABLE_PTR_HELPER_CTOR_CALLER(AShooterCharacter); \
 	DEFINE_DEFAULT_CONSTRUCTOR_CALL(AShooterCharacter)
 
 
-#define WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_22_PRIVATE_PROPERTY_OFFSET \
+#define WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_23_PRIVATE_PROPERTY_OFFSET \
 	FORCEINLINE static uint32 __PPO__Gun() { return STRUCT_OFFSET(AShooterCharacter, Gun); } \
 	FORCEINLINE static uint32 __PPO__GunClass() { return STRUCT_OFFSET(AShooterCharacter, GunClass); } \
 	FORCEINLINE static uint32 __PPO__Inventory() { return STRUCT_OFFSET(AShooterCharacter, Inventory); }
 
 
-#define WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_19_PROLOG
-#define WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_22_GENERATED_BODY_LEGACY \
+#define WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_20_PROLOG
+#define WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_23_GENERATED_BODY_LEGACY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \
 public: \
-	WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_22_PRIVATE_PROPERTY_OFFSET \
-	WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_22_SPARSE_DATA \
-	WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_22_RPC_WRAPPERS \
-	WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_22_INCLASS \
-	WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_22_STANDARD_CONSTRUCTORS \
+	WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_23_PRIVATE_PROPERTY_OFFSET \
+	WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_23_SPARSE_DATA \
+	WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_23_RPC_WRAPPERS \
+	WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_23_INCLASS \
+	WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_23_STANDARD_CONSTRUCTORS \
 public: \
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
 
 
-#define WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_22_GENERATED_BODY \
+#define WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_23_GENERATED_BODY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \
 public: \
-	WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_22_PRIVATE_PROPERTY_OFFSET \
-	WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_22_SPARSE_DATA \
-	WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_22_RPC_WRAPPERS_NO_PURE_DECLS \
-	WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_22_INCLASS_NO_PURE_DECLS \
-	WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_22_ENHANCED_CONSTRUCTORS \
+	WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_23_PRIVATE_PROPERTY_OFFSET \
+	WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_23_SPARSE_DATA \
+	WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_23_RPC_WRAPPERS_NO_PURE_DECLS \
+	WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_23_INCLASS_NO_PURE_DECLS \
+	WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_23_ENHANCED_CONSTRUCTORS \
 private: \
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
 

@@ -6,6 +6,7 @@
 #include "Components/SphereComponent.h"
 #include "Components/DecalComponent.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "Kismet/Gameplaystatics.h"
 #include "ShooterCharacter.h"
 #include "EngineUtils.h"
 #include "TimerManager.h"
@@ -44,6 +45,11 @@ void APillSpawner::SpawnPill()
     
     PillInstance = GetWorld()->SpawnActor<AMagicPill>(ItemToSpawn, GetTransform(), SpawnParams);
     
+    if(RespawnSound)
+    {
+         UGameplayStatics::SpawnSoundAtLocation(GetWorld(), RespawnSound, GetActorLocation());
+    }
+    
 }
 
 void APillSpawner::NotifyActorBeginOverlap(AActor* otherActor)
@@ -59,8 +65,13 @@ void APillSpawner::NotifyActorBeginOverlap(AActor* otherActor)
         if(MyGameMode != nullptr)
         {
             MyGameMode->CharacterVisualEffectsDelegateStart.ExecuteIfBound();
+           
         }
         
+        if(PickUpSound)
+        {
+             UGameplayStatics::SpawnSoundAtLocation(GetWorld(), PickUpSound, GetActorLocation());
+        }
         //Broadcast the player entered event so that pill can randomize
         OnPlayerEntered.Broadcast();
         

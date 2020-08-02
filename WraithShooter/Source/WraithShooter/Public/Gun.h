@@ -112,6 +112,9 @@ public:
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
     UAnimMontage* ReloadAnim;
     
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
+    UAnimMontage* HipReloadAnim;
+    
     UFUNCTION()
     void PlayFireAnimation(UAnimMontage* FireAnim);
     

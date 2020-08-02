@@ -235,11 +235,25 @@ void AGun::Reload()
     
     if(MaxAmmo != 0 && AmmoInClip < ClipSize && AmmoDifference <= MaxAmmo)
     {
-        
-        if(ReloadAnim)
+        if(MyCharacter->GetbIsAiming() == true)
         {
-            MyCharacter->StopAim();
-            MyCharacter->PlayAnimMontage(ReloadAnim);
+            
+            if(ReloadAnim)
+            {
+                bCanFire = false;
+                MyCharacter->StopShoot();
+                MyCharacter->PlayAnimMontage(ReloadAnim);
+            }
+        }
+        else if (MyCharacter->GetbIsAiming() == false)
+        {
+            if(HipReloadAnim)
+            {
+                bCanFire = false;
+                MyCharacter->StopShoot();
+                MyCharacter->PlayAnimMontage(HipReloadAnim);
+            }
+
         }
         
         UE_LOG(LogTemp, Warning, TEXT("AmmoDifference : %d"), AmmoDifference);

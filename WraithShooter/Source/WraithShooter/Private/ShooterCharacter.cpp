@@ -5,8 +5,11 @@
 #include "Gun.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/TextRenderComponent.h"
+#include "GameFramework/Character.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "WraithShooter/WraithShooterGameModeBase.h"
 #include "Components/SkeletalMeshComponent.h"
+#include "Kismet/GameplayStatics.h"
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/Actor.h"
 #include "Particles/ParticleSystem.h"
@@ -23,10 +26,13 @@ AShooterCharacter::AShooterCharacter()
 {    
     BasePitchValue = 45.f;
     BaseYawValue = 45.f;
-    MaxHealth = 100;
-    GunAttachSocket = "WeaponSocket";
-    bIsAiming = false;
+    MaxHealth = 100.f;
     CharacterScore = 100.f;
+    Energy = 50.f;
+    bIsAiming = false;
+    GunAttachSocket = "AttachWeapon";
+    GunHostlerSocket = "WeaponHostler";
+    FootSocketName = "foor_r";
     
     //Sets up particle system of the character.
     VisualFX = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("VFX"));
@@ -132,11 +138,10 @@ void AShooterCharacter::SpawnInventory()
             AGun* NewWeapon = GetWorld()->SpawnActor<AGun>(GunClass[i], SpawnInfo);
             Inventory.AddUnique(NewWeapon);
         }
-    }
-    
-    if (Inventory.Num() > 0)
-    {
-        EquipWeapon(Inventory[0]);
+        if (Inventory.Num() > 0)
+        {
+            EquipWeapon(Inventory[i]);
+        }
     }
 }
 
@@ -223,10 +228,19 @@ void AShooterCharacter::CanJump()
 {
     if(GetbIsAiming() == false)
     {
-        Jump();
+        if(GetCharacterMovement()->IsFalling() == false )
+        {
+            
+            PlaySoundEffects();
+            Jump();
+        }
     }
 }
 
+void AShooterCharacter::Landed(const FHitResult& Hit)
+{
+    PlaySoundEffects();
+}
 void AShooterCharacter::LookUpRate(float AxisValue)
 {
     AddControllerPitchInput(AxisValue * BasePitchValue * GetWorld()->GetDeltaSeconds());
@@ -321,10 +335,22 @@ FName AShooterCharacter::GetWeaponAttachPoint() const
     return GunAttachSocket;
 }
 
+//Get WeaponHostlerPoint
+FName AShooterCharacter::GetGunHostlerPoint() const
+{
+    return GunHostlerSocket;
+}
+
 //GetPawnMesh
 USkeletalMeshComponent* AShooterCharacter::GetPawnMesh() const
 {
     return GetMesh();
+}
+
+//Returns the Energy of Player
+float AShooterCharacter::GetEnergy() const
+{
+    return Energy;
 }
 
 //Returns Health of player
@@ -396,4 +422,17 @@ bool AShooterCharacter::ReactToPlayerEntered_Implementation()
     HealthText->SetText(FText::FromString(FString::Printf(TEXT("HP: %0.f "), GetHealth())));
     return true;
     
+}
+
+void AShooterCharacter::PlaySoundEffects()
+{
+    if(JumpSound)
+    {
+        UGameplayStatics::SpawnSoundAttached(JumpSound, GetPawnMesh(), FootSocketName);
+    }
+    
+    if(LandSound)
+    {
+        UGameplayStatics::SpawnSoundAttached(LandSound, GetMesh(), FootSocketName);
+    }
 }
