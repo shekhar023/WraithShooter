@@ -24,9 +24,6 @@ class WRAITHSHOOTER_API AWraithShooterGameModeBase : public AGameModeBase
 public:
     // Virtual function to get pawn kill created manually
    virtual void PawnKilled(APawn* PawnKilled);
-
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Player)
-    AShooterCharacter* SCharacter;
     
     //MARK:Multiple object of same delegate
     FStandardDelegateSignature CharacterVisualEffectsDelegateStart;
