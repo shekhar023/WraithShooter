@@ -230,7 +230,6 @@ void AShooterCharacter::CanJump()
     {
         if(GetCharacterMovement()->IsFalling() == false )
         {
-            
             PlaySoundEffects();
             Jump();
         }
@@ -259,7 +258,6 @@ void AShooterCharacter::Shoot()
     if(Gun)
     {
         Gun->PullTrigger();
-        
     }
 }
 
@@ -289,12 +287,14 @@ void AShooterCharacter::StopShoot()
 //Aiming function
 void AShooterCharacter::Aim()
 {
+    OnAiming.Broadcast(bIsAiming);
     bIsAiming = true;
 }
 
 //Player StopAiming function
 void AShooterCharacter::StopAim()
 {
+    OnAiming.Broadcast(bIsAiming);
     bIsAiming = false;
 }
 

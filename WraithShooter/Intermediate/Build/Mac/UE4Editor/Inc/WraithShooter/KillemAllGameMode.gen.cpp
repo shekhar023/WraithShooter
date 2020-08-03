@@ -74,7 +74,7 @@ void EmptyLinkFunctionForGeneratedCodeKillemAllGameMode() {}
 		}
 		return OuterClass;
 	}
-	IMPLEMENT_CLASS(AKillemAllGameMode, 2157864875);
+	IMPLEMENT_CLASS(AKillemAllGameMode, 2691820100);
 	template<> WRAITHSHOOTER_API UClass* StaticClass<AKillemAllGameMode>()
 	{
 		return AKillemAllGameMode::StaticClass();

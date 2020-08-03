@@ -16,6 +16,99 @@ class UParticleSystemComponent;
 class UTextRenderComponent;
 class AShooterPlayerState;
 class USoundBase;
+class UDamageType;
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnAiming, bool, IsAiming);
+
+//MARK:ENUM EOffensiveAbility
+UENUM(BlueprintType)
+enum class EOffensiveAbility : uint8
+{
+    None,
+    Fireball,
+    ElectroSpark,
+    Teleport,
+};
+//MARK:ENUM EDefensiveAbility
+UENUM(BlueprintType)
+enum class EDefensiveAbility : uint8
+{
+    None,
+    LensOfTruth,
+    Mist,
+    Shield,
+    TimeSlow,
+};
+
+//MARK:ENUM ESkills
+UENUM(BlueprintType)
+enum class ESkills : uint8
+{
+    None,
+    DoubleJump,
+    BackDash,
+    Fireball,
+    ElectroSpark,
+    LensOfTruth,
+    Mist,
+};
+
+//MARK: Structure for Skills Data
+USTRUCT(BlueprintType, Blueprintable)
+struct FSkillData
+{
+    GENERATED_USTRUCT_BODY()
+
+public:
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SkillData)
+    FText Title;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SkillData)
+    FText Description;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SkillData)
+    FSlateBrush InputButton;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SkillData)
+    FSlateBrush SkillIcon;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SkillData)
+    FSlateBrush SkillImage;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SkillData)
+    FSlateBrush SkillBorderColor;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SkillData)
+    FSlateColor SkillFontColor;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SkillData)
+    bool bIsMagicSkill;
+};
+
+//MARK: Structure for Skills Attributes
+USTRUCT(BlueprintType, Blueprintable)
+struct FSkillsAttributes
+{
+     GENERATED_USTRUCT_BODY()
+    
+public:
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SkillsAttributes)
+    FText Name;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SkillsAttributes)
+    FSlateBrush IconSlate;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SkillsAttributes)
+    float EnergyCost;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SkillsAttributes)
+    float Damage;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SkillsAttributes)
+    TSubclassOf<UDamageType> DamageType;
+};
 
 UCLASS()
 class WRAITHSHOOTER_API AShooterCharacter : public ACharacter, public IWraithUIInterface // inherited IWraithUIInterface
@@ -108,6 +201,30 @@ public:
     
     UFUNCTION()
     void PlaySoundEffects();
+    
+    UPROPERTY(BlueprintAssignable, Category = "GameMode")
+    FOnAiming OnAiming;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ShooterCharacterInfo)
+    bool bIsOffensiveAbilityReady = true;
+    
+    UPROPERTY(BlueprintReadOnly, Category = ENUM)
+    EOffensiveAbility OAbility;
+    
+    UPROPERTY(BlueprintReadOnly, Category = ENUM)
+    EDefensiveAbility DAbility;
+    
+    UPROPERTY(BlueprintReadOnly, Category = ENUM)
+    ESkills Skills;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ShooterCharacterInfo)
+    EOffensiveAbility OffensiveAbilitySlotted;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ShooterCharacterInfo)
+    EDefensiveAbility DefensiveAbilitySlotted;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ShooterCharacterInfo)
+    ESkills SkillAcquired;
     
 protected:
     
