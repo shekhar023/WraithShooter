@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "WraithUIInterface.h"
 #include "GameFramework/Character.h"
+#include "SkillStructures.h"
 #include "ShooterCharacter.generated.h"
 
 //MARK: Classes forward Declerations
@@ -20,98 +21,8 @@ class UDamageType;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnAiming, bool, IsAiming);
 
-//MARK:ENUM EOffensiveAbility
-UENUM(BlueprintType)
-enum class EOffensiveAbility : uint8
-{
-    None,
-    Fireball,
-    ElectroSpark,
-    Teleport,
-};
-//MARK:ENUM EDefensiveAbility
-UENUM(BlueprintType)
-enum class EDefensiveAbility : uint8
-{
-    None,
-    LensOfTruth,
-    Mist,
-    Shield,
-    TimeSlow,
-};
-
-//MARK:ENUM ESkills
-UENUM(BlueprintType)
-enum class ESkills : uint8
-{
-    None,
-    DoubleJump,
-    BackDash,
-    Fireball,
-    ElectroSpark,
-    LensOfTruth,
-    Mist,
-};
-
-//MARK: Structure for Skills Data
-USTRUCT(BlueprintType, Blueprintable)
-struct FSkillData
-{
-    GENERATED_USTRUCT_BODY()
-
-public:
-    
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SkillData)
-    FText Title;
-    
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SkillData)
-    FText Description;
-    
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SkillData)
-    FSlateBrush InputButton;
-    
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SkillData)
-    FSlateBrush SkillIcon;
-    
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SkillData)
-    FSlateBrush SkillImage;
-    
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SkillData)
-    FSlateBrush SkillBorderColor;
-    
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SkillData)
-    FSlateColor SkillFontColor;
-    
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SkillData)
-    bool bIsMagicSkill;
-};
-
-//MARK: Structure for Skills Attributes
-USTRUCT(BlueprintType, Blueprintable)
-struct FSkillsAttributes
-{
-     GENERATED_USTRUCT_BODY()
-    
-public:
-    
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SkillsAttributes)
-    FText Name;
-    
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SkillsAttributes)
-    FSlateBrush IconSlate;
-    
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SkillsAttributes)
-    float EnergyCost;
-    
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SkillsAttributes)
-    float Damage;
-    
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SkillsAttributes)
-    TSubclassOf<UDamageType> DamageType;
-};
-
 UCLASS()
-class WRAITHSHOOTER_API AShooterCharacter : public ACharacter, public IWraithUIInterface // inherited IWraithUIInterface
+class WRAITHSHOOTER_API AShooterCharacter : public ACharacter, public IWraithUIInterface, public SkillStructures // inherited IWraithUIInterface
 {
     GENERATED_BODY()
     
@@ -160,71 +71,72 @@ public:
     //For AI to Stop Aiming
     void StopAiming();
     
+    
 public:
     //MARK:Variables
     
-    UPROPERTY(EditAnywhere)
+    UPROPERTY(EditAnywhere, Category = ShooterCharacter)
     float BasePitchValue;
     
-    UPROPERTY(EditAnywhere)
+    UPROPERTY(EditAnywhere, Category = ShooterCharacter)
     float BaseYawValue;
     
-    UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = ShooterCharacter)
     FName GunAttachSocket;
     
-    UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = ShooterCharacter)
     FName GunHostlerSocket;
     
-    UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = ShooterCharacter)
     FName FootSocketName;
     
-    UPROPERTY(EditAnywhere)
-    bool bIsAiming;
-    
-    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ShooterCharacter)
     float Energy;
     
-    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ShooterCharacter)
     float MaxHealth;
     
-    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ShooterCharacter)
     float Health;
     
-    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ShooterCharacter)
     float CharacterScore;
     
-   UPROPERTY(EditAnywhere, BlueprintReadWrite)
-   USoundBase* JumpSound;
+    UPROPERTY(EditAnywhere, Category = ShooterCharacter)
+    bool bIsAiming;
     
-    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SoundFX)
+    USoundBase* JumpSound;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite,  Category = SoundFX)
     USoundBase* LandSound;
-    
-    UFUNCTION()
-    void PlaySoundEffects();
     
     UPROPERTY(BlueprintAssignable, Category = "GameMode")
     FOnAiming OnAiming;
     
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ShooterCharacterInfo)
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SkillsInfo)
     bool bIsOffensiveAbilityReady = true;
     
-    UPROPERTY(BlueprintReadOnly, Category = ENUM)
+    UPROPERTY(BlueprintReadOnly, Category = SkillsInfo)
     EOffensiveAbility OAbility;
     
-    UPROPERTY(BlueprintReadOnly, Category = ENUM)
+    UPROPERTY(BlueprintReadOnly, Category = SkillsInfo)
     EDefensiveAbility DAbility;
     
-    UPROPERTY(BlueprintReadOnly, Category = ENUM)
+    UPROPERTY(BlueprintReadOnly, Category = SkillsInfo)
     ESkills Skills;
     
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ShooterCharacterInfo)
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SkillsInfo)
     EOffensiveAbility OffensiveAbilitySlotted;
     
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ShooterCharacterInfo)
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SkillsInfo)
     EDefensiveAbility DefensiveAbilitySlotted;
     
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ShooterCharacterInfo)
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SkillsInfo)
     ESkills SkillAcquired;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SkillStructures)
+    FSkillsAttributes DoubleJump;
     
 protected:
     
@@ -300,12 +212,15 @@ public:
     
 public:
     
-    //MARK: VFX function Decleration
+    //MARK: VFX and SFX function Decleration
     UFUNCTION()
     void MakeVFXVisible();
     
     UFUNCTION()
     void MakeVFXInvisible();
+    
+    UFUNCTION()
+    void PlaySoundEffects();
     
     
 public:
