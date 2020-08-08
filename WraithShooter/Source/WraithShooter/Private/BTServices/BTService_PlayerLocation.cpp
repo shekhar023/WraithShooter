@@ -5,6 +5,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "GameFramework/Pawn.h"
+#include "ShooterAIController.h"
 
 UBTService_PlayerLocation::UBTService_PlayerLocation()
 {
@@ -17,7 +18,19 @@ void UBTService_PlayerLocation::TickNode(UBehaviorTreeComponent& OwnerComp, uint
     
     APawn* PlayerPawn = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
     
+    AShooterAIController* AIPlayer = Cast<AShooterAIController>(OwnerComp.GetAIOwner());
+    
     if(PlayerPawn == nullptr) {return;}
+    
+    if(AIPlayer == nullptr) {return;}
+    
+    FVector PlayerPosition = OwnerComp.GetBlackboardComponent()->GetValue<UBlackboardKeyType_Vector(AIPlayer->NPCKeyId);
+    
+    if(AIPlayer)
+    {
+        AIPlayer->MoveToLocation(PlayerPosition, 100.f, true, true, false, true, 0, true);
+    }
     
     OwnerComp.GetBlackboardComponent()->SetValueAsVector(GetSelectedBlackboardKey(), PlayerPawn->GetActorLocation());
 }
+

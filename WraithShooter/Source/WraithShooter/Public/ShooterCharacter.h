@@ -19,10 +19,12 @@ class AShooterPlayerState;
 class USoundBase;
 class UDamageType;
 
+//MARK: Delegate Decleration
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnAiming, bool, IsAiming);
 
+//MARK: ShooterCharacter Class
 UCLASS()
-class WRAITHSHOOTER_API AShooterCharacter : public ACharacter, public IWraithUIInterface, public SkillStructures // inherited IWraithUIInterface
+class WRAITHSHOOTER_API AShooterCharacter : public ACharacter, public IWraithUIInterface, public SkillStructures // inherited IWraithUIInterface and SkillStructures
 {
     GENERATED_BODY()
     
@@ -111,21 +113,110 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite,  Category = SoundFX)
     USoundBase* LandSound;
     
-    UPROPERTY(BlueprintAssignable, Category = "GameMode")
+    UPROPERTY(BlueprintAssignable, Category = GameMode)
     FOnAiming OnAiming;
     
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SkillsInfo)
     bool bIsOffensiveAbilityReady = true;
+
+public:
+    //MARK: Offensive Skills Variables and Data
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = DoubleJump)
+    bool bHasDoubleJump = false;
     
-    UPROPERTY(BlueprintReadOnly, Category = SkillsInfo)
-    EOffensiveAbility OAbility;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = DoubleJump)
+    FSkillData DoubleJumpData;
     
-    UPROPERTY(BlueprintReadOnly, Category = SkillsInfo)
-    EDefensiveAbility DAbility;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = BackDash)
+    bool bHasBackDash = false;
     
-    UPROPERTY(BlueprintReadOnly, Category = SkillsInfo)
-    ESkills Skills;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = BackDash)
+    FSkillData BackDashData;
     
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Fireball)
+    bool bHasFireball = false;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Fireball)
+    FSkillData FireballData;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Fireball)
+    FSkillsAttributes FireballAttributes;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ElectroSpark)
+    bool bHasElectroSpark = false;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ElectroSpark)
+    FSkillData ElectroSparkData;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ElectroSpark)
+    FSkillsAttributes ElectroSparkAttributes;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Bloodlust)
+    bool bHasBloodlust = false;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Bloodlust)
+    FSkillData BloodlustData;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Bloodlust)
+    FSkillsAttributes BloodlustAttributes;
+    
+    //MARK: Passive Skills Variables and Data
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = LensOfTruth)
+    bool bHasLensOfTruth = false;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = LensOfTruth)
+    bool bIsUsingLensOfTruth = false;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = LensOfTruth)
+    float  LensOfTruthTimePercentage = 1.0f;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = LensOfTruth)
+    float  LensOfTruthCoolDownTimePercentage = 0.0f;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = LensOfTruth)
+    FSkillData LensOfTruthData;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = LensOfTruth)
+    FSkillsAttributes LensOfTruthAttributes;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Mist)
+    bool bHasMist = false;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Mist)
+    bool bIsUsingMist = false;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Mist)
+    float  MistTimePercentage = 1.0f;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Mist)
+    float  MistCoolDownTimePercentage = 0.0f;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Mist)
+    FSkillData MistData;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Mist)
+    FSkillsAttributes MistAttributes;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Shield)
+    bool bHasShield = false;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Shield)
+    bool bIsUsingShield = false;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Shield)
+    float  ShieldTimePercentage = 1.0f;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Shield)
+    float  ShieldCoolDownTimePercentage = 0.0f;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Shield)
+    FSkillData ShieldData;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Shield)
+    FSkillsAttributes ShieldAttributes;
+    
+    //MARK: ENUMS variables
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SkillsInfo)
     EOffensiveAbility OffensiveAbilitySlotted;
     
@@ -134,9 +225,6 @@ public:
     
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SkillsInfo)
     ESkills SkillAcquired;
-    
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SkillStructures)
-    FSkillsAttributes DoubleJump;
     
 protected:
     
@@ -170,10 +258,9 @@ public:
     UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Effects)
     UParticleSystemComponent* VisualFX;
     
-    UPROPERTY(EditAnywhere, Category = "AI Behavior")
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = AIBehavior)
     UBehaviorTree* ShooterBT;
 
-    
 public:
     //MARK: Return Functions
     
@@ -221,8 +308,7 @@ public:
     
     UFUNCTION()
     void PlaySoundEffects();
-    
-    
+
 public:
     //MARK: Virtual function Take Damage, GetTestName, PostInitializeComponents, ReactToPlayerEntered, ReactToPlayerEntered_Implementation
     

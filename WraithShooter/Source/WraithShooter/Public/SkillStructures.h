@@ -5,10 +5,6 @@
 #include "CoreMinimal.h"
 #include "SkillStructures.generated.h"
 
-/**
- *
- *
- */
 
 //MARK:ENUM EOffensiveAbility
 UENUM(BlueprintType)
@@ -17,6 +13,7 @@ enum class EOffensiveAbility : uint8
     None,
     Fireball,
     ElectroSpark,
+    Bloodlust,
     Teleport,
 };
 //MARK:ENUM EDefensiveAbility

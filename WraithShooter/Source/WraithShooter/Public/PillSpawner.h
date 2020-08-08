@@ -25,14 +25,14 @@ private:
     
     UPROPERTY()
     AMagicPill* PillInstance;
-    
+
     UPROPERTY(VisibleAnywhere, Category = Spawning)
     USphereComponent* SphereComp;
     
     UPROPERTY(VisibleAnywhere, Category = Spawning)
     UDecalComponent* DecalComp;
     
-    UPROPERTY(EditInstanceOnly, Category = "PickupActor")
+    UPROPERTY(EditInstanceOnly, Category = PickupActor)
     float CooldownDuration;
     
     FTimerHandle TimerHandle_RespawnTimer;
@@ -51,8 +51,8 @@ protected:
     TSubclassOf<AMagicPill> ItemToSpawn;
     
 public:
-    
     //MARK: Custom Events
+    
     //Declare custom Event for pill spawner
     DECLARE_EVENT(APillSpawner, FPlayerEntered);
     
@@ -60,6 +60,9 @@ public:
     FPlayerEntered OnPlayerEntered;
 
 public:
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = InteractMessage)
+    FText InteractMessage;
     
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Spawning)
     UParticleSystem* PillFX;
