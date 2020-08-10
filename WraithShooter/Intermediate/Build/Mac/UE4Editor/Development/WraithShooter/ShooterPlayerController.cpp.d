@@ -2650,6 +2650,27 @@
   /Users/Shekhar/Documents/Unreal\ Projects/WraithShooter/WraithShooter/Intermediate/Build/Mac/UE4Editor/Development/WraithShooter/Definitions.WraithShooter.h \
   /Users/Shekhar/Documents/Unreal\ Projects/WraithShooter/WraithShooter/Source/WraithShooter/Public/ShooterPlayerController.h \
   /Users/Shekhar/Documents/Unreal\ Projects/WraithShooter/WraithShooter/Intermediate/Build/Mac/UE4Editor/Inc/WraithShooter/ShooterPlayerController.generated.h \
+  /Users/Shekhar/Documents/Unreal\ Projects/WraithShooter/WraithShooter/Source/WraithShooter/Public/ShooterCharacter.h \
+  /Users/Shekhar/Documents/Unreal\ Projects/WraithShooter/WraithShooter/Source/WraithShooter/Public/WraithUIInterface.h \
+  /Users/Shekhar/Documents/Unreal\ Projects/WraithShooter/WraithShooter/Intermediate/Build/Mac/UE4Editor/Inc/WraithShooter/WraithUIInterface.generated.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Engine/Classes/GameFramework/Character.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Engine/Classes/GameFramework/RootMotionSource.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Intermediate/Build/Mac/UE4Editor/Inc/Engine/RootMotionSource.generated.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Intermediate/Build/Mac/UE4Editor/Inc/Engine/Character.generated.h \
+  /Users/Shekhar/Documents/Unreal\ Projects/WraithShooter/WraithShooter/Source/WraithShooter/Public/SkillStructures.h \
+  /Users/Shekhar/Documents/Unreal\ Projects/WraithShooter/WraithShooter/Intermediate/Build/Mac/UE4Editor/Inc/WraithShooter/SkillStructures.generated.h \
+  /Users/Shekhar/Documents/Unreal\ Projects/WraithShooter/WraithShooter/Intermediate/Build/Mac/UE4Editor/Inc/WraithShooter/ShooterCharacter.generated.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Engine/Classes/Kismet/GameplayStatics.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Engine/Classes/Kismet/KismetSystemLibrary.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/CoreUObject/Public/UObject/PropertyAccessUtil.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Engine/Classes/Engine/CollisionProfile.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Intermediate/Build/Mac/UE4Editor/Inc/Engine/CollisionProfile.generated.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Intermediate/Build/Mac/UE4Editor/Inc/Engine/KismetSystemLibrary.generated.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Engine/Classes/Sound/DialogueTypes.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Intermediate/Build/Mac/UE4Editor/Inc/Engine/DialogueTypes.generated.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Engine/Classes/Kismet/GameplayStaticsTypes.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Intermediate/Build/Mac/UE4Editor/Inc/Engine/GameplayStaticsTypes.generated.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Intermediate/Build/Mac/UE4Editor/Inc/Engine/GameplayStatics.generated.h \
   /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/UMG/Public/Blueprint/UserWidget.h \
   /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/UMG/Public/Components/SlateWrapperTypes.h \
   /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Intermediate/Build/Mac/UE4Editor/Inc/UMG/SlateWrapperTypes.generated.h \
@@ -2766,4 +2787,5 @@
   /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Intermediate/Build/Mac/UE4Editor/Inc/PropertyPath/PropertyPathHelpers.generated.h \
   /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Intermediate/Build/Mac/UE4Editor/Inc/UMG/DynamicPropertyPath.generated.h \
   /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Intermediate/Build/Mac/UE4Editor/Inc/UMG/WidgetBlueprintGeneratedClass.generated.h \
-  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Intermediate/Build/Mac/UE4Editor/Inc/UMG/UserWidget.generated.h
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Intermediate/Build/Mac/UE4Editor/Inc/UMG/UserWidget.generated.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Engine/Public/EngineUtils.h

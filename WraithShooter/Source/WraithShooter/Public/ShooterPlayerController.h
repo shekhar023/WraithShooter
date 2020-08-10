@@ -7,6 +7,7 @@
 #include "ShooterPlayerController.generated.h"
 
 class UUserWidget;
+class AShooterCharacter;
 
 UCLASS()
 class WRAITHSHOOTER_API AShooterPlayerController : public APlayerController
@@ -17,12 +18,19 @@ public:
     
     virtual void GameHasEnded(class AActor* EndGameFocus = nullptr, bool bIsWinner = false) override;
     
+    UFUNCTION(BlueprintCallable)
+    void OnTriggerEvent();
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+       UUserWidget* WBPLearnedSkill;
+    
 protected:
     
     virtual void BeginPlay() override;
     
 private:
     
+    void ExitSkillAquire();
     //UUserWidget Instance
     UPROPERTY()
     UUserWidget* HUD;
@@ -38,6 +46,9 @@ private:
     //Win Screen
     UPROPERTY(EditAnywhere)
     TSubclassOf<UUserWidget> WinScreenClass;
+    
+    UPROPERTY(EditAnywhere)
+    TSubclassOf<UUserWidget> WBPLearnedSkillClass;
     
     //Restart Delay
     UPROPERTY(EditAnywhere)

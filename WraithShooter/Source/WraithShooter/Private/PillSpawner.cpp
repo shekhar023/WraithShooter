@@ -10,6 +10,7 @@
 #include "ShooterCharacter.h"
 #include "EngineUtils.h"
 #include "TimerManager.h"
+#include "Blueprint/UserWidget.h"
 #include "WraithShooter/WraithShooterGameModeBase.h"
 
 // Sets default values
@@ -57,7 +58,7 @@ void APillSpawner::NotifyActorBeginOverlap(AActor* otherActor)
     Super::NotifyActorBeginOverlap(otherActor);
     
     AShooterCharacter* SCharacter = Cast<AShooterCharacter>(otherActor);
-    
+        
     if(SCharacter && PillInstance->GetIsPowerupActive() == false)
     {
         

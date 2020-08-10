@@ -106,6 +106,7 @@ protected: \
 public: \
 	typedef UWraithUIInterface UClassType; \
 	typedef IWraithUIInterface ThisClass; \
+	static void Execute_ObjectInteractedWith(UObject* O); \
 	static bool Execute_ReactToPlayerEntered(UObject* O); \
 	static bool Execute_ReactToPlayerExited(UObject* O); \
 	virtual UObject* _getUObject() const { check(0 && "Missing required implementation."); return nullptr; }
@@ -117,6 +118,7 @@ protected: \
 public: \
 	typedef UWraithUIInterface UClassType; \
 	typedef IWraithUIInterface ThisClass; \
+	static void Execute_ObjectInteractedWith(UObject* O); \
 	static bool Execute_ReactToPlayerEntered(UObject* O); \
 	static bool Execute_ReactToPlayerExited(UObject* O); \
 	virtual UObject* _getUObject() const { check(0 && "Missing required implementation."); return nullptr; }

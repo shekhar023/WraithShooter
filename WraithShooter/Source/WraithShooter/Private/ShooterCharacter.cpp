@@ -19,17 +19,24 @@
 #include "ShooterPlayerController.h"
 #include "ShooterPlayerState.h"
 #include "MagicPill.h"
+#include "DrawDebugHelpers.h"
 
+
+static int32 DebugWeaponDrawing = 1;
+FAutoConsoleVariableRef CVARDebugWeaponDrawing(TEXT("COOP.DebugWeapons"), DebugWeaponDrawing, TEXT("Draw Debug Lines for Weapons"),ECVF_Cheat);
 
 //MARK: Constructor -> Sets default values
 AShooterCharacter::AShooterCharacter()
 {    
     BasePitchValue = 45.f;
     BaseYawValue = 45.f;
+    InteractTraceLength = 100;
     MaxHealth = 100.f;
     CharacterScore = 100.f;
     Energy = 50.f;
+    JumpCount = 0;
     bIsAiming = false;
+    bCanInteract = false;
     GunAttachSocket = "AttachWeapon";
     GunHostlerSocket = "WeaponHostler";
     FootSocketName = "foor_r";
@@ -209,7 +216,7 @@ void AShooterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
     
     PlayerInputComponent->BindAction("SwitchWeapon", IE_Pressed, this, &AShooterCharacter::SwitchWeapon);
     
-    //PlayerInputComponent->BindAction("PickingUp", IE_Pressed, this, &AShooterCharacter::PickObjects);
+    PlayerInputComponent->BindAction("PickingUp", IE_Pressed, this, &AShooterCharacter::PickObjects);
     
 }
 
@@ -319,6 +326,36 @@ void AShooterCharacter::SwitchWeapon()
     }
 }
 
+void AShooterCharacter::PickObjects()
+{
+    FHitResult Hit;
+    FVector ShotDirection;
+    bool bSuccess = ObjectTrace(Hit, ShotDirection);
+    
+    AActor* HitActor = Hit.GetActor();
+    
+    if(bCanInteract)
+    {
+        if(HitActor != nullptr)
+        {
+            if (HitActor->GetClass()->ImplementsInterface(UWraithUIInterface::StaticClass()))
+            {
+                const auto &Interface = Cast<IWraithUIInterface>(HitActor);
+                if (Interface)
+                {
+                    Interface->Execute_ObjectInteractedWith(HitActor);
+                }
+                // Else, Execute Interface on Blueprint layer instead:
+                else if (HitActor->GetClass()->ImplementsInterface(UWraithUIInterface::StaticClass()))
+                {
+                    IWraithUIInterface::Execute_ObjectInteractedWith(HitActor);
+                    
+                }
+            }
+        }
+    }
+}
+
 //MARK: Return Functions
 
 // Name of Class
@@ -374,6 +411,34 @@ bool AShooterCharacter::GetbIsAiming() const
 float AShooterCharacter::GetScoreValue() const
 {
     return CharacterScore;
+}
+
+bool AShooterCharacter::ObjectTrace(FHitResult& Hit, FVector& ShotDirection)
+{
+    AController* OwnerController = GetController();
+    if(!OwnerController){return false;}
+    
+    FVector Location;
+    FRotator Rotation;
+    
+    OwnerController->GetPlayerViewPoint(Location, Rotation);
+    
+    ShotDirection = -Rotation.Vector();
+
+    FVector EndPoint = Location + Rotation.Vector() * InteractTraceLength;
+    
+    FCollisionQueryParams Params;
+    Params.AddIgnoredActor(GetOwner());
+    Params.AddIgnoredActor(this);
+    Params.bTraceComplex = true;
+    Params.bReturnPhysicalMaterial = true;
+    
+    if (DebugWeaponDrawing > 0)
+        {
+            DrawDebugLine(GetWorld(), Location, EndPoint, FColor::Red, false, 1.0f, 0, 1.0f);
+        }
+    
+    return GetWorld()->LineTraceSingleByChannel(Hit, Location, EndPoint, ECollisionChannel::ECC_GameTraceChannel1, Params);
 }
 
 //MARK: TakeDamage

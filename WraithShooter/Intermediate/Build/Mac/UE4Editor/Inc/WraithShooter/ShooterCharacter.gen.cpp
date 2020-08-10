@@ -19,15 +19,18 @@ void EmptyLinkFunctionForGeneratedCodeShooterCharacter() {}
 	WRAITHSHOOTER_API UClass* Z_Construct_UClass_AShooterCharacter();
 	ENGINE_API UClass* Z_Construct_UClass_ACharacter();
 	ENGINE_API UClass* Z_Construct_UClass_USkeletalMeshComponent_NoRegister();
+	COREUOBJECT_API UScriptStruct* Z_Construct_UScriptStruct_FVector();
+	ENGINE_API UScriptStruct* Z_Construct_UScriptStruct_FHitResult();
 	AIMODULE_API UClass* Z_Construct_UClass_UBehaviorTree_NoRegister();
 	ENGINE_API UClass* Z_Construct_UClass_UParticleSystemComponent_NoRegister();
 	ENGINE_API UClass* Z_Construct_UClass_UTextRenderComponent_NoRegister();
 	WRAITHSHOOTER_API UClass* Z_Construct_UClass_AGun_NoRegister();
 	COREUOBJECT_API UClass* Z_Construct_UClass_UClass();
-	WRAITHSHOOTER_API UScriptStruct* Z_Construct_UScriptStruct_FSkillsAttributes();
 	WRAITHSHOOTER_API UEnum* Z_Construct_UEnum_WraithShooter_ESkills();
 	WRAITHSHOOTER_API UEnum* Z_Construct_UEnum_WraithShooter_EDefensiveAbility();
 	WRAITHSHOOTER_API UEnum* Z_Construct_UEnum_WraithShooter_EOffensiveAbility();
+	WRAITHSHOOTER_API UScriptStruct* Z_Construct_UScriptStruct_FSkillsAttributes();
+	WRAITHSHOOTER_API UScriptStruct* Z_Construct_UScriptStruct_FSkillData();
 	ENGINE_API UClass* Z_Construct_UClass_USoundBase_NoRegister();
 	WRAITHSHOOTER_API UClass* Z_Construct_UClass_UWraithUIInterface_NoRegister();
 // End Cross Module References
@@ -55,7 +58,9 @@ void EmptyLinkFunctionForGeneratedCodeShooterCharacter() {}
 	};
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UDelegateFunction_WraithShooter_OnAiming__DelegateSignature_Statics::Function_MetaDataParams[] = {
+		{ "Comment", "//MARK: Delegate Decleration\n" },
 		{ "ModuleRelativePath", "Public/ShooterCharacter.h" },
+		{ "ToolTip", "MARK: Delegate Decleration" },
 	};
 #endif
 	const UE4CodeGen_Private::FFunctionParams Z_Construct_UDelegateFunction_WraithShooter_OnAiming__DelegateSignature_Statics::FuncParams = { (UObject*(*)())Z_Construct_UPackage__Script_WraithShooter, nullptr, "OnAiming__DelegateSignature", nullptr, nullptr, sizeof(_Script_WraithShooter_eventOnAiming_Parms), Z_Construct_UDelegateFunction_WraithShooter_OnAiming__DelegateSignature_Statics::PropPointers, UE_ARRAY_COUNT(Z_Construct_UDelegateFunction_WraithShooter_OnAiming__DelegateSignature_Statics::PropPointers), RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x00130000, 0, 0, METADATA_PARAMS(Z_Construct_UDelegateFunction_WraithShooter_OnAiming__DelegateSignature_Statics::Function_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UDelegateFunction_WraithShooter_OnAiming__DelegateSignature_Statics::Function_MetaDataParams)) };
@@ -101,6 +106,15 @@ void EmptyLinkFunctionForGeneratedCodeShooterCharacter() {}
 		P_FINISH;
 		P_NATIVE_BEGIN;
 		P_THIS->BindDelegates();
+		P_NATIVE_END;
+	}
+	DEFINE_FUNCTION(AShooterCharacter::execObjectTrace)
+	{
+		P_GET_STRUCT_REF(FHitResult,Z_Param_Out_Hit);
+		P_GET_STRUCT_REF(FVector,Z_Param_Out_ShotDirection);
+		P_FINISH;
+		P_NATIVE_BEGIN;
+		*(bool*)Z_Param__Result=P_THIS->ObjectTrace(Z_Param_Out_Hit,Z_Param_Out_ShotDirection);
 		P_NATIVE_END;
 	}
 	DEFINE_FUNCTION(AShooterCharacter::execGetScoreValue)
@@ -174,6 +188,7 @@ void EmptyLinkFunctionForGeneratedCodeShooterCharacter() {}
 			{ "IsDead", &AShooterCharacter::execIsDead },
 			{ "MakeVFXInvisible", &AShooterCharacter::execMakeVFXInvisible },
 			{ "MakeVFXVisible", &AShooterCharacter::execMakeVFXVisible },
+			{ "ObjectTrace", &AShooterCharacter::execObjectTrace },
 			{ "PlaySoundEffects", &AShooterCharacter::execPlaySoundEffects },
 			{ "UnBindDelegates", &AShooterCharacter::execUnBindDelegates },
 		};
@@ -525,6 +540,51 @@ void EmptyLinkFunctionForGeneratedCodeShooterCharacter() {}
 		}
 		return ReturnFunction;
 	}
+	struct Z_Construct_UFunction_AShooterCharacter_ObjectTrace_Statics
+	{
+		struct ShooterCharacter_eventObjectTrace_Parms
+		{
+			FHitResult Hit;
+			FVector ShotDirection;
+			bool ReturnValue;
+		};
+		static void NewProp_ReturnValue_SetBit(void* Obj);
+		static const UE4CodeGen_Private::FBoolPropertyParams NewProp_ReturnValue;
+		static const UE4CodeGen_Private::FStructPropertyParams NewProp_ShotDirection;
+		static const UE4CodeGen_Private::FStructPropertyParams NewProp_Hit;
+		static const UE4CodeGen_Private::FPropertyParamsBase* const PropPointers[];
+#if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam Function_MetaDataParams[];
+#endif
+		static const UE4CodeGen_Private::FFunctionParams FuncParams;
+	};
+	void Z_Construct_UFunction_AShooterCharacter_ObjectTrace_Statics::NewProp_ReturnValue_SetBit(void* Obj)
+	{
+		((ShooterCharacter_eventObjectTrace_Parms*)Obj)->ReturnValue = 1;
+	}
+	const UE4CodeGen_Private::FBoolPropertyParams Z_Construct_UFunction_AShooterCharacter_ObjectTrace_Statics::NewProp_ReturnValue = { "ReturnValue", nullptr, (EPropertyFlags)0x0010000000000580, UE4CodeGen_Private::EPropertyGenFlags::Bool | UE4CodeGen_Private::EPropertyGenFlags::NativeBool, RF_Public|RF_Transient|RF_MarkAsNative, 1, sizeof(bool), sizeof(ShooterCharacter_eventObjectTrace_Parms), &Z_Construct_UFunction_AShooterCharacter_ObjectTrace_Statics::NewProp_ReturnValue_SetBit, METADATA_PARAMS(nullptr, 0) };
+	const UE4CodeGen_Private::FStructPropertyParams Z_Construct_UFunction_AShooterCharacter_ObjectTrace_Statics::NewProp_ShotDirection = { "ShotDirection", nullptr, (EPropertyFlags)0x0010000000000180, UE4CodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(ShooterCharacter_eventObjectTrace_Parms, ShotDirection), Z_Construct_UScriptStruct_FVector, METADATA_PARAMS(nullptr, 0) };
+	const UE4CodeGen_Private::FStructPropertyParams Z_Construct_UFunction_AShooterCharacter_ObjectTrace_Statics::NewProp_Hit = { "Hit", nullptr, (EPropertyFlags)0x0010008000000180, UE4CodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(ShooterCharacter_eventObjectTrace_Parms, Hit), Z_Construct_UScriptStruct_FHitResult, METADATA_PARAMS(nullptr, 0) };
+	const UE4CodeGen_Private::FPropertyParamsBase* const Z_Construct_UFunction_AShooterCharacter_ObjectTrace_Statics::PropPointers[] = {
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_AShooterCharacter_ObjectTrace_Statics::NewProp_ReturnValue,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_AShooterCharacter_ObjectTrace_Statics::NewProp_ShotDirection,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_AShooterCharacter_ObjectTrace_Statics::NewProp_Hit,
+	};
+#if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_AShooterCharacter_ObjectTrace_Statics::Function_MetaDataParams[] = {
+		{ "ModuleRelativePath", "Public/ShooterCharacter.h" },
+	};
+#endif
+	const UE4CodeGen_Private::FFunctionParams Z_Construct_UFunction_AShooterCharacter_ObjectTrace_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_AShooterCharacter, nullptr, "ObjectTrace", nullptr, nullptr, sizeof(ShooterCharacter_eventObjectTrace_Parms), Z_Construct_UFunction_AShooterCharacter_ObjectTrace_Statics::PropPointers, UE_ARRAY_COUNT(Z_Construct_UFunction_AShooterCharacter_ObjectTrace_Statics::PropPointers), RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x00C20401, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_AShooterCharacter_ObjectTrace_Statics::Function_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UFunction_AShooterCharacter_ObjectTrace_Statics::Function_MetaDataParams)) };
+	UFunction* Z_Construct_UFunction_AShooterCharacter_ObjectTrace()
+	{
+		static UFunction* ReturnFunction = nullptr;
+		if (!ReturnFunction)
+		{
+			UE4CodeGen_Private::ConstructUFunction(ReturnFunction, Z_Construct_UFunction_AShooterCharacter_ObjectTrace_Statics::FuncParams);
+		}
+		return ReturnFunction;
+	}
 	struct Z_Construct_UFunction_AShooterCharacter_PlaySoundEffects_Statics
 	{
 #if WITH_METADATA
@@ -607,10 +667,6 @@ void EmptyLinkFunctionForGeneratedCodeShooterCharacter() {}
 #endif
 		static const UE4CodeGen_Private::FObjectPropertyParams NewProp_Gun;
 #if WITH_METADATA
-		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_DoubleJump_MetaData[];
-#endif
-		static const UE4CodeGen_Private::FStructPropertyParams NewProp_DoubleJump;
-#if WITH_METADATA
 		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_SkillAcquired_MetaData[];
 #endif
 		static const UE4CodeGen_Private::FEnumPropertyParams NewProp_SkillAcquired;
@@ -626,20 +682,153 @@ void EmptyLinkFunctionForGeneratedCodeShooterCharacter() {}
 		static const UE4CodeGen_Private::FEnumPropertyParams NewProp_OffensiveAbilitySlotted;
 		static const UE4CodeGen_Private::FBytePropertyParams NewProp_OffensiveAbilitySlotted_Underlying;
 #if WITH_METADATA
-		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_Skills_MetaData[];
+		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_ShieldAttributes_MetaData[];
 #endif
-		static const UE4CodeGen_Private::FEnumPropertyParams NewProp_Skills;
-		static const UE4CodeGen_Private::FBytePropertyParams NewProp_Skills_Underlying;
+		static const UE4CodeGen_Private::FStructPropertyParams NewProp_ShieldAttributes;
 #if WITH_METADATA
-		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_DAbility_MetaData[];
+		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_ShieldData_MetaData[];
 #endif
-		static const UE4CodeGen_Private::FEnumPropertyParams NewProp_DAbility;
-		static const UE4CodeGen_Private::FBytePropertyParams NewProp_DAbility_Underlying;
+		static const UE4CodeGen_Private::FStructPropertyParams NewProp_ShieldData;
 #if WITH_METADATA
-		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_OAbility_MetaData[];
+		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_ShieldCoolDownTimePercentage_MetaData[];
 #endif
-		static const UE4CodeGen_Private::FEnumPropertyParams NewProp_OAbility;
-		static const UE4CodeGen_Private::FBytePropertyParams NewProp_OAbility_Underlying;
+		static const UE4CodeGen_Private::FFloatPropertyParams NewProp_ShieldCoolDownTimePercentage;
+#if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_ShieldTimePercentage_MetaData[];
+#endif
+		static const UE4CodeGen_Private::FFloatPropertyParams NewProp_ShieldTimePercentage;
+#if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_bIsUsingShield_MetaData[];
+#endif
+		static void NewProp_bIsUsingShield_SetBit(void* Obj);
+		static const UE4CodeGen_Private::FBoolPropertyParams NewProp_bIsUsingShield;
+#if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_bHasShield_MetaData[];
+#endif
+		static void NewProp_bHasShield_SetBit(void* Obj);
+		static const UE4CodeGen_Private::FBoolPropertyParams NewProp_bHasShield;
+#if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_MistAttributes_MetaData[];
+#endif
+		static const UE4CodeGen_Private::FStructPropertyParams NewProp_MistAttributes;
+#if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_MistData_MetaData[];
+#endif
+		static const UE4CodeGen_Private::FStructPropertyParams NewProp_MistData;
+#if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_MistCoolDownTimePercentage_MetaData[];
+#endif
+		static const UE4CodeGen_Private::FFloatPropertyParams NewProp_MistCoolDownTimePercentage;
+#if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_MistTimePercentage_MetaData[];
+#endif
+		static const UE4CodeGen_Private::FFloatPropertyParams NewProp_MistTimePercentage;
+#if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_bIsUsingMist_MetaData[];
+#endif
+		static void NewProp_bIsUsingMist_SetBit(void* Obj);
+		static const UE4CodeGen_Private::FBoolPropertyParams NewProp_bIsUsingMist;
+#if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_bHasMist_MetaData[];
+#endif
+		static void NewProp_bHasMist_SetBit(void* Obj);
+		static const UE4CodeGen_Private::FBoolPropertyParams NewProp_bHasMist;
+#if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_LensOfTruthAttributes_MetaData[];
+#endif
+		static const UE4CodeGen_Private::FStructPropertyParams NewProp_LensOfTruthAttributes;
+#if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_LensOfTruthData_MetaData[];
+#endif
+		static const UE4CodeGen_Private::FStructPropertyParams NewProp_LensOfTruthData;
+#if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_LensOfTruthCoolDownTimePercentage_MetaData[];
+#endif
+		static const UE4CodeGen_Private::FFloatPropertyParams NewProp_LensOfTruthCoolDownTimePercentage;
+#if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_LensOfTruthTimePercentage_MetaData[];
+#endif
+		static const UE4CodeGen_Private::FFloatPropertyParams NewProp_LensOfTruthTimePercentage;
+#if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_bIsUsingLensOfTruth_MetaData[];
+#endif
+		static void NewProp_bIsUsingLensOfTruth_SetBit(void* Obj);
+		static const UE4CodeGen_Private::FBoolPropertyParams NewProp_bIsUsingLensOfTruth;
+#if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_bHasLensOfTruth_MetaData[];
+#endif
+		static void NewProp_bHasLensOfTruth_SetBit(void* Obj);
+		static const UE4CodeGen_Private::FBoolPropertyParams NewProp_bHasLensOfTruth;
+#if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_BloodlustAttributes_MetaData[];
+#endif
+		static const UE4CodeGen_Private::FStructPropertyParams NewProp_BloodlustAttributes;
+#if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_BloodlustData_MetaData[];
+#endif
+		static const UE4CodeGen_Private::FStructPropertyParams NewProp_BloodlustData;
+#if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_bHasBloodlust_MetaData[];
+#endif
+		static void NewProp_bHasBloodlust_SetBit(void* Obj);
+		static const UE4CodeGen_Private::FBoolPropertyParams NewProp_bHasBloodlust;
+#if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_ElectroSparkAttributes_MetaData[];
+#endif
+		static const UE4CodeGen_Private::FStructPropertyParams NewProp_ElectroSparkAttributes;
+#if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_ElectroSparkData_MetaData[];
+#endif
+		static const UE4CodeGen_Private::FStructPropertyParams NewProp_ElectroSparkData;
+#if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_bHasElectroSpark_MetaData[];
+#endif
+		static void NewProp_bHasElectroSpark_SetBit(void* Obj);
+		static const UE4CodeGen_Private::FBoolPropertyParams NewProp_bHasElectroSpark;
+#if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_FireballAttributes_MetaData[];
+#endif
+		static const UE4CodeGen_Private::FStructPropertyParams NewProp_FireballAttributes;
+#if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_FireballData_MetaData[];
+#endif
+		static const UE4CodeGen_Private::FStructPropertyParams NewProp_FireballData;
+#if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_bHasFireball_MetaData[];
+#endif
+		static void NewProp_bHasFireball_SetBit(void* Obj);
+		static const UE4CodeGen_Private::FBoolPropertyParams NewProp_bHasFireball;
+#if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_BackDashData_MetaData[];
+#endif
+		static const UE4CodeGen_Private::FStructPropertyParams NewProp_BackDashData;
+#if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_bHasBackDash_MetaData[];
+#endif
+		static void NewProp_bHasBackDash_SetBit(void* Obj);
+		static const UE4CodeGen_Private::FBoolPropertyParams NewProp_bHasBackDash;
+#if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_DoubleJumpData_MetaData[];
+#endif
+		static const UE4CodeGen_Private::FStructPropertyParams NewProp_DoubleJumpData;
+#if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_JumpVelocity_MetaData[];
+#endif
+		static const UE4CodeGen_Private::FStructPropertyParams NewProp_JumpVelocity;
+#if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_JumpCount_MetaData[];
+#endif
+		static const UE4CodeGen_Private::FIntPropertyParams NewProp_JumpCount;
+#if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_bIsDoubleJumping_MetaData[];
+#endif
+		static void NewProp_bIsDoubleJumping_SetBit(void* Obj);
+		static const UE4CodeGen_Private::FBoolPropertyParams NewProp_bIsDoubleJumping;
+#if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_bHasDoubleJump_MetaData[];
+#endif
+		static void NewProp_bHasDoubleJump_SetBit(void* Obj);
+		static const UE4CodeGen_Private::FBoolPropertyParams NewProp_bHasDoubleJump;
 #if WITH_METADATA
 		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_bIsOffensiveAbilityReady_MetaData[];
 #endif
@@ -662,6 +851,15 @@ void EmptyLinkFunctionForGeneratedCodeShooterCharacter() {}
 #endif
 		static void NewProp_bIsAiming_SetBit(void* Obj);
 		static const UE4CodeGen_Private::FBoolPropertyParams NewProp_bIsAiming;
+#if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_InteractTraceLength_MetaData[];
+#endif
+		static const UE4CodeGen_Private::FIntPropertyParams NewProp_InteractTraceLength;
+#if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_bCanInteract_MetaData[];
+#endif
+		static void NewProp_bCanInteract_SetBit(void* Obj);
+		static const UE4CodeGen_Private::FBoolPropertyParams NewProp_bCanInteract;
 #if WITH_METADATA
 		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_CharacterScore_MetaData[];
 #endif
@@ -719,23 +917,26 @@ void EmptyLinkFunctionForGeneratedCodeShooterCharacter() {}
 		{ &Z_Construct_UFunction_AShooterCharacter_IsDead, "IsDead" }, // 3360033544
 		{ &Z_Construct_UFunction_AShooterCharacter_MakeVFXInvisible, "MakeVFXInvisible" }, // 995759127
 		{ &Z_Construct_UFunction_AShooterCharacter_MakeVFXVisible, "MakeVFXVisible" }, // 464836617
+		{ &Z_Construct_UFunction_AShooterCharacter_ObjectTrace, "ObjectTrace" }, // 2898214006
 		{ &Z_Construct_UFunction_AShooterCharacter_PlaySoundEffects, "PlaySoundEffects" }, // 4167234361
 		{ &Z_Construct_UFunction_AShooterCharacter_UnBindDelegates, "UnBindDelegates" }, // 17716327
 	};
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AShooterCharacter_Statics::Class_MetaDataParams[] = {
+		{ "Comment", "//MARK: ShooterCharacter Class\n" },
 		{ "HideCategories", "Navigation" },
 		{ "IncludePath", "ShooterCharacter.h" },
 		{ "ModuleRelativePath", "Public/ShooterCharacter.h" },
+		{ "ToolTip", "MARK: ShooterCharacter Class" },
 	};
 #endif
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AShooterCharacter_Statics::NewProp_ShooterBT_MetaData[] = {
-		{ "Category", "AI Behavior" },
+		{ "Category", "AIBehavior" },
 		{ "ModuleRelativePath", "Public/ShooterCharacter.h" },
 	};
 #endif
-	const UE4CodeGen_Private::FObjectPropertyParams Z_Construct_UClass_AShooterCharacter_Statics::NewProp_ShooterBT = { "ShooterBT", nullptr, (EPropertyFlags)0x0010000000000001, UE4CodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AShooterCharacter, ShooterBT), Z_Construct_UClass_UBehaviorTree_NoRegister, METADATA_PARAMS(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_ShooterBT_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_ShooterBT_MetaData)) };
+	const UE4CodeGen_Private::FObjectPropertyParams Z_Construct_UClass_AShooterCharacter_Statics::NewProp_ShooterBT = { "ShooterBT", nullptr, (EPropertyFlags)0x0010000000000005, UE4CodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AShooterCharacter, ShooterBT), Z_Construct_UClass_UBehaviorTree_NoRegister, METADATA_PARAMS(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_ShooterBT_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_ShooterBT_MetaData)) };
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AShooterCharacter_Statics::NewProp_VisualFX_MetaData[] = {
 		{ "Category", "Effects" },
@@ -779,13 +980,6 @@ void EmptyLinkFunctionForGeneratedCodeShooterCharacter() {}
 #endif
 	const UE4CodeGen_Private::FObjectPropertyParams Z_Construct_UClass_AShooterCharacter_Statics::NewProp_Gun = { "Gun", nullptr, (EPropertyFlags)0x0020080000000014, UE4CodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AShooterCharacter, Gun), Z_Construct_UClass_AGun_NoRegister, METADATA_PARAMS(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_Gun_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_Gun_MetaData)) };
 #if WITH_METADATA
-	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AShooterCharacter_Statics::NewProp_DoubleJump_MetaData[] = {
-		{ "Category", "SkillStructures" },
-		{ "ModuleRelativePath", "Public/ShooterCharacter.h" },
-	};
-#endif
-	const UE4CodeGen_Private::FStructPropertyParams Z_Construct_UClass_AShooterCharacter_Statics::NewProp_DoubleJump = { "DoubleJump", nullptr, (EPropertyFlags)0x0010000000000005, UE4CodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AShooterCharacter, DoubleJump), Z_Construct_UScriptStruct_FSkillsAttributes, METADATA_PARAMS(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_DoubleJump_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_DoubleJump_MetaData)) };
-#if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AShooterCharacter_Statics::NewProp_SkillAcquired_MetaData[] = {
 		{ "Category", "SkillsInfo" },
 		{ "ModuleRelativePath", "Public/ShooterCharacter.h" },
@@ -804,35 +998,303 @@ void EmptyLinkFunctionForGeneratedCodeShooterCharacter() {}
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AShooterCharacter_Statics::NewProp_OffensiveAbilitySlotted_MetaData[] = {
 		{ "Category", "SkillsInfo" },
+		{ "Comment", "//MARK: ENUMS variables\n" },
 		{ "ModuleRelativePath", "Public/ShooterCharacter.h" },
+		{ "ToolTip", "MARK: ENUMS variables" },
 	};
 #endif
 	const UE4CodeGen_Private::FEnumPropertyParams Z_Construct_UClass_AShooterCharacter_Statics::NewProp_OffensiveAbilitySlotted = { "OffensiveAbilitySlotted", nullptr, (EPropertyFlags)0x0010000000000005, UE4CodeGen_Private::EPropertyGenFlags::Enum, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AShooterCharacter, OffensiveAbilitySlotted), Z_Construct_UEnum_WraithShooter_EOffensiveAbility, METADATA_PARAMS(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_OffensiveAbilitySlotted_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_OffensiveAbilitySlotted_MetaData)) };
 	const UE4CodeGen_Private::FBytePropertyParams Z_Construct_UClass_AShooterCharacter_Statics::NewProp_OffensiveAbilitySlotted_Underlying = { "UnderlyingType", nullptr, (EPropertyFlags)0x0000000000000000, UE4CodeGen_Private::EPropertyGenFlags::Byte, RF_Public|RF_Transient|RF_MarkAsNative, 1, 0, nullptr, METADATA_PARAMS(nullptr, 0) };
 #if WITH_METADATA
-	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AShooterCharacter_Statics::NewProp_Skills_MetaData[] = {
-		{ "Category", "SkillsInfo" },
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AShooterCharacter_Statics::NewProp_ShieldAttributes_MetaData[] = {
+		{ "Category", "Shield" },
 		{ "ModuleRelativePath", "Public/ShooterCharacter.h" },
 	};
 #endif
-	const UE4CodeGen_Private::FEnumPropertyParams Z_Construct_UClass_AShooterCharacter_Statics::NewProp_Skills = { "Skills", nullptr, (EPropertyFlags)0x0010000000000014, UE4CodeGen_Private::EPropertyGenFlags::Enum, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AShooterCharacter, Skills), Z_Construct_UEnum_WraithShooter_ESkills, METADATA_PARAMS(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_Skills_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_Skills_MetaData)) };
-	const UE4CodeGen_Private::FBytePropertyParams Z_Construct_UClass_AShooterCharacter_Statics::NewProp_Skills_Underlying = { "UnderlyingType", nullptr, (EPropertyFlags)0x0000000000000000, UE4CodeGen_Private::EPropertyGenFlags::Byte, RF_Public|RF_Transient|RF_MarkAsNative, 1, 0, nullptr, METADATA_PARAMS(nullptr, 0) };
+	const UE4CodeGen_Private::FStructPropertyParams Z_Construct_UClass_AShooterCharacter_Statics::NewProp_ShieldAttributes = { "ShieldAttributes", nullptr, (EPropertyFlags)0x0010000000000005, UE4CodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AShooterCharacter, ShieldAttributes), Z_Construct_UScriptStruct_FSkillsAttributes, METADATA_PARAMS(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_ShieldAttributes_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_ShieldAttributes_MetaData)) };
 #if WITH_METADATA
-	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AShooterCharacter_Statics::NewProp_DAbility_MetaData[] = {
-		{ "Category", "SkillsInfo" },
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AShooterCharacter_Statics::NewProp_ShieldData_MetaData[] = {
+		{ "Category", "Shield" },
 		{ "ModuleRelativePath", "Public/ShooterCharacter.h" },
 	};
 #endif
-	const UE4CodeGen_Private::FEnumPropertyParams Z_Construct_UClass_AShooterCharacter_Statics::NewProp_DAbility = { "DAbility", nullptr, (EPropertyFlags)0x0010000000000014, UE4CodeGen_Private::EPropertyGenFlags::Enum, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AShooterCharacter, DAbility), Z_Construct_UEnum_WraithShooter_EDefensiveAbility, METADATA_PARAMS(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_DAbility_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_DAbility_MetaData)) };
-	const UE4CodeGen_Private::FBytePropertyParams Z_Construct_UClass_AShooterCharacter_Statics::NewProp_DAbility_Underlying = { "UnderlyingType", nullptr, (EPropertyFlags)0x0000000000000000, UE4CodeGen_Private::EPropertyGenFlags::Byte, RF_Public|RF_Transient|RF_MarkAsNative, 1, 0, nullptr, METADATA_PARAMS(nullptr, 0) };
+	const UE4CodeGen_Private::FStructPropertyParams Z_Construct_UClass_AShooterCharacter_Statics::NewProp_ShieldData = { "ShieldData", nullptr, (EPropertyFlags)0x0010000000000005, UE4CodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AShooterCharacter, ShieldData), Z_Construct_UScriptStruct_FSkillData, METADATA_PARAMS(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_ShieldData_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_ShieldData_MetaData)) };
 #if WITH_METADATA
-	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AShooterCharacter_Statics::NewProp_OAbility_MetaData[] = {
-		{ "Category", "SkillsInfo" },
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AShooterCharacter_Statics::NewProp_ShieldCoolDownTimePercentage_MetaData[] = {
+		{ "Category", "Shield" },
 		{ "ModuleRelativePath", "Public/ShooterCharacter.h" },
 	};
 #endif
-	const UE4CodeGen_Private::FEnumPropertyParams Z_Construct_UClass_AShooterCharacter_Statics::NewProp_OAbility = { "OAbility", nullptr, (EPropertyFlags)0x0010000000000014, UE4CodeGen_Private::EPropertyGenFlags::Enum, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AShooterCharacter, OAbility), Z_Construct_UEnum_WraithShooter_EOffensiveAbility, METADATA_PARAMS(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_OAbility_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_OAbility_MetaData)) };
-	const UE4CodeGen_Private::FBytePropertyParams Z_Construct_UClass_AShooterCharacter_Statics::NewProp_OAbility_Underlying = { "UnderlyingType", nullptr, (EPropertyFlags)0x0000000000000000, UE4CodeGen_Private::EPropertyGenFlags::Byte, RF_Public|RF_Transient|RF_MarkAsNative, 1, 0, nullptr, METADATA_PARAMS(nullptr, 0) };
+	const UE4CodeGen_Private::FFloatPropertyParams Z_Construct_UClass_AShooterCharacter_Statics::NewProp_ShieldCoolDownTimePercentage = { "ShieldCoolDownTimePercentage", nullptr, (EPropertyFlags)0x0010000000000005, UE4CodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AShooterCharacter, ShieldCoolDownTimePercentage), METADATA_PARAMS(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_ShieldCoolDownTimePercentage_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_ShieldCoolDownTimePercentage_MetaData)) };
+#if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AShooterCharacter_Statics::NewProp_ShieldTimePercentage_MetaData[] = {
+		{ "Category", "Shield" },
+		{ "ModuleRelativePath", "Public/ShooterCharacter.h" },
+	};
+#endif
+	const UE4CodeGen_Private::FFloatPropertyParams Z_Construct_UClass_AShooterCharacter_Statics::NewProp_ShieldTimePercentage = { "ShieldTimePercentage", nullptr, (EPropertyFlags)0x0010000000000005, UE4CodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AShooterCharacter, ShieldTimePercentage), METADATA_PARAMS(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_ShieldTimePercentage_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_ShieldTimePercentage_MetaData)) };
+#if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bIsUsingShield_MetaData[] = {
+		{ "Category", "Shield" },
+		{ "ModuleRelativePath", "Public/ShooterCharacter.h" },
+	};
+#endif
+	void Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bIsUsingShield_SetBit(void* Obj)
+	{
+		((AShooterCharacter*)Obj)->bIsUsingShield = 1;
+	}
+	const UE4CodeGen_Private::FBoolPropertyParams Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bIsUsingShield = { "bIsUsingShield", nullptr, (EPropertyFlags)0x0010000000000005, UE4CodeGen_Private::EPropertyGenFlags::Bool | UE4CodeGen_Private::EPropertyGenFlags::NativeBool, RF_Public|RF_Transient|RF_MarkAsNative, 1, sizeof(bool), sizeof(AShooterCharacter), &Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bIsUsingShield_SetBit, METADATA_PARAMS(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bIsUsingShield_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bIsUsingShield_MetaData)) };
+#if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bHasShield_MetaData[] = {
+		{ "Category", "Shield" },
+		{ "ModuleRelativePath", "Public/ShooterCharacter.h" },
+	};
+#endif
+	void Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bHasShield_SetBit(void* Obj)
+	{
+		((AShooterCharacter*)Obj)->bHasShield = 1;
+	}
+	const UE4CodeGen_Private::FBoolPropertyParams Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bHasShield = { "bHasShield", nullptr, (EPropertyFlags)0x0010000000000005, UE4CodeGen_Private::EPropertyGenFlags::Bool | UE4CodeGen_Private::EPropertyGenFlags::NativeBool, RF_Public|RF_Transient|RF_MarkAsNative, 1, sizeof(bool), sizeof(AShooterCharacter), &Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bHasShield_SetBit, METADATA_PARAMS(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bHasShield_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bHasShield_MetaData)) };
+#if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AShooterCharacter_Statics::NewProp_MistAttributes_MetaData[] = {
+		{ "Category", "Mist" },
+		{ "ModuleRelativePath", "Public/ShooterCharacter.h" },
+	};
+#endif
+	const UE4CodeGen_Private::FStructPropertyParams Z_Construct_UClass_AShooterCharacter_Statics::NewProp_MistAttributes = { "MistAttributes", nullptr, (EPropertyFlags)0x0010000000000005, UE4CodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AShooterCharacter, MistAttributes), Z_Construct_UScriptStruct_FSkillsAttributes, METADATA_PARAMS(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_MistAttributes_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_MistAttributes_MetaData)) };
+#if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AShooterCharacter_Statics::NewProp_MistData_MetaData[] = {
+		{ "Category", "Mist" },
+		{ "ModuleRelativePath", "Public/ShooterCharacter.h" },
+	};
+#endif
+	const UE4CodeGen_Private::FStructPropertyParams Z_Construct_UClass_AShooterCharacter_Statics::NewProp_MistData = { "MistData", nullptr, (EPropertyFlags)0x0010000000000005, UE4CodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AShooterCharacter, MistData), Z_Construct_UScriptStruct_FSkillData, METADATA_PARAMS(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_MistData_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_MistData_MetaData)) };
+#if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AShooterCharacter_Statics::NewProp_MistCoolDownTimePercentage_MetaData[] = {
+		{ "Category", "Mist" },
+		{ "ModuleRelativePath", "Public/ShooterCharacter.h" },
+	};
+#endif
+	const UE4CodeGen_Private::FFloatPropertyParams Z_Construct_UClass_AShooterCharacter_Statics::NewProp_MistCoolDownTimePercentage = { "MistCoolDownTimePercentage", nullptr, (EPropertyFlags)0x0010000000000005, UE4CodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AShooterCharacter, MistCoolDownTimePercentage), METADATA_PARAMS(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_MistCoolDownTimePercentage_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_MistCoolDownTimePercentage_MetaData)) };
+#if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AShooterCharacter_Statics::NewProp_MistTimePercentage_MetaData[] = {
+		{ "Category", "Mist" },
+		{ "ModuleRelativePath", "Public/ShooterCharacter.h" },
+	};
+#endif
+	const UE4CodeGen_Private::FFloatPropertyParams Z_Construct_UClass_AShooterCharacter_Statics::NewProp_MistTimePercentage = { "MistTimePercentage", nullptr, (EPropertyFlags)0x0010000000000005, UE4CodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AShooterCharacter, MistTimePercentage), METADATA_PARAMS(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_MistTimePercentage_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_MistTimePercentage_MetaData)) };
+#if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bIsUsingMist_MetaData[] = {
+		{ "Category", "Mist" },
+		{ "ModuleRelativePath", "Public/ShooterCharacter.h" },
+	};
+#endif
+	void Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bIsUsingMist_SetBit(void* Obj)
+	{
+		((AShooterCharacter*)Obj)->bIsUsingMist = 1;
+	}
+	const UE4CodeGen_Private::FBoolPropertyParams Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bIsUsingMist = { "bIsUsingMist", nullptr, (EPropertyFlags)0x0010000000000005, UE4CodeGen_Private::EPropertyGenFlags::Bool | UE4CodeGen_Private::EPropertyGenFlags::NativeBool, RF_Public|RF_Transient|RF_MarkAsNative, 1, sizeof(bool), sizeof(AShooterCharacter), &Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bIsUsingMist_SetBit, METADATA_PARAMS(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bIsUsingMist_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bIsUsingMist_MetaData)) };
+#if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bHasMist_MetaData[] = {
+		{ "Category", "Mist" },
+		{ "ModuleRelativePath", "Public/ShooterCharacter.h" },
+	};
+#endif
+	void Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bHasMist_SetBit(void* Obj)
+	{
+		((AShooterCharacter*)Obj)->bHasMist = 1;
+	}
+	const UE4CodeGen_Private::FBoolPropertyParams Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bHasMist = { "bHasMist", nullptr, (EPropertyFlags)0x0010000000000005, UE4CodeGen_Private::EPropertyGenFlags::Bool | UE4CodeGen_Private::EPropertyGenFlags::NativeBool, RF_Public|RF_Transient|RF_MarkAsNative, 1, sizeof(bool), sizeof(AShooterCharacter), &Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bHasMist_SetBit, METADATA_PARAMS(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bHasMist_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bHasMist_MetaData)) };
+#if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AShooterCharacter_Statics::NewProp_LensOfTruthAttributes_MetaData[] = {
+		{ "Category", "LensOfTruth" },
+		{ "ModuleRelativePath", "Public/ShooterCharacter.h" },
+	};
+#endif
+	const UE4CodeGen_Private::FStructPropertyParams Z_Construct_UClass_AShooterCharacter_Statics::NewProp_LensOfTruthAttributes = { "LensOfTruthAttributes", nullptr, (EPropertyFlags)0x0010000000000005, UE4CodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AShooterCharacter, LensOfTruthAttributes), Z_Construct_UScriptStruct_FSkillsAttributes, METADATA_PARAMS(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_LensOfTruthAttributes_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_LensOfTruthAttributes_MetaData)) };
+#if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AShooterCharacter_Statics::NewProp_LensOfTruthData_MetaData[] = {
+		{ "Category", "LensOfTruth" },
+		{ "ModuleRelativePath", "Public/ShooterCharacter.h" },
+	};
+#endif
+	const UE4CodeGen_Private::FStructPropertyParams Z_Construct_UClass_AShooterCharacter_Statics::NewProp_LensOfTruthData = { "LensOfTruthData", nullptr, (EPropertyFlags)0x0010000000000005, UE4CodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AShooterCharacter, LensOfTruthData), Z_Construct_UScriptStruct_FSkillData, METADATA_PARAMS(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_LensOfTruthData_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_LensOfTruthData_MetaData)) };
+#if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AShooterCharacter_Statics::NewProp_LensOfTruthCoolDownTimePercentage_MetaData[] = {
+		{ "Category", "LensOfTruth" },
+		{ "ModuleRelativePath", "Public/ShooterCharacter.h" },
+	};
+#endif
+	const UE4CodeGen_Private::FFloatPropertyParams Z_Construct_UClass_AShooterCharacter_Statics::NewProp_LensOfTruthCoolDownTimePercentage = { "LensOfTruthCoolDownTimePercentage", nullptr, (EPropertyFlags)0x0010000000000005, UE4CodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AShooterCharacter, LensOfTruthCoolDownTimePercentage), METADATA_PARAMS(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_LensOfTruthCoolDownTimePercentage_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_LensOfTruthCoolDownTimePercentage_MetaData)) };
+#if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AShooterCharacter_Statics::NewProp_LensOfTruthTimePercentage_MetaData[] = {
+		{ "Category", "LensOfTruth" },
+		{ "ModuleRelativePath", "Public/ShooterCharacter.h" },
+	};
+#endif
+	const UE4CodeGen_Private::FFloatPropertyParams Z_Construct_UClass_AShooterCharacter_Statics::NewProp_LensOfTruthTimePercentage = { "LensOfTruthTimePercentage", nullptr, (EPropertyFlags)0x0010000000000005, UE4CodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AShooterCharacter, LensOfTruthTimePercentage), METADATA_PARAMS(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_LensOfTruthTimePercentage_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_LensOfTruthTimePercentage_MetaData)) };
+#if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bIsUsingLensOfTruth_MetaData[] = {
+		{ "Category", "LensOfTruth" },
+		{ "ModuleRelativePath", "Public/ShooterCharacter.h" },
+	};
+#endif
+	void Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bIsUsingLensOfTruth_SetBit(void* Obj)
+	{
+		((AShooterCharacter*)Obj)->bIsUsingLensOfTruth = 1;
+	}
+	const UE4CodeGen_Private::FBoolPropertyParams Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bIsUsingLensOfTruth = { "bIsUsingLensOfTruth", nullptr, (EPropertyFlags)0x0010000000000005, UE4CodeGen_Private::EPropertyGenFlags::Bool | UE4CodeGen_Private::EPropertyGenFlags::NativeBool, RF_Public|RF_Transient|RF_MarkAsNative, 1, sizeof(bool), sizeof(AShooterCharacter), &Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bIsUsingLensOfTruth_SetBit, METADATA_PARAMS(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bIsUsingLensOfTruth_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bIsUsingLensOfTruth_MetaData)) };
+#if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bHasLensOfTruth_MetaData[] = {
+		{ "Category", "LensOfTruth" },
+		{ "Comment", "//MARK: Passive Skills Variables and Data\n" },
+		{ "ModuleRelativePath", "Public/ShooterCharacter.h" },
+		{ "ToolTip", "MARK: Passive Skills Variables and Data" },
+	};
+#endif
+	void Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bHasLensOfTruth_SetBit(void* Obj)
+	{
+		((AShooterCharacter*)Obj)->bHasLensOfTruth = 1;
+	}
+	const UE4CodeGen_Private::FBoolPropertyParams Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bHasLensOfTruth = { "bHasLensOfTruth", nullptr, (EPropertyFlags)0x0010000000000005, UE4CodeGen_Private::EPropertyGenFlags::Bool | UE4CodeGen_Private::EPropertyGenFlags::NativeBool, RF_Public|RF_Transient|RF_MarkAsNative, 1, sizeof(bool), sizeof(AShooterCharacter), &Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bHasLensOfTruth_SetBit, METADATA_PARAMS(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bHasLensOfTruth_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bHasLensOfTruth_MetaData)) };
+#if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AShooterCharacter_Statics::NewProp_BloodlustAttributes_MetaData[] = {
+		{ "Category", "Bloodlust" },
+		{ "ModuleRelativePath", "Public/ShooterCharacter.h" },
+	};
+#endif
+	const UE4CodeGen_Private::FStructPropertyParams Z_Construct_UClass_AShooterCharacter_Statics::NewProp_BloodlustAttributes = { "BloodlustAttributes", nullptr, (EPropertyFlags)0x0010000000000005, UE4CodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AShooterCharacter, BloodlustAttributes), Z_Construct_UScriptStruct_FSkillsAttributes, METADATA_PARAMS(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_BloodlustAttributes_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_BloodlustAttributes_MetaData)) };
+#if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AShooterCharacter_Statics::NewProp_BloodlustData_MetaData[] = {
+		{ "Category", "Bloodlust" },
+		{ "ModuleRelativePath", "Public/ShooterCharacter.h" },
+	};
+#endif
+	const UE4CodeGen_Private::FStructPropertyParams Z_Construct_UClass_AShooterCharacter_Statics::NewProp_BloodlustData = { "BloodlustData", nullptr, (EPropertyFlags)0x0010000000000005, UE4CodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AShooterCharacter, BloodlustData), Z_Construct_UScriptStruct_FSkillData, METADATA_PARAMS(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_BloodlustData_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_BloodlustData_MetaData)) };
+#if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bHasBloodlust_MetaData[] = {
+		{ "Category", "Bloodlust" },
+		{ "ModuleRelativePath", "Public/ShooterCharacter.h" },
+	};
+#endif
+	void Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bHasBloodlust_SetBit(void* Obj)
+	{
+		((AShooterCharacter*)Obj)->bHasBloodlust = 1;
+	}
+	const UE4CodeGen_Private::FBoolPropertyParams Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bHasBloodlust = { "bHasBloodlust", nullptr, (EPropertyFlags)0x0010000000000005, UE4CodeGen_Private::EPropertyGenFlags::Bool | UE4CodeGen_Private::EPropertyGenFlags::NativeBool, RF_Public|RF_Transient|RF_MarkAsNative, 1, sizeof(bool), sizeof(AShooterCharacter), &Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bHasBloodlust_SetBit, METADATA_PARAMS(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bHasBloodlust_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bHasBloodlust_MetaData)) };
+#if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AShooterCharacter_Statics::NewProp_ElectroSparkAttributes_MetaData[] = {
+		{ "Category", "ElectroSpark" },
+		{ "ModuleRelativePath", "Public/ShooterCharacter.h" },
+	};
+#endif
+	const UE4CodeGen_Private::FStructPropertyParams Z_Construct_UClass_AShooterCharacter_Statics::NewProp_ElectroSparkAttributes = { "ElectroSparkAttributes", nullptr, (EPropertyFlags)0x0010000000000005, UE4CodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AShooterCharacter, ElectroSparkAttributes), Z_Construct_UScriptStruct_FSkillsAttributes, METADATA_PARAMS(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_ElectroSparkAttributes_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_ElectroSparkAttributes_MetaData)) };
+#if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AShooterCharacter_Statics::NewProp_ElectroSparkData_MetaData[] = {
+		{ "Category", "ElectroSpark" },
+		{ "ModuleRelativePath", "Public/ShooterCharacter.h" },
+	};
+#endif
+	const UE4CodeGen_Private::FStructPropertyParams Z_Construct_UClass_AShooterCharacter_Statics::NewProp_ElectroSparkData = { "ElectroSparkData", nullptr, (EPropertyFlags)0x0010000000000005, UE4CodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AShooterCharacter, ElectroSparkData), Z_Construct_UScriptStruct_FSkillData, METADATA_PARAMS(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_ElectroSparkData_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_ElectroSparkData_MetaData)) };
+#if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bHasElectroSpark_MetaData[] = {
+		{ "Category", "ElectroSpark" },
+		{ "ModuleRelativePath", "Public/ShooterCharacter.h" },
+	};
+#endif
+	void Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bHasElectroSpark_SetBit(void* Obj)
+	{
+		((AShooterCharacter*)Obj)->bHasElectroSpark = 1;
+	}
+	const UE4CodeGen_Private::FBoolPropertyParams Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bHasElectroSpark = { "bHasElectroSpark", nullptr, (EPropertyFlags)0x0010000000000005, UE4CodeGen_Private::EPropertyGenFlags::Bool | UE4CodeGen_Private::EPropertyGenFlags::NativeBool, RF_Public|RF_Transient|RF_MarkAsNative, 1, sizeof(bool), sizeof(AShooterCharacter), &Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bHasElectroSpark_SetBit, METADATA_PARAMS(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bHasElectroSpark_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bHasElectroSpark_MetaData)) };
+#if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AShooterCharacter_Statics::NewProp_FireballAttributes_MetaData[] = {
+		{ "Category", "Fireball" },
+		{ "ModuleRelativePath", "Public/ShooterCharacter.h" },
+	};
+#endif
+	const UE4CodeGen_Private::FStructPropertyParams Z_Construct_UClass_AShooterCharacter_Statics::NewProp_FireballAttributes = { "FireballAttributes", nullptr, (EPropertyFlags)0x0010000000000005, UE4CodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AShooterCharacter, FireballAttributes), Z_Construct_UScriptStruct_FSkillsAttributes, METADATA_PARAMS(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_FireballAttributes_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_FireballAttributes_MetaData)) };
+#if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AShooterCharacter_Statics::NewProp_FireballData_MetaData[] = {
+		{ "Category", "Fireball" },
+		{ "ModuleRelativePath", "Public/ShooterCharacter.h" },
+	};
+#endif
+	const UE4CodeGen_Private::FStructPropertyParams Z_Construct_UClass_AShooterCharacter_Statics::NewProp_FireballData = { "FireballData", nullptr, (EPropertyFlags)0x0010000000000005, UE4CodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AShooterCharacter, FireballData), Z_Construct_UScriptStruct_FSkillData, METADATA_PARAMS(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_FireballData_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_FireballData_MetaData)) };
+#if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bHasFireball_MetaData[] = {
+		{ "Category", "Fireball" },
+		{ "ModuleRelativePath", "Public/ShooterCharacter.h" },
+	};
+#endif
+	void Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bHasFireball_SetBit(void* Obj)
+	{
+		((AShooterCharacter*)Obj)->bHasFireball = 1;
+	}
+	const UE4CodeGen_Private::FBoolPropertyParams Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bHasFireball = { "bHasFireball", nullptr, (EPropertyFlags)0x0010000000000005, UE4CodeGen_Private::EPropertyGenFlags::Bool | UE4CodeGen_Private::EPropertyGenFlags::NativeBool, RF_Public|RF_Transient|RF_MarkAsNative, 1, sizeof(bool), sizeof(AShooterCharacter), &Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bHasFireball_SetBit, METADATA_PARAMS(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bHasFireball_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bHasFireball_MetaData)) };
+#if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AShooterCharacter_Statics::NewProp_BackDashData_MetaData[] = {
+		{ "Category", "BackDash" },
+		{ "ModuleRelativePath", "Public/ShooterCharacter.h" },
+	};
+#endif
+	const UE4CodeGen_Private::FStructPropertyParams Z_Construct_UClass_AShooterCharacter_Statics::NewProp_BackDashData = { "BackDashData", nullptr, (EPropertyFlags)0x0010000000000005, UE4CodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AShooterCharacter, BackDashData), Z_Construct_UScriptStruct_FSkillData, METADATA_PARAMS(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_BackDashData_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_BackDashData_MetaData)) };
+#if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bHasBackDash_MetaData[] = {
+		{ "Category", "BackDash" },
+		{ "ModuleRelativePath", "Public/ShooterCharacter.h" },
+	};
+#endif
+	void Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bHasBackDash_SetBit(void* Obj)
+	{
+		((AShooterCharacter*)Obj)->bHasBackDash = 1;
+	}
+	const UE4CodeGen_Private::FBoolPropertyParams Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bHasBackDash = { "bHasBackDash", nullptr, (EPropertyFlags)0x0010000000000005, UE4CodeGen_Private::EPropertyGenFlags::Bool | UE4CodeGen_Private::EPropertyGenFlags::NativeBool, RF_Public|RF_Transient|RF_MarkAsNative, 1, sizeof(bool), sizeof(AShooterCharacter), &Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bHasBackDash_SetBit, METADATA_PARAMS(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bHasBackDash_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bHasBackDash_MetaData)) };
+#if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AShooterCharacter_Statics::NewProp_DoubleJumpData_MetaData[] = {
+		{ "Category", "DoubleJump" },
+		{ "ModuleRelativePath", "Public/ShooterCharacter.h" },
+	};
+#endif
+	const UE4CodeGen_Private::FStructPropertyParams Z_Construct_UClass_AShooterCharacter_Statics::NewProp_DoubleJumpData = { "DoubleJumpData", nullptr, (EPropertyFlags)0x0010000000000005, UE4CodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AShooterCharacter, DoubleJumpData), Z_Construct_UScriptStruct_FSkillData, METADATA_PARAMS(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_DoubleJumpData_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_DoubleJumpData_MetaData)) };
+#if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AShooterCharacter_Statics::NewProp_JumpVelocity_MetaData[] = {
+		{ "Category", "DoubleJump" },
+		{ "ModuleRelativePath", "Public/ShooterCharacter.h" },
+	};
+#endif
+	const UE4CodeGen_Private::FStructPropertyParams Z_Construct_UClass_AShooterCharacter_Statics::NewProp_JumpVelocity = { "JumpVelocity", nullptr, (EPropertyFlags)0x0010000000000005, UE4CodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AShooterCharacter, JumpVelocity), Z_Construct_UScriptStruct_FVector, METADATA_PARAMS(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_JumpVelocity_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_JumpVelocity_MetaData)) };
+#if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AShooterCharacter_Statics::NewProp_JumpCount_MetaData[] = {
+		{ "Category", "DoubleJump" },
+		{ "ModuleRelativePath", "Public/ShooterCharacter.h" },
+	};
+#endif
+	const UE4CodeGen_Private::FIntPropertyParams Z_Construct_UClass_AShooterCharacter_Statics::NewProp_JumpCount = { "JumpCount", nullptr, (EPropertyFlags)0x0010000000000005, UE4CodeGen_Private::EPropertyGenFlags::Int, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AShooterCharacter, JumpCount), METADATA_PARAMS(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_JumpCount_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_JumpCount_MetaData)) };
+#if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bIsDoubleJumping_MetaData[] = {
+		{ "Category", "DoubleJump" },
+		{ "ModuleRelativePath", "Public/ShooterCharacter.h" },
+	};
+#endif
+	void Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bIsDoubleJumping_SetBit(void* Obj)
+	{
+		((AShooterCharacter*)Obj)->bIsDoubleJumping = 1;
+	}
+	const UE4CodeGen_Private::FBoolPropertyParams Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bIsDoubleJumping = { "bIsDoubleJumping", nullptr, (EPropertyFlags)0x0010000000000005, UE4CodeGen_Private::EPropertyGenFlags::Bool | UE4CodeGen_Private::EPropertyGenFlags::NativeBool, RF_Public|RF_Transient|RF_MarkAsNative, 1, sizeof(bool), sizeof(AShooterCharacter), &Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bIsDoubleJumping_SetBit, METADATA_PARAMS(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bIsDoubleJumping_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bIsDoubleJumping_MetaData)) };
+#if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bHasDoubleJump_MetaData[] = {
+		{ "Category", "DoubleJump" },
+		{ "Comment", "//MARK: Offensive Skills Variables and Data\n" },
+		{ "ModuleRelativePath", "Public/ShooterCharacter.h" },
+		{ "ToolTip", "MARK: Offensive Skills Variables and Data" },
+	};
+#endif
+	void Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bHasDoubleJump_SetBit(void* Obj)
+	{
+		((AShooterCharacter*)Obj)->bHasDoubleJump = 1;
+	}
+	const UE4CodeGen_Private::FBoolPropertyParams Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bHasDoubleJump = { "bHasDoubleJump", nullptr, (EPropertyFlags)0x0010000000000005, UE4CodeGen_Private::EPropertyGenFlags::Bool | UE4CodeGen_Private::EPropertyGenFlags::NativeBool, RF_Public|RF_Transient|RF_MarkAsNative, 1, sizeof(bool), sizeof(AShooterCharacter), &Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bHasDoubleJump_SetBit, METADATA_PARAMS(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bHasDoubleJump_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bHasDoubleJump_MetaData)) };
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bIsOffensiveAbilityReady_MetaData[] = {
 		{ "Category", "SkillsInfo" },
@@ -876,6 +1338,28 @@ void EmptyLinkFunctionForGeneratedCodeShooterCharacter() {}
 		((AShooterCharacter*)Obj)->bIsAiming = 1;
 	}
 	const UE4CodeGen_Private::FBoolPropertyParams Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bIsAiming = { "bIsAiming", nullptr, (EPropertyFlags)0x0010000000000001, UE4CodeGen_Private::EPropertyGenFlags::Bool | UE4CodeGen_Private::EPropertyGenFlags::NativeBool, RF_Public|RF_Transient|RF_MarkAsNative, 1, sizeof(bool), sizeof(AShooterCharacter), &Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bIsAiming_SetBit, METADATA_PARAMS(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bIsAiming_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bIsAiming_MetaData)) };
+#if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AShooterCharacter_Statics::NewProp_InteractTraceLength_MetaData[] = {
+		{ "Category", "ShooterCharacter" },
+		{ "Comment", "//set true when overlapping interactable objects\n" },
+		{ "ModuleRelativePath", "Public/ShooterCharacter.h" },
+		{ "ToolTip", "set true when overlapping interactable objects" },
+	};
+#endif
+	const UE4CodeGen_Private::FIntPropertyParams Z_Construct_UClass_AShooterCharacter_Statics::NewProp_InteractTraceLength = { "InteractTraceLength", nullptr, (EPropertyFlags)0x0010000000000005, UE4CodeGen_Private::EPropertyGenFlags::Int, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AShooterCharacter, InteractTraceLength), METADATA_PARAMS(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_InteractTraceLength_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_InteractTraceLength_MetaData)) };
+#if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bCanInteract_MetaData[] = {
+		{ "Category", "ShooterCharacter" },
+		{ "Comment", "//set true when overlapping interactable objects\n" },
+		{ "ModuleRelativePath", "Public/ShooterCharacter.h" },
+		{ "ToolTip", "set true when overlapping interactable objects" },
+	};
+#endif
+	void Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bCanInteract_SetBit(void* Obj)
+	{
+		((AShooterCharacter*)Obj)->bCanInteract = 1;
+	}
+	const UE4CodeGen_Private::FBoolPropertyParams Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bCanInteract = { "bCanInteract", nullptr, (EPropertyFlags)0x0010000000000005, UE4CodeGen_Private::EPropertyGenFlags::Bool | UE4CodeGen_Private::EPropertyGenFlags::NativeBool, RF_Public|RF_Transient|RF_MarkAsNative, 1, sizeof(bool), sizeof(AShooterCharacter), &Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bCanInteract_SetBit, METADATA_PARAMS(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bCanInteract_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bCanInteract_MetaData)) };
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AShooterCharacter_Statics::NewProp_CharacterScore_MetaData[] = {
 		{ "Category", "ShooterCharacter" },
@@ -950,24 +1434,53 @@ void EmptyLinkFunctionForGeneratedCodeShooterCharacter() {}
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterCharacter_Statics::NewProp_GunClass,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterCharacter_Statics::NewProp_GunClass_Inner,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterCharacter_Statics::NewProp_Gun,
-		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterCharacter_Statics::NewProp_DoubleJump,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterCharacter_Statics::NewProp_SkillAcquired,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterCharacter_Statics::NewProp_SkillAcquired_Underlying,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterCharacter_Statics::NewProp_DefensiveAbilitySlotted,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterCharacter_Statics::NewProp_DefensiveAbilitySlotted_Underlying,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterCharacter_Statics::NewProp_OffensiveAbilitySlotted,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterCharacter_Statics::NewProp_OffensiveAbilitySlotted_Underlying,
-		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterCharacter_Statics::NewProp_Skills,
-		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterCharacter_Statics::NewProp_Skills_Underlying,
-		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterCharacter_Statics::NewProp_DAbility,
-		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterCharacter_Statics::NewProp_DAbility_Underlying,
-		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterCharacter_Statics::NewProp_OAbility,
-		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterCharacter_Statics::NewProp_OAbility_Underlying,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterCharacter_Statics::NewProp_ShieldAttributes,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterCharacter_Statics::NewProp_ShieldData,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterCharacter_Statics::NewProp_ShieldCoolDownTimePercentage,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterCharacter_Statics::NewProp_ShieldTimePercentage,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bIsUsingShield,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bHasShield,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterCharacter_Statics::NewProp_MistAttributes,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterCharacter_Statics::NewProp_MistData,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterCharacter_Statics::NewProp_MistCoolDownTimePercentage,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterCharacter_Statics::NewProp_MistTimePercentage,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bIsUsingMist,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bHasMist,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterCharacter_Statics::NewProp_LensOfTruthAttributes,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterCharacter_Statics::NewProp_LensOfTruthData,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterCharacter_Statics::NewProp_LensOfTruthCoolDownTimePercentage,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterCharacter_Statics::NewProp_LensOfTruthTimePercentage,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bIsUsingLensOfTruth,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bHasLensOfTruth,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterCharacter_Statics::NewProp_BloodlustAttributes,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterCharacter_Statics::NewProp_BloodlustData,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bHasBloodlust,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterCharacter_Statics::NewProp_ElectroSparkAttributes,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterCharacter_Statics::NewProp_ElectroSparkData,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bHasElectroSpark,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterCharacter_Statics::NewProp_FireballAttributes,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterCharacter_Statics::NewProp_FireballData,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bHasFireball,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterCharacter_Statics::NewProp_BackDashData,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bHasBackDash,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterCharacter_Statics::NewProp_DoubleJumpData,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterCharacter_Statics::NewProp_JumpVelocity,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterCharacter_Statics::NewProp_JumpCount,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bIsDoubleJumping,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bHasDoubleJump,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bIsOffensiveAbilityReady,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterCharacter_Statics::NewProp_OnAiming,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterCharacter_Statics::NewProp_LandSound,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterCharacter_Statics::NewProp_JumpSound,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bIsAiming,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterCharacter_Statics::NewProp_InteractTraceLength,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bCanInteract,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterCharacter_Statics::NewProp_CharacterScore,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterCharacter_Statics::NewProp_Health,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterCharacter_Statics::NewProp_MaxHealth,
@@ -1008,7 +1521,7 @@ void EmptyLinkFunctionForGeneratedCodeShooterCharacter() {}
 		}
 		return OuterClass;
 	}
-	IMPLEMENT_CLASS(AShooterCharacter, 2730364981);
+	IMPLEMENT_CLASS(AShooterCharacter, 2139121952);
 	template<> WRAITHSHOOTER_API UClass* StaticClass<AShooterCharacter>()
 	{
 		return AShooterCharacter::StaticClass();

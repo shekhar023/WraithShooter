@@ -2651,4 +2651,6 @@
   /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/CoreUObject/Public/UObject/GeneratedCppIncludes.h \
   /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/CoreUObject/Public/UObject/MetaData.h \
   /Users/Shekhar/Documents/Unreal\ Projects/WraithShooter/WraithShooter/Source/WraithShooter/Public/PillSpawner.h \
+  /Users/Shekhar/Documents/Unreal\ Projects/WraithShooter/WraithShooter/Source/WraithShooter/Public/WraithUIInterface.h \
+  /Users/Shekhar/Documents/Unreal\ Projects/WraithShooter/WraithShooter/Intermediate/Build/Mac/UE4Editor/Inc/WraithShooter/WraithUIInterface.generated.h \
   /Users/Shekhar/Documents/Unreal\ Projects/WraithShooter/WraithShooter/Intermediate/Build/Mac/UE4Editor/Inc/WraithShooter/PillSpawner.generated.h

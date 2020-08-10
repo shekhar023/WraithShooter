@@ -25,6 +25,10 @@ void EmptyLinkFunctionForGeneratedCodeWraithUIInterface() {}
 		*(bool*)Z_Param__Result=P_THIS->ReactToPlayerEntered_Implementation();
 		P_NATIVE_END;
 	}
+	void IWraithUIInterface::ObjectInteractedWith()
+	{
+		check(0 && "Do not directly call Event functions in Interfaces. Call Execute_ObjectInteractedWith instead.");
+	}
 	bool IWraithUIInterface::ReactToPlayerEntered()
 	{
 		check(0 && "Do not directly call Event functions in Interfaces. Call Execute_ReactToPlayerEntered instead.");
@@ -44,6 +48,29 @@ void EmptyLinkFunctionForGeneratedCodeWraithUIInterface() {}
 			{ "ReactToPlayerEntered", &IWraithUIInterface::execReactToPlayerEntered },
 		};
 		FNativeFunctionRegistrar::RegisterFunctions(Class, Funcs, UE_ARRAY_COUNT(Funcs));
+	}
+	struct Z_Construct_UFunction_UWraithUIInterface_ObjectInteractedWith_Statics
+	{
+#if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam Function_MetaDataParams[];
+#endif
+		static const UE4CodeGen_Private::FFunctionParams FuncParams;
+	};
+#if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_UWraithUIInterface_ObjectInteractedWith_Statics::Function_MetaDataParams[] = {
+		{ "Category", "Interfaces" },
+		{ "ModuleRelativePath", "Public/WraithUIInterface.h" },
+	};
+#endif
+	const UE4CodeGen_Private::FFunctionParams Z_Construct_UFunction_UWraithUIInterface_ObjectInteractedWith_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_UWraithUIInterface, nullptr, "ObjectInteractedWith", nullptr, nullptr, 0, nullptr, 0, RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x0C020800, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_UWraithUIInterface_ObjectInteractedWith_Statics::Function_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UFunction_UWraithUIInterface_ObjectInteractedWith_Statics::Function_MetaDataParams)) };
+	UFunction* Z_Construct_UFunction_UWraithUIInterface_ObjectInteractedWith()
+	{
+		static UFunction* ReturnFunction = nullptr;
+		if (!ReturnFunction)
+		{
+			UE4CodeGen_Private::ConstructUFunction(ReturnFunction, Z_Construct_UFunction_UWraithUIInterface_ObjectInteractedWith_Statics::FuncParams);
+		}
+		return ReturnFunction;
 	}
 	struct Z_Construct_UFunction_UWraithUIInterface_ReactToPlayerEntered_Statics
 	{
@@ -134,6 +161,7 @@ void EmptyLinkFunctionForGeneratedCodeWraithUIInterface() {}
 		(UObject* (*)())Z_Construct_UPackage__Script_WraithShooter,
 	};
 	const FClassFunctionLinkInfo Z_Construct_UClass_UWraithUIInterface_Statics::FuncInfo[] = {
+		{ &Z_Construct_UFunction_UWraithUIInterface_ObjectInteractedWith, "ObjectInteractedWith" }, // 4250478847
 		{ &Z_Construct_UFunction_UWraithUIInterface_ReactToPlayerEntered, "ReactToPlayerEntered" }, // 3574366759
 		{ &Z_Construct_UFunction_UWraithUIInterface_ReactToPlayerExited, "ReactToPlayerExited" }, // 1398500375
 	};
@@ -169,13 +197,24 @@ void EmptyLinkFunctionForGeneratedCodeWraithUIInterface() {}
 		}
 		return OuterClass;
 	}
-	IMPLEMENT_CLASS(UWraithUIInterface, 582976382);
+	IMPLEMENT_CLASS(UWraithUIInterface, 4230882050);
 	template<> WRAITHSHOOTER_API UClass* StaticClass<UWraithUIInterface>()
 	{
 		return UWraithUIInterface::StaticClass();
 	}
 	static FCompiledInDefer Z_CompiledInDefer_UClass_UWraithUIInterface(Z_Construct_UClass_UWraithUIInterface, &UWraithUIInterface::StaticClass, TEXT("/Script/WraithShooter"), TEXT("UWraithUIInterface"), false, nullptr, nullptr, nullptr);
 	DEFINE_VTABLE_PTR_HELPER_CTOR(UWraithUIInterface);
+	static FName NAME_UWraithUIInterface_ObjectInteractedWith = FName(TEXT("ObjectInteractedWith"));
+	void IWraithUIInterface::Execute_ObjectInteractedWith(UObject* O)
+	{
+		check(O != NULL);
+		check(O->GetClass()->ImplementsInterface(UWraithUIInterface::StaticClass()));
+		UFunction* const Func = O->FindFunction(NAME_UWraithUIInterface_ObjectInteractedWith);
+		if (Func)
+		{
+			O->ProcessEvent(Func, NULL);
+		}
+	}
 	static FName NAME_UWraithUIInterface_ReactToPlayerEntered = FName(TEXT("ReactToPlayerEntered"));
 	bool IWraithUIInterface::Execute_ReactToPlayerEntered(UObject* O)
 	{

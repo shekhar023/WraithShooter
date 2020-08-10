@@ -32,4 +32,7 @@ public:
     UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = Interfaces)
     bool ReactToPlayerEntered();
     
+    UFUNCTION(BlueprintCallable, BlueprintImplementableEvent,Category = Interfaces)
+    void ObjectInteractedWith();
+    
 };

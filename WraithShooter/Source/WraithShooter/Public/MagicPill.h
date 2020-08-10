@@ -5,13 +5,14 @@
 #include "CoreMinimal.h"
 
 #include "GameFramework/Actor.h"
+#include "WraithUIInterface.h"
 #include "MagicPill.generated.h"
 
 class UStaticMeshComponent;
 class APillSpawner;
 
 UCLASS()
-class WRAITHSHOOTER_API AMagicPill : public AActor
+class WRAITHSHOOTER_API AMagicPill : public AActor, public IWraithUIInterface
 {
     GENERATED_BODY()
     
@@ -25,6 +26,9 @@ protected:
     
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Components)
     UStaticMeshComponent* PillMesh;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = InteractMessage)
+    FText InteractMessage;
     
     //MARK: Recieve call from OnPlayerenterd custom event to trigger functionality here
     APillSpawner* TriggerEventSource;
@@ -73,4 +77,5 @@ public:
     
     UFUNCTION(BlueprintImplementableEvent, Category = "Powerups")
     void OnExpired();
+    
 };

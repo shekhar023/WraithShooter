@@ -73,6 +73,7 @@ public:
     //For AI to Stop Aiming
     void StopAiming();
     
+    void PickObjects();
     
 public:
     //MARK:Variables
@@ -104,6 +105,12 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ShooterCharacter)
     float CharacterScore;
     
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ShooterCharacter)//set true when overlapping interactable objects
+    bool bCanInteract;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ShooterCharacter)//set true when overlapping interactable objects
+    int32 InteractTraceLength;
+    
     UPROPERTY(EditAnywhere, Category = ShooterCharacter)
     bool bIsAiming;
     
@@ -123,6 +130,15 @@ public:
     //MARK: Offensive Skills Variables and Data
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = DoubleJump)
     bool bHasDoubleJump = false;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = DoubleJump)
+    bool bIsDoubleJumping = false;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = DoubleJump)
+    int32 JumpCount;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = DoubleJump)
+    FVector JumpVelocity;
     
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = DoubleJump)
     FSkillData DoubleJumpData;
@@ -288,6 +304,9 @@ public:
     UFUNCTION(BlueprintPure)
     float GetScoreValue() const;
     
+    UFUNCTION()
+    bool ObjectTrace(FHitResult& Hit, FVector& ShotDirection);
+    
 public:
     
     //MARK: Function for Binding Delegates created in WraithShooterGameModeBase.h
@@ -322,7 +341,9 @@ public:
     
     //Declared function must be implmented in c++
     bool ReactToPlayerEntered();
-    bool ReactToPlayerEntered_Implementation() override;    
+    bool ReactToPlayerEntered_Implementation() override;
+    
+    //void ObjectInteractedWith();
     
 public:
     // Called to bind functionality to input

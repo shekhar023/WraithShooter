@@ -164,7 +164,7 @@ void EmptyLinkFunctionForGeneratedCodeSkillStructures() {}
 		return EOffensiveAbility_StaticEnum();
 	}
 	static FCompiledInDeferEnum Z_CompiledInDeferEnum_UEnum_EOffensiveAbility(EOffensiveAbility_StaticEnum, TEXT("/Script/WraithShooter"), TEXT("EOffensiveAbility"), false, nullptr, nullptr);
-	uint32 Get_Z_Construct_UEnum_WraithShooter_EOffensiveAbility_Hash() { return 4022462188U; }
+	uint32 Get_Z_Construct_UEnum_WraithShooter_EOffensiveAbility_Hash() { return 1364802635U; }
 	UEnum* Z_Construct_UEnum_WraithShooter_EOffensiveAbility()
 	{
 #if WITH_HOT_RELOAD
@@ -179,18 +179,20 @@ void EmptyLinkFunctionForGeneratedCodeSkillStructures() {}
 				{ "EOffensiveAbility::None", (int64)EOffensiveAbility::None },
 				{ "EOffensiveAbility::Fireball", (int64)EOffensiveAbility::Fireball },
 				{ "EOffensiveAbility::ElectroSpark", (int64)EOffensiveAbility::ElectroSpark },
+				{ "EOffensiveAbility::Bloodlust", (int64)EOffensiveAbility::Bloodlust },
 				{ "EOffensiveAbility::Teleport", (int64)EOffensiveAbility::Teleport },
 			};
 #if WITH_METADATA
 			const UE4CodeGen_Private::FMetaDataPairParam Enum_MetaDataParams[] = {
+				{ "Bloodlust.Name", "EOffensiveAbility::Bloodlust" },
 				{ "BlueprintType", "true" },
-				{ "Comment", "/**\n *\n *\n *///MARK:ENUM EOffensiveAbility\n" },
+				{ "Comment", "//MARK:ENUM EOffensiveAbility\n" },
 				{ "ElectroSpark.Name", "EOffensiveAbility::ElectroSpark" },
 				{ "Fireball.Name", "EOffensiveAbility::Fireball" },
 				{ "ModuleRelativePath", "Public/SkillStructures.h" },
 				{ "None.Name", "EOffensiveAbility::None" },
 				{ "Teleport.Name", "EOffensiveAbility::Teleport" },
-				{ "ToolTip", "//MARK:ENUM EOffensiveAbility" },
+				{ "ToolTip", "MARK:ENUM EOffensiveAbility" },
 			};
 #endif
 			static const UE4CodeGen_Private::FEnumParams EnumParams = {

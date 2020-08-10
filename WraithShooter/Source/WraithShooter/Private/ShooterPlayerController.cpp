@@ -3,7 +3,11 @@
 
 #include "ShooterPlayerController.h"
 #include "TimerManager.h"
+#include "ShooterCharacter.h"
+#include "Kismet/GameplayStatics.h"
 #include "Blueprint/UserWidget.h"
+#include "EngineUtils.h"
+
 
 void AShooterPlayerController::BeginPlay()
 {
@@ -43,4 +47,16 @@ void AShooterPlayerController::GameHasEnded(class AActor* EndGameFocus, bool bIs
     }
     
     GetWorldTimerManager().SetTimer(RestartTimer, this, &APlayerController::RestartLevel, RestartDelay);
+}
+
+void AShooterPlayerController::OnTriggerEvent()
+{
+    UGameplayStatics::SetGamePaused(GetWorld(), true);
+    
+    WBPLearnedSkill = CreateWidget(this, WBPLearnedSkillClass);
+    
+    if(WBPLearnedSkill != nullptr)
+    {
+        WBPLearnedSkill->AddToViewport();
+    }
 }
