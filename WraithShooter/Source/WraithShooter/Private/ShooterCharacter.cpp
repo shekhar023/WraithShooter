@@ -10,7 +10,6 @@
 #include "WraithShooter/WraithShooterGameModeBase.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Kismet/GameplayStatics.h"
-#include "Kismet/GameplayStatics.h"
 #include "GameFramework/Actor.h"
 #include "Particles/ParticleSystem.h"
 #include "Particles/ParticleSystemComponent.h"
@@ -22,7 +21,7 @@
 #include "DrawDebugHelpers.h"
 
 
-static int32 DebugWeaponDrawing = 1;
+static int32 DebugWeaponDrawing = 0;
 FAutoConsoleVariableRef CVARDebugWeaponDrawing(TEXT("COOP.DebugWeapons"), DebugWeaponDrawing, TEXT("Draw Debug Lines for Weapons"),ECVF_Cheat);
 
 //MARK: Constructor -> Sets default values
@@ -35,11 +34,23 @@ AShooterCharacter::AShooterCharacter()
     CharacterScore = 100.f;
     Energy = 50.f;
     JumpCount = 0;
+    BackDashCooldown = 0.35f;
+    BackDashLeftAmount.X = -20.f;
+    BackDashRightAmount.X = 20.f;
+    BackDashForwardAmount.Y = 20.f;
+    BackDashAmount.Y = -20.f;
+    
     bIsAiming = false;
     bCanInteract = false;
-    GunAttachSocket = "AttachWeapon";
-    GunHostlerSocket = "WeaponHostler";
-    FootSocketName = "foor_r";
+    bIsBackDashing = false;
+    bHasBackDash = false;
+    
+    bIsBackDashReady = true;
+    
+    
+    WeaponAttachPoint = TEXT("AttachWeapon");
+    SpineAttachPoint = TEXT("WeaponHostler");
+    PelvisAttachPoint = TEXT("PelvisSocket");
     
     //Sets up particle system of the character.
     VisualFX = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("VFX"));
@@ -83,20 +94,10 @@ void AShooterCharacter::UnBindDelegates()
         }
     }
 }
-//MARK: PostInitializeComponents
-void AShooterCharacter::PostInitializeComponents() {
-    
-    Super::PostInitializeComponents();
-    
-    if (RootComponent)
-    {
-        // GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &AShooterCharacter::OnOverlapBegin);
-    }
-}
 
+//MARK: Setup for AI widget
 void AShooterCharacter::SetTextComponents()
 {
-    //Setup for AI widget
     HealthText->SetXScale(1.f);
     HealthText->SetYScale(1.f);
     HealthText->SetWorldSize(15);
@@ -143,18 +144,24 @@ void AShooterCharacter::SpawnInventory()
             FActorSpawnParameters SpawnInfo;
             SpawnInfo.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
             AGun* NewWeapon = GetWorld()->SpawnActor<AGun>(GunClass[i], SpawnInfo);
+            NewWeapon->OnEnterInventory(this);
             Inventory.AddUnique(NewWeapon);
+            
+            if (Inventory.Num() > 0)
+            {
+                EquipWeapon(Inventory[i]);
+            }
         }
-        if (Inventory.Num() > 0)
-        {
-            EquipWeapon(Inventory[i]);
-        }
+        
     }
 }
 
 // MARK:EquipWeapon
 void AShooterCharacter::EquipWeapon(AGun* Weapon)
 {
+    //ignore if trying to equip already equipped weapon
+    if(Weapon == Gun){return;}
+    
     if(Weapon)
     {
         SetCurrentWeapon(Weapon, Gun);
@@ -164,6 +171,9 @@ void AShooterCharacter::EquipWeapon(AGun* Weapon)
 //MARK:SetCurrentWeapon
 void AShooterCharacter::SetCurrentWeapon(AGun* NewWeapon, AGun* LastWeapon)
 {
+    /* Maintain a reference for visual weapon swapping */
+    PreviousGun = LastWeapon;
+    
     AGun* LocalLastWeapon = nullptr;
     
     if (LastWeapon != nullptr)
@@ -175,10 +185,13 @@ void AShooterCharacter::SetCurrentWeapon(AGun* NewWeapon, AGun* LastWeapon)
         LocalLastWeapon = Gun;
     }
     
+    // UnEquip the current
+    bool bHasPreviousWeapon = false;
     // unequip previous
     if (LocalLastWeapon)
     {
         LocalLastWeapon->OnUnEquip();
+        bHasPreviousWeapon = true;
     }
     
     Gun = NewWeapon;
@@ -187,7 +200,7 @@ void AShooterCharacter::SetCurrentWeapon(AGun* NewWeapon, AGun* LastWeapon)
     if (NewWeapon)
     {
         NewWeapon->SetOwningPawn(this);
-        NewWeapon->OnEquip(LastWeapon);
+        NewWeapon->OnEquip(bHasPreviousWeapon);
     }
 }
 
@@ -205,6 +218,8 @@ void AShooterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
     PlayerInputComponent->BindAxis("TurnRate", this, &AShooterCharacter::TurnRate);
     
     PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &AShooterCharacter::CanJump);
+    PlayerInputComponent->BindAction("Crouch", IE_Pressed, this, &AShooterCharacter::StartCrouch);
+    PlayerInputComponent->BindAction("BackDash", IE_Pressed, this, &AShooterCharacter::BackDash);
     
     PlayerInputComponent->BindAction("Shoot", IE_Pressed, this, &AShooterCharacter::StartShoot);
     PlayerInputComponent->BindAction("Shoot", IE_Released, this, &AShooterCharacter::StopShoot);
@@ -215,6 +230,9 @@ void AShooterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
     PlayerInputComponent->BindAction("Reload", IE_Pressed, this, &AShooterCharacter::Reload);
     
     PlayerInputComponent->BindAction("SwitchWeapon", IE_Pressed, this, &AShooterCharacter::SwitchWeapon);
+    
+    PlayerInputComponent->BindAction("EquipPrimaryWeapon", IE_Pressed, this, &AShooterCharacter::OnEquipPrimaryWeapon);
+    PlayerInputComponent->BindAction("EquipSecondaryWeapon", IE_Pressed, this, &AShooterCharacter::OnEquipSecondaryWeapon);
     
     PlayerInputComponent->BindAction("PickingUp", IE_Pressed, this, &AShooterCharacter::PickObjects);
     
@@ -231,22 +249,70 @@ void AShooterCharacter::moveRight(float AxisValue)
     AddMovementInput(GetActorRightVector() * AxisValue);
 }
 
+void AShooterCharacter::StartCrouch()
+{
+    // If we are crouching then CanCrouch will return false. If we cannot crouch then calling Crouch() wont do anything
+    if (CanCrouch())
+    {
+        Crouch();
+    }
+    else
+    {
+        UnCrouch();
+    }
+}
+
 void AShooterCharacter::CanJump()
 {
     if(GetbIsAiming() == false)
     {
-        if(GetCharacterMovement()->IsFalling() == false )
+        if(GetCharacterMovement()->IsFalling() == false && bHasDoubleJump == false)
         {
-            PlaySoundEffects();
             Jump();
+        }
+        
+        if(bHasDoubleJump == true)
+        {
+            switch (JumpCount)
+            {
+                case 0:
+                    if(GetCharacterMovement()->IsFalling() == false)
+                    {
+                        Jump();
+                        JumpCount++;
+                    }
+                    break;
+                    
+                case 1:DoubleJump();
+                    break;
+                    
+                default:
+                    break;
+            }
         }
     }
 }
-
+void AShooterCharacter::DoubleJump()
+{
+    JumpCount++;
+    bIsDoubleJumping = true;
+    if(DoubleJumpData.VFX)
+    {
+        UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), DoubleJumpData.VFX, GetActorLocation());
+    }
+    AShooterCharacter::LaunchCharacter(JumpVelocity, false, true);
+    bIsDoubleJumping = false;
+}
 void AShooterCharacter::Landed(const FHitResult& Hit)
 {
-    PlaySoundEffects();
+    JumpCount = 0;
 }
+
+void AShooterCharacter::BackDash()
+{
+   
+}
+
 void AShooterCharacter::LookUpRate(float AxisValue)
 {
     AddControllerPitchInput(AxisValue * BasePitchValue * GetWorld()->GetDeltaSeconds());
@@ -294,21 +360,21 @@ void AShooterCharacter::StopShoot()
 //Aiming function
 void AShooterCharacter::Aim()
 {
-    OnAiming.Broadcast(bIsAiming);
     bIsAiming = true;
+    Zoom(bIsAiming);
 }
 
 //Player StopAiming function
 void AShooterCharacter::StopAim()
 {
-    OnAiming.Broadcast(bIsAiming);
     bIsAiming = false;
+    Zoom(bIsAiming);
 }
 
 // Weapon Reload function
 void AShooterCharacter::Reload()
 {
-    Gun->Reload();
+    Gun->StartReload();
 }
 
 //MARK:SwitchWeapon
@@ -325,6 +391,71 @@ void AShooterCharacter::SwitchWeapon()
         }
     }
 }
+
+void AShooterCharacter::OnEquipPrimaryWeapon()
+{
+ 
+    if (Inventory.Num() >= 1)
+    {
+        /* Find first weapon that uses primary slot. */
+        for (int32 i = 0; i < Inventory.Num(); i++)
+        {
+            AGun* Weapon = Inventory[i];
+            if (Weapon->GetStorageSlot() == EInventorySlot::Primary)
+            {
+                EquipWeapon(Weapon);
+            }
+        }
+    }
+}
+
+void AShooterCharacter::OnEquipSecondaryWeapon()
+{
+
+    if (Inventory.Num() >= 2)
+    {
+        /* Find first weapon that uses secondary slot. */
+        for (int32 i = 0; i < Inventory.Num(); i++)
+        {
+            AGun* Weapon = Inventory[i];
+            if (Weapon->GetStorageSlot() == EInventorySlot::Secondary)
+            {
+                EquipWeapon(Weapon);
+            }
+        }
+    }
+}
+
+bool AShooterCharacter::WeaponSlotAvailable(EInventorySlot CheckSlot)
+{
+    /* Iterate all weapons to see if requested slot is occupied */
+    for (int32 i = 0; i < Inventory.Num(); i++)
+    {
+        AGun* Weapon = Inventory[i];
+        if (Weapon)
+        {
+            if (Weapon->GetStorageSlot() == CheckSlot)
+                return false;
+        }
+    }
+    
+    return true;
+}
+
+
+void AShooterCharacter::SwapToNewWeaponMesh()
+{
+    if (PreviousGun)
+    {
+        PreviousGun->AttachMeshToPawn(PreviousGun->GetStorageSlot());
+    }
+
+    if (Gun)
+    {
+        Gun->AttachMeshToPawn(EInventorySlot::Hands);
+    }
+}
+
 
 void AShooterCharacter::PickObjects()
 {
@@ -366,18 +497,43 @@ FString AShooterCharacter::GetTestName()
 }
 
 
+
+FName AShooterCharacter::GetInventoryAttachPoint(EInventorySlot Slot) const
+{
+    /* Return the socket name for the specified storage slot */
+    switch (Slot)
+    {
+    case EInventorySlot::Hands:
+        return WeaponAttachPoint;
+    case EInventorySlot::Primary:
+        return SpineAttachPoint;
+    case EInventorySlot::Secondary:
+        return PelvisAttachPoint;
+    default:
+        // Not implemented.
+        return "";
+    }
+}
+
+
+
 //GetWeaponAttachPoint
 FName AShooterCharacter::GetWeaponAttachPoint() const
 {
-    return GunAttachSocket;
+    return WeaponAttachPoint;
 }
 
 //Get WeaponHostlerPoint
 FName AShooterCharacter::GetGunHostlerPoint() const
 {
-    return GunHostlerSocket;
+    return SpineAttachPoint;
 }
 
+
+AGun* AShooterCharacter::GetCurrentWeapon() const
+{
+    return Gun;
+}
 //GetPawnMesh
 USkeletalMeshComponent* AShooterCharacter::GetPawnMesh() const
 {
@@ -491,13 +647,5 @@ bool AShooterCharacter::ReactToPlayerEntered_Implementation()
 
 void AShooterCharacter::PlaySoundEffects()
 {
-    if(JumpSound)
-    {
-        UGameplayStatics::SpawnSoundAttached(JumpSound, GetPawnMesh(), FootSocketName);
-    }
-    
-    if(LandSound)
-    {
-        UGameplayStatics::SpawnSoundAttached(LandSound, GetMesh(), FootSocketName);
-    }
+   
 }

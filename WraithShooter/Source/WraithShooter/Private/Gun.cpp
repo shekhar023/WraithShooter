@@ -1,42 +1,71 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 #include "Gun.h"
 #include "Components/SkeletalMeshComponent.h"
+#include "Components/StaticMeshComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "DrawDebugHelpers.h"
 #include "TimerManager.h"
 #include "ShooterCharacter.h"
+#include "GameFramework/Actor.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Particles/ParticleSystemComponent.h"
 #include "PhysicalMaterials/PhysicalMaterial.h"
 #include "Animation/AnimMontage.h"
 #include "Animation/AnimInstance.h"
+#include "Animation/AnimationAsset.h"
 
 // Sets default values
 AGun::AGun()
 {
-    Root = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
-    SetRootComponent(Root);
+    //Root = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
+   // SetRootComponent(Root);
     
     Mesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Mesh"));
-    Mesh->SetupAttachment(Root);
+    Mesh->SetupAttachment(RootComponent);
     
     MuzzleFlashSocketName = TEXT("MuzzleFlashSocket");
+    GunShellSocket = TEXT("AmmoSocket");
     TracerTargetName = "Target";
+    
+    StorageSlot = EInventorySlot::Primary;
+    
     MaxRange = 10000.f;
     RateOfFire = 600;
     BulletSpread = 2.0f;
     Damage = 10.f;
-    MaxAmmo = 250;
-    ClipSize = 30;
-    AmmoInClip = 30;
+    MaxAmmo = 300;
+    MaxAmmoInClip = 30;
+    
+    bIsFiring = false;
+    bIsReloading = false;
+    
+    CurrentState = EWeaponState::Idle;
     
 }
 
-// Called when the game starts or when spawned
-void AGun::BeginPlay()
+//MARK: PostInitializeComponents
+void AGun::PostInitializeComponents()
 {
-    Super::BeginPlay();
+    Super::PostInitializeComponents();
+
+    /* Setup configuration */
     TimeBetweenShots = 60 / RateOfFire;
+    CurrentAmmoInClip = FMath::Min(MaxAmmo, MaxAmmoInClip);
+}
+//MARK: EndPlay
+void AGun::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+    Super::EndPlay(EndPlayReason);
+
+    DetachMeshFromPawn();
+    StopAutomaticFire();
+    
+}
+
+//MARK: Return Functions
+USkeletalMeshComponent* AGun::GetWeaponMesh() const
+{
+    return Mesh;
 }
 
 bool AGun::GetbCanFire() const
@@ -46,7 +75,7 @@ bool AGun::GetbCanFire() const
 
 int AGun::GetCurrentAmmoInClip() const
 {
-    return AmmoInClip;
+    return CurrentAmmoInClip;
 }
 
 int AGun::GetMaxAmmo() const
@@ -54,6 +83,28 @@ int AGun::GetMaxAmmo() const
     return MaxAmmo;
 }
 
+float AGun::GetEquipStartedTime() const
+{
+    return EquipStartedTime;
+}
+
+
+float AGun::GetEquipDuration() const
+{
+    return EquipDuration;
+}
+bool AGun::IsPlayerAiming()
+{
+    AShooterCharacter* MyCharacter = Cast<AShooterCharacter>(GetOwner());
+    if(MyCharacter != nullptr)
+    {
+        return MyCharacter->GetbIsAiming();
+    }
+    
+    return false;
+}
+
+//MARK: Set Owner and Get Owner
 void AGun::SetOwningPawn(AShooterCharacter* MyPawn)
 {
     if (MyPawn)
@@ -71,6 +122,7 @@ AController* AGun::GetOwnerController() const
     return OwnerPawn->GetController();
 }
 
+//MARK: Weapon Fire
 void AGun::StartAutomaticFire()
 {
     float FirstDelay = FMath::Max(LastFireTime + TimeBetweenShots - GetWorld()->TimeSeconds, 0.0f);
@@ -82,7 +134,7 @@ void AGun::StopAutomaticFire()
     GetWorldTimerManager().ClearTimer(TimerHandle_TimeBetweenShots);
 }
 
-
+//MARK: Gun Trace
 bool AGun::GunTrace(FHitResult& Hit, FVector& ShotDirection)
 {
     AController* OwnerController = GetOwnerController();
@@ -108,12 +160,12 @@ bool AGun::GunTrace(FHitResult& Hit, FVector& ShotDirection)
     
     return GetWorld()->LineTraceSingleByChannel(Hit, Location, EndPoint, ECollisionChannel::ECC_GameTraceChannel1, Params);
 }
-
+//MARK: PullTrigger
 void AGun::PullTrigger()
 {
-    CalculateAmmo();
+   CalculateAmmo();
     
-    if(bCanFire)
+    if(GetbCanFire() == true && bIsReloading == false)
     {
         FHitResult Hit;
         FVector ShotDirection;
@@ -123,7 +175,6 @@ void AGun::PullTrigger()
         if(bSuccess)
         {
             PlayFireEffects(Hit.ImpactPoint);
-            PlayFireAnimation(GunFireMontage);
             SurfaceType = UPhysicalMaterial::DetermineSurfaceType(Hit.PhysMaterial.Get());
             PlayImpactEffects(SurfaceType, Hit.ImpactPoint);
             AActor* HitActor = Hit.GetActor();
@@ -138,7 +189,106 @@ void AGun::PullTrigger()
         }
     }
 }
+//MARK: Calculate Ammo
+void AGun::CalculateAmmo()
+{
+    if(GetCurrentAmmoInClip() > 0 && IsPlayerAiming() == true && bIsReloading == false)
+    {
+        bCanFire = true;
+        CurrentAmmoInClip--;
+    }
+    
+    else
+    {
+        bCanFire = false;
+    }
+    
+}
+ //MARK: Reloading Functions
+bool AGun::CanReload() const
+{
+    if((GetCurrentAmmoInClip() == MaxAmmoInClip) || (GetCurrentAmmoInClip() == MaxAmmoInClip)|| (GetMaxAmmo() == 0))
+    {
+        return false;
+    }
+    return true;
+}
 
+void AGun::StartReload()
+{
+    if(CanReload() == false) {return;}
+    bIsReloading = true;
+    bCanFire = false;
+    //DetermineWeaponState();
+    if(IsPlayerAiming())
+    {
+        
+        float AnimDuration = PlayCharacterAnimations(PlayerReloadMontage);
+        if (AnimDuration <= 0.0f)
+        {
+            AnimDuration = 1.0f;
+        }
+        
+        PlayGunAnimations(ReloadIronSightAnim);
+        
+        GetWorldTimerManager().SetTimer(TimerHandle_StopReload, this, &AGun::StopReload, AnimDuration, false);
+        
+        GetWorldTimerManager().SetTimer(TimerHandle_ReloadWeapon, this, &AGun::Reload, FMath::Max(0.1f, AnimDuration - 0.1f), false);
+    }
+    else
+    {
+        float AnimDuration = PlayCharacterAnimations(PlayerHipReloadMontage);
+        if (AnimDuration <= 0.0f)
+        {
+            AnimDuration = 1.0f;
+        }
+        
+        PlayGunAnimations(ReloadHipAnim);
+        
+        GetWorldTimerManager().SetTimer(TimerHandle_StopReload, this, &AGun::StopReload, AnimDuration, false);
+        
+        GetWorldTimerManager().SetTimer(TimerHandle_ReloadWeapon, this, &AGun::Reload, FMath::Max(0.1f, AnimDuration - 0.1f), false);
+    }
+}
+
+void AGun::StopReload()
+{
+    bIsReloading = false;
+    //DetermineWeaponState();
+    
+    if(IsPlayerAiming())
+    {
+        StopWeaponAnimation(PlayerReloadMontage);
+    }
+    
+    else
+    {
+        StopWeaponAnimation(PlayerHipReloadMontage);
+    }
+    
+}
+
+void AGun::Reload()
+{
+    if(GetCurrentAmmoInClip() < MaxAmmoInClip)
+    {
+        
+        
+    }
+    
+    int32 AmmoDifference = FMath::Min(MaxAmmoInClip - CurrentAmmoInClip, MaxAmmo - CurrentAmmoInClip);
+
+    if (AmmoDifference > 0)
+    {
+        CurrentAmmoInClip += AmmoDifference;
+        MaxAmmo -= FMath::Clamp(MaxAmmo, 0, AmmoDifference);
+    }
+    
+    bIsReloading = false;
+    bCanFire = true;
+}
+
+//MARK: Weapon Effects
 void AGun::PlayFireEffects(FVector TraceEnd)
 {
     if(MuzzleSound)
@@ -165,6 +315,12 @@ void AGun::PlayFireEffects(FVector TraceEnd)
         }
     }
     
+    if(GunShellFX)
+    {
+        auto ShellEjectTransform = Mesh->GetSocketTransform(GunShellSocket);
+        UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), GunShellFX, ShellEjectTransform);
+    }
+    
     APawn* MyOwner = Cast<APawn>(GetOwner());
     if (MyOwner)
     {
@@ -174,8 +330,11 @@ void AGun::PlayFireEffects(FVector TraceEnd)
             PlayerController->ClientPlayCameraShake(FireCamShake);
         }
     }
+    
+    PlayGunAnimations(GunFireAnim);
+    PlayCharacterAnimations(PlayerGunFireMontage);
 }
-
+//MARK: Weapon Impact Effects
 void AGun::PlayImpactEffects(EPhysicalSurface MySurfaceType, FVector ImpactPoint)
 {
     UParticleSystem* SelectedEffect = nullptr;
@@ -203,90 +362,92 @@ void AGun::PlayImpactEffects(EPhysicalSurface MySurfaceType, FVector ImpactPoint
     }
 }
 
-
-
-void AGun::CalculateAmmo()
+//MARK: Weapon Equiping and Dequiping functions
+void AGun::OnEquip(bool bPlayAnimation)
 {
-    AShooterCharacter* MyCharacter = Cast<AShooterCharacter>(GetOwner());
-    if(MyCharacter == nullptr){return;}
+    bPendingEquip = true;
     
-    if(MyCharacter->GetbIsAiming() == true)
+   // AttachMeshToPawn(StorageSlot);
+    if (bPlayAnimation)
     {
-        if(GetCurrentAmmoInClip() > 0)
+        float Duration = PlayCharacterAnimations(EquipAnim);
+        if (Duration <= 0.0f)
         {
-            bCanFire = true;
-            AmmoInClip--;
-        }
-        else
-        {
-            bCanFire = false;
-        }
-    }
-    
-    if(MyCharacter->GetbIsAiming() == false) {bCanFire = false;}
-}
-
-void AGun::Reload()
-{
-    AShooterCharacter* MyCharacter = Cast<AShooterCharacter>(GetOwner());
-    if(MyCharacter == nullptr){return;}
-    
-    int AmmoDifference = FMath::Min(ClipSize - AmmoInClip, MaxAmmo - AmmoInClip);
-    
-    if(MaxAmmo != 0 && AmmoInClip < ClipSize && AmmoDifference <= MaxAmmo)
-    {
-        if(MyCharacter->GetbIsAiming() == true)
-        {
-            
-            if(ReloadAnim)
-            {
-                bCanFire = false;
-                MyCharacter->StopShoot();
-                MyCharacter->PlayAnimMontage(ReloadAnim);
-            }
-        }
-        else if (MyCharacter->GetbIsAiming() == false)
-        {
-            if(HipReloadAnim)
-            {
-                bCanFire = false;
-                MyCharacter->StopShoot();
-                MyCharacter->PlayAnimMontage(HipReloadAnim);
-            }
-
+            // Failsafe in case animation is missing
+            Duration = 1.0f;
         }
         
-        UE_LOG(LogTemp, Warning, TEXT("AmmoDifference : %d"), AmmoDifference);
-        AmmoInClip += AmmoDifference;
-        MaxAmmo -=AmmoDifference;
-        UE_LOG(LogTemp, Warning, TEXT("MaxAmmo : %d"), MaxAmmo);
+        EquipStartedTime = GetWorld()->TimeSeconds;
+        EquipDuration = Duration;
+
+        GetWorldTimerManager().SetTimer(EquipFinishedTimerHandle, this, &AGun::OnEquipFinished, Duration, false);
     }
-    
+    else
+    {
+        OnEquipFinished();
+    }
 }
 
-void AGun::OnEquip(const AGun* LastWeapon)
+void AGun::OnEquipFinished()
 {
     AttachMeshToPawn();
+
+    bIsEquipped = true;
+    bPendingEquip = false;
+
+        // Try to reload empty clip
+    if (CurrentAmmoInClip <= 0 && CanReload())
+    {
+        StartReload();
+    }
 }
 
 void AGun::OnUnEquip()
 {
-    DetachMeshFromPawn();
+    bIsEquipped = false;
+    //DetachMeshFromPawn();
     StopAutomaticFire();
+    
+    if (bPendingEquip)
+    {
+        StopWeaponAnimation(EquipAnim);
+        bPendingEquip = false;
+
+        GetWorldTimerManager().ClearTimer(EquipFinishedTimerHandle);
+    }
+    if (bIsReloading)
+    {
+        if(IsPlayerAiming() == true)
+        {
+            StopWeaponAnimation(PlayerReloadMontage);
+        }
+        else
+        {
+             StopWeaponAnimation(PlayerHipReloadMontage);
+        }
+        bIsReloading = false;
+
+        GetWorldTimerManager().ClearTimer(TimerHandle_ReloadWeapon);
+    }
+
+}
+void AGun::OnEnterInventory(AShooterCharacter* NewOwner)
+{
+    SetOwningPawn(NewOwner);
+    AttachMeshToPawn(StorageSlot);
 }
 
-void AGun::AttachMeshToPawn()
+void AGun::AttachMeshToPawn(EInventorySlot Slot)
 {
-    DetachMeshFromPawn();
-    
     AShooterCharacter* MyCharacter = Cast<AShooterCharacter>(GetOwner());
     
     if(MyCharacter == nullptr){return;}
     
-    FName GunAttachPoint = MyCharacter->GetWeaponAttachPoint();
-    Mesh->AttachToComponent(MyCharacter->GetPawnMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, GunAttachPoint);
-    Mesh->SetHiddenInGame(false);
+    DetachMeshFromPawn();
     
+    FName GunAttachPoint = MyCharacter->GetInventoryAttachPoint(Slot);
+    Mesh->SetHiddenInGame(false);
+    Mesh->AttachToComponent(MyCharacter->GetPawnMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, GunAttachPoint);
 }
 
 void AGun::DetachMeshFromPawn()
@@ -295,21 +456,36 @@ void AGun::DetachMeshFromPawn()
     Mesh->SetHiddenInGame(true);
 }
 
-void AGun::PlayFireAnimation(UAnimMontage* FireAnim)
+//MARK: Animations Functions
+float AGun::PlayCharacterAnimations(UAnimMontage* CharacterAnims)
 {
-     AShooterCharacter* MyCharacter = Cast<AShooterCharacter>(GetOwner());
-    if(MyCharacter == nullptr){return;}
+    AShooterCharacter* MyCharacter = Cast<AShooterCharacter>(GetOwner());
+    if(MyCharacter == nullptr){return 0.0f;}
     
-    if(FireAnim)
+    float Duration = 0.0f;
+    if(CharacterAnims)
     {
-         MyCharacter->PlayAnimMontage(FireAnim);
-       /* GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Blue, FString::Printf(TEXT("FireAnimeReturned")));
-        UAnimInstance* AnimInstance = MyCharacter->GetMesh()->GetAnimInstance();
-        if (AnimInstance != NULL)
-        {
-            GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Blue, FString::Printf(TEXT("AnimeInstace is okay")));
-            AnimInstance->Montage_Play(FireAnim, 1.f);
-        }*/
+      Duration = MyCharacter->PlayAnimMontage(CharacterAnims);
+    }
+    return Duration;
 }
+
+void AGun::StopWeaponAnimation(UAnimMontage* Animation)
+{
+    AShooterCharacter* MyCharacter = Cast<AShooterCharacter>(GetOwner());
+    if(!MyCharacter){return;}
     
+    UAnimMontage* UseAnim = Animation;
+        if (UseAnim)
+        {
+            MyCharacter->StopAnimMontage(UseAnim);
+        }
+}
+
+void AGun::PlayGunAnimations(UAnimationAsset* GunAnims)
+{
+    if(GunAnims)
+    {
+        Mesh->PlayAnimation(GunAnims, false);
+    }
 }

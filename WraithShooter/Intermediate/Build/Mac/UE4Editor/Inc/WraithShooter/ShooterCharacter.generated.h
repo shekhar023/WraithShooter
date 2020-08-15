@@ -8,35 +8,26 @@
 #include "UObject/ScriptMacros.h"
 
 PRAGMA_DISABLE_DEPRECATION_WARNINGS
+enum class EInventorySlot : uint8;
 struct FHitResult;
 struct FVector;
 class USkeletalMeshComponent;
+class AGun;
 #ifdef WRAITHSHOOTER_ShooterCharacter_generated_h
 #error "ShooterCharacter.generated.h already included, missing '#pragma once' in ShooterCharacter.h"
 #endif
 #define WRAITHSHOOTER_ShooterCharacter_generated_h
 
-#define WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_23_DELEGATE \
-struct _Script_WraithShooter_eventOnAiming_Parms \
-{ \
-	bool IsAiming; \
-}; \
-static inline void FOnAiming_DelegateWrapper(const FMulticastScriptDelegate& OnAiming, bool IsAiming) \
-{ \
-	_Script_WraithShooter_eventOnAiming_Parms Parms; \
-	Parms.IsAiming=IsAiming ? true : false; \
-	OnAiming.ProcessMulticastDelegate<UObject>(&Parms); \
-}
-
-
-#define WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_29_SPARSE_DATA
-#define WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_29_RPC_WRAPPERS \
+#define WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_40_SPARSE_DATA
+#define WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_40_RPC_WRAPPERS \
  \
 	DECLARE_FUNCTION(execPlaySoundEffects); \
 	DECLARE_FUNCTION(execMakeVFXInvisible); \
 	DECLARE_FUNCTION(execMakeVFXVisible); \
 	DECLARE_FUNCTION(execUnBindDelegates); \
 	DECLARE_FUNCTION(execBindDelegates); \
+	DECLARE_FUNCTION(execSwapToNewWeaponMesh); \
+	DECLARE_FUNCTION(execGetInventoryAttachPoint); \
 	DECLARE_FUNCTION(execObjectTrace); \
 	DECLARE_FUNCTION(execGetScoreValue); \
 	DECLARE_FUNCTION(execGetPawnMesh); \
@@ -45,16 +36,19 @@ static inline void FOnAiming_DelegateWrapper(const FMulticastScriptDelegate& OnA
 	DECLARE_FUNCTION(execGetEnergy); \
 	DECLARE_FUNCTION(execGetHealth); \
 	DECLARE_FUNCTION(execGetbIsAiming); \
-	DECLARE_FUNCTION(execIsDead);
+	DECLARE_FUNCTION(execIsDead); \
+	DECLARE_FUNCTION(execGetCurrentWeapon);
 
 
-#define WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_29_RPC_WRAPPERS_NO_PURE_DECLS \
+#define WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_40_RPC_WRAPPERS_NO_PURE_DECLS \
  \
 	DECLARE_FUNCTION(execPlaySoundEffects); \
 	DECLARE_FUNCTION(execMakeVFXInvisible); \
 	DECLARE_FUNCTION(execMakeVFXVisible); \
 	DECLARE_FUNCTION(execUnBindDelegates); \
 	DECLARE_FUNCTION(execBindDelegates); \
+	DECLARE_FUNCTION(execSwapToNewWeaponMesh); \
+	DECLARE_FUNCTION(execGetInventoryAttachPoint); \
 	DECLARE_FUNCTION(execObjectTrace); \
 	DECLARE_FUNCTION(execGetScoreValue); \
 	DECLARE_FUNCTION(execGetPawnMesh); \
@@ -63,10 +57,19 @@ static inline void FOnAiming_DelegateWrapper(const FMulticastScriptDelegate& OnA
 	DECLARE_FUNCTION(execGetEnergy); \
 	DECLARE_FUNCTION(execGetHealth); \
 	DECLARE_FUNCTION(execGetbIsAiming); \
-	DECLARE_FUNCTION(execIsDead);
+	DECLARE_FUNCTION(execIsDead); \
+	DECLARE_FUNCTION(execGetCurrentWeapon);
 
 
-#define WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_29_INCLASS_NO_PURE_DECLS \
+#define WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_40_EVENT_PARMS \
+	struct ShooterCharacter_eventZoom_Parms \
+	{ \
+		bool CanZoom; \
+	};
+
+
+#define WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_40_CALLBACK_WRAPPERS
+#define WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_40_INCLASS_NO_PURE_DECLS \
 private: \
 	static void StaticRegisterNativesAShooterCharacter(); \
 	friend struct Z_Construct_UClass_AShooterCharacter_Statics; \
@@ -76,7 +79,7 @@ public: \
 	virtual UObject* _getUObject() const override { return const_cast<AShooterCharacter*>(this); }
 
 
-#define WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_29_INCLASS \
+#define WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_40_INCLASS \
 private: \
 	static void StaticRegisterNativesAShooterCharacter(); \
 	friend struct Z_Construct_UClass_AShooterCharacter_Statics; \
@@ -86,7 +89,7 @@ public: \
 	virtual UObject* _getUObject() const override { return const_cast<AShooterCharacter*>(this); }
 
 
-#define WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_29_STANDARD_CONSTRUCTORS \
+#define WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_40_STANDARD_CONSTRUCTORS \
 	/** Standard constructor, called after all reflected properties have been initialized */ \
 	NO_API AShooterCharacter(const FObjectInitializer& ObjectInitializer); \
 	DEFINE_DEFAULT_OBJECT_INITIALIZER_CONSTRUCTOR_CALL(AShooterCharacter) \
@@ -99,7 +102,7 @@ private: \
 public:
 
 
-#define WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_29_ENHANCED_CONSTRUCTORS \
+#define WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_40_ENHANCED_CONSTRUCTORS \
 private: \
 	/** Private move- and copy-constructors, should never be used */ \
 	NO_API AShooterCharacter(AShooterCharacter&&); \
@@ -110,33 +113,38 @@ DEFINE_VTABLE_PTR_HELPER_CTOR_CALLER(AShooterCharacter); \
 	DEFINE_DEFAULT_CONSTRUCTOR_CALL(AShooterCharacter)
 
 
-#define WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_29_PRIVATE_PROPERTY_OFFSET \
+#define WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_40_PRIVATE_PROPERTY_OFFSET \
 	FORCEINLINE static uint32 __PPO__Gun() { return STRUCT_OFFSET(AShooterCharacter, Gun); } \
 	FORCEINLINE static uint32 __PPO__GunClass() { return STRUCT_OFFSET(AShooterCharacter, GunClass); } \
 	FORCEINLINE static uint32 __PPO__Inventory() { return STRUCT_OFFSET(AShooterCharacter, Inventory); }
 
 
-#define WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_26_PROLOG
-#define WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_29_GENERATED_BODY_LEGACY \
+#define WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_37_PROLOG \
+	WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_40_EVENT_PARMS
+
+
+#define WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_40_GENERATED_BODY_LEGACY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \
 public: \
-	WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_29_PRIVATE_PROPERTY_OFFSET \
-	WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_29_SPARSE_DATA \
-	WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_29_RPC_WRAPPERS \
-	WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_29_INCLASS \
-	WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_29_STANDARD_CONSTRUCTORS \
+	WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_40_PRIVATE_PROPERTY_OFFSET \
+	WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_40_SPARSE_DATA \
+	WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_40_RPC_WRAPPERS \
+	WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_40_CALLBACK_WRAPPERS \
+	WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_40_INCLASS \
+	WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_40_STANDARD_CONSTRUCTORS \
 public: \
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
 
 
-#define WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_29_GENERATED_BODY \
+#define WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_40_GENERATED_BODY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \
 public: \
-	WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_29_PRIVATE_PROPERTY_OFFSET \
-	WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_29_SPARSE_DATA \
-	WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_29_RPC_WRAPPERS_NO_PURE_DECLS \
-	WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_29_INCLASS_NO_PURE_DECLS \
-	WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_29_ENHANCED_CONSTRUCTORS \
+	WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_40_PRIVATE_PROPERTY_OFFSET \
+	WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_40_SPARSE_DATA \
+	WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_40_RPC_WRAPPERS_NO_PURE_DECLS \
+	WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_40_CALLBACK_WRAPPERS \
+	WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_40_INCLASS_NO_PURE_DECLS \
+	WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_40_ENHANCED_CONSTRUCTORS \
 private: \
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
 
@@ -146,5 +154,13 @@ template<> WRAITHSHOOTER_API UClass* StaticClass<class AShooterCharacter>();
 #undef CURRENT_FILE_ID
 #define CURRENT_FILE_ID WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h
 
+
+#define FOREACH_ENUM_EINVENTORYSLOT(op) \
+	op(EInventorySlot::Hands) \
+	op(EInventorySlot::Primary) \
+	op(EInventorySlot::Secondary) 
+
+enum class EInventorySlot : uint8;
+template<> WRAITHSHOOTER_API UEnum* StaticEnum<EInventorySlot>();
 
 PRAGMA_ENABLE_DEPRECATION_WARNINGS

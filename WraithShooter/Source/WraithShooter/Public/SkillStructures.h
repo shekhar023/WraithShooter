@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "SkillStructures.generated.h"
 
+class UParticleSystem;
 
 //MARK:ENUM EOffensiveAbility
 UENUM(BlueprintType)
@@ -68,6 +69,9 @@ public:
     
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SkillData)
     FSlateColor SkillFontColor;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SkillData)
+    UParticleSystem* VFX;
     
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SkillData)
     bool bIsMagicSkill;

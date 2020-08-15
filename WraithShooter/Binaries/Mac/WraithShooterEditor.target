@@ -8799,6 +8799,114 @@
 			"Type": "DebugNonUFS"
 		},
 		{
+			"Path": "$(ProjectDir)/Content/Slate/.DS_Store",
+			"Type": "UFS"
+		},
+		{
+			"Path": "$(ProjectDir)/Content/Slate/Fonts/Google Android License.txt",
+			"Type": "UFS"
+		},
+		{
+			"Path": "$(ProjectDir)/Content/Slate/Fonts/Roboto-Black.ttf",
+			"Type": "UFS"
+		},
+		{
+			"Path": "$(ProjectDir)/Content/Slate/Fonts/Roboto-Black.uasset",
+			"Type": "UFS"
+		},
+		{
+			"Path": "$(ProjectDir)/Content/Slate/Fonts/Roboto-Black_Font.uasset",
+			"Type": "UFS"
+		},
+		{
+			"Path": "$(ProjectDir)/Content/Slate/Fonts/Roboto-Medium.ttf",
+			"Type": "UFS"
+		},
+		{
+			"Path": "$(ProjectDir)/Content/Slate/Fonts/Roboto-Medium.uasset",
+			"Type": "UFS"
+		},
+		{
+			"Path": "$(ProjectDir)/Content/Slate/Fonts/Roboto-Medium_Font.uasset",
+			"Type": "UFS"
+		},
+		{
+			"Path": "$(ProjectDir)/Content/Slate/Fonts/Roboto-Regular.ttf",
+			"Type": "UFS"
+		},
+		{
+			"Path": "$(ProjectDir)/Content/Slate/Fonts/Roboto-Regular.uasset",
+			"Type": "UFS"
+		},
+		{
+			"Path": "$(ProjectDir)/Content/Slate/Fonts/Roboto-Regular_Font.uasset",
+			"Type": "UFS"
+		},
+		{
+			"Path": "$(ProjectDir)/Content/Slate/Images/ReplayPause.png",
+			"Type": "UFS"
+		},
+		{
+			"Path": "$(ProjectDir)/Content/Slate/Images/ReplayPause.uasset",
+			"Type": "UFS"
+		},
+		{
+			"Path": "$(ProjectDir)/Content/Slate/Images/ReplayTimeline.png",
+			"Type": "UFS"
+		},
+		{
+			"Path": "$(ProjectDir)/Content/Slate/Images/ReplayTimeline.uasset",
+			"Type": "UFS"
+		},
+		{
+			"Path": "$(ProjectDir)/Content/Slate/Images/ReplayTimelineIndicator.png",
+			"Type": "UFS"
+		},
+		{
+			"Path": "$(ProjectDir)/Content/Slate/Images/ReplayTimelineIndicator.uasset",
+			"Type": "UFS"
+		},
+		{
+			"Path": "$(ProjectDir)/Content/Slate/Images/SoundCue_SpeakerIcon.png",
+			"Type": "UFS"
+		},
+		{
+			"Path": "$(ProjectDir)/Content/Slate/Images/SoundCue_SpeakerIcon.uasset",
+			"Type": "UFS"
+		},
+		{
+			"Path": "$(ProjectDir)/Content/Slate/Images/SwitchButtonDown.png",
+			"Type": "UFS"
+		},
+		{
+			"Path": "$(ProjectDir)/Content/Slate/Images/SwitchButtonDown.uasset",
+			"Type": "UFS"
+		},
+		{
+			"Path": "$(ProjectDir)/Content/Slate/Images/SwitchButtonLeft.png",
+			"Type": "UFS"
+		},
+		{
+			"Path": "$(ProjectDir)/Content/Slate/Images/SwitchButtonLeft.uasset",
+			"Type": "UFS"
+		},
+		{
+			"Path": "$(ProjectDir)/Content/Slate/Images/SwitchButtonRight.png",
+			"Type": "UFS"
+		},
+		{
+			"Path": "$(ProjectDir)/Content/Slate/Images/SwitchButtonRight.uasset",
+			"Type": "UFS"
+		},
+		{
+			"Path": "$(ProjectDir)/Content/Slate/Images/SwitchButtonUp.png",
+			"Type": "UFS"
+		},
+		{
+			"Path": "$(ProjectDir)/Content/Slate/Images/SwitchButtonUp.uasset",
+			"Type": "UFS"
+		},
+		{
 			"Path": "$(EngineDir)/Binaries/ThirdParty/ImgTec/PVRTexToolCLI",
 			"Type": "NonUFS"
 		},

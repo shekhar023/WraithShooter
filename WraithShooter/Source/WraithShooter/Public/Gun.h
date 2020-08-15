@@ -4,41 +4,85 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "ShooterCharacter.h"
 #include "Gun.generated.h"
 
 class AShooterCharacter;
 class UCameraShake;
 class UParticleSystem;
 class UAnimMontage;
+class UAnimationAsset;
+
+namespace EWeaponState
+{
+    enum Type
+    {
+        Idle,
+        Firing,
+        Reloading,
+        Equipping,
+    };
+}
 
 UCLASS()
 class WRAITHSHOOTER_API AGun : public AActor
 {
     GENERATED_BODY()
     
-public:	
-    // Sets default values for this actor's properties
-    AGun();
+private:
     
-    void PullTrigger();
+    UPROPERTY(VisibleAnywhere)
+    FName MuzzleFlashSocketName;
     
-    void StartAutomaticFire();
+    UPROPERTY(VisibleDefaultsOnly, Category = "Weapon")
+    FName TracerTargetName;
     
-    void StopAutomaticFire();
+    UPROPERTY(VisibleDefaultsOnly, Category = "Weapon")
+    FName GunShellSocket;
     
-    void Reload();
+    UPROPERTY(EditAnywhere, Category = "Weapon",meta = (ClampMin=0.0f))
+    float MaxRange;
+    
+    UPROPERTY(EditAnywhere, Category = "Weapon", meta = (ClampMin=0.0f))
+    float RateOfFire;
+    
+    UPROPERTY(EditDefaultsOnly, Category = "Weapon", meta = (ClampMin=0.0f))
+    float BulletSpread;
+    
+    UPROPERTY(EditAnywhere, Category = "Weapon", meta = (ClampMin=0.0f))
+    float Damage;
+    
+    UPROPERTY(EditAnywhere,Category = "Weapon", meta = (ClampMin=0.0f))
+    int32 StartAmmo;
+    
+    UPROPERTY(EditAnywhere, Category = "Weapon", meta = (ClampMin=0.0f))
+    int32 MaxAmmo;
+    
+    UPROPERTY(EditAnywhere,Category = "Weapon", meta = (ClampMin=0.0f))
+    int32 MaxAmmoInClip;
+    
+    UPROPERTY(EditAnywhere,Category = "Weapon", meta = (ClampMin=0.0f))
+    int32 CurrentAmmoInClip;
+    
+    UPROPERTY(EditAnywhere,Category = "Weapon", meta = (ClampMin=0.0f))
+    int32 CurrentAmmo;
+    
     
 protected:
-    // Called when the game starts or when spawned
-    virtual void BeginPlay() override;
+    
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+    USkeletalMeshComponent* Mesh;
     
     bool bCanFire = true;
     
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Weapon)
+    bool bIsFiring;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Weapon)
+    bool bIsReloading;
+    
     UPROPERTY()
     AShooterCharacter* SCharacter;
-    
-    UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
-    FName TracerTargetName;
     
     AController* GetOwnerController() const;
     
@@ -60,6 +104,51 @@ protected:
     UPROPERTY()
     TEnumAsByte<EPhysicalSurface> SurfaceType;
     
+    EWeaponState::Type GetCurrentState() const;
+    
+    /** update weapon state */
+    void SetWeaponState(EWeaponState::Type NewState);
+
+    /** determine current weapon state */
+    void DetermineWeaponState();
+    
+    /** current weapon state */
+    EWeaponState::Type CurrentState;
+    
+    virtual void PostInitializeComponents() override;
+    
+    virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+    
+    
+public:	
+    // Sets default values for this actor's properties
+    AGun();
+    
+    void PullTrigger();
+    
+    void StartAutomaticFire();
+    
+    void StopAutomaticFire();
+    
+    void Reload();
+    
+    void StartReload();
+    
+    void StopReload();
+    
+    void OnUnEquip();
+    
+    void OnEquipFinished();
+    
+    void AttachMeshToPawn(EInventorySlot Slot = EInventorySlot::Hands);
+    
+    void DetachMeshFromPawn();
+    
+    void SetOwningPawn(AShooterCharacter* MyPawn);
+    
+    void OnEquip(bool bPlayAnimation);
+    
+    USkeletalMeshComponent* GetWeaponMesh() const;
     
 public:
     
@@ -72,16 +161,6 @@ public:
     UFUNCTION(BlueprintPure)
     bool GetbCanFire() const;
     
-    void OnEquip(const AGun* LastWeapon);
-    
-    void OnUnEquip();
-    
-    void AttachMeshToPawn();
-    
-    void DetachMeshFromPawn();
-    
-    void SetOwningPawn(AShooterCharacter* MyPawn);
-    
     UPROPERTY(EditDefaultsOnly, Category = "Weapon")
     TSubclassOf<UCameraShake> FireCamShake;
     
@@ -90,12 +169,15 @@ public:
     
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
     UParticleSystem* ImpactEffect;
-
+    
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
     UParticleSystem* BodyImpactEffect;
     
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
     UParticleSystem* MetalImpactEffect;
+    
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
+    UParticleSystem* GunShellFX;
     
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
     UParticleSystem* MuzzleFlash;
@@ -107,47 +189,74 @@ public:
     USoundBase* ImpactSound;
     
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
-    UAnimMontage* GunFireMontage;
+    UAnimationAsset* GunFireAnim;
     
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
-    UAnimMontage* ReloadAnim;
+    UAnimationAsset* ReloadIronSightAnim;
     
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
-    UAnimMontage* HipReloadAnim;
+    UAnimationAsset* ReloadHipAnim;
+    
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
+    UAnimMontage* EquipAnim;
+    
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
+    UAnimMontage* PlayerGunFireMontage;
+    
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
+    UAnimMontage* PlayerReloadMontage;
+    
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
+    UAnimMontage* PlayerHipReloadMontage;
     
     UFUNCTION()
-    void PlayFireAnimation(UAnimMontage* FireAnim);
+    float PlayCharacterAnimations(UAnimMontage* CharacterAnims);
     
-private:
+    UFUNCTION()
+    void PlayGunAnimations(UAnimationAsset* GunAnims);
     
-    UPROPERTY(VisibleAnywhere)
-    USceneComponent* Root;
+    UFUNCTION()
+    void StopWeaponAnimation(UAnimMontage* Animation);
     
-    UPROPERTY(VisibleAnywhere)
-    USkeletalMeshComponent* Mesh;
+    UFUNCTION()
+    bool IsPlayerAiming();
     
-    UPROPERTY(VisibleAnywhere)
-    FName MuzzleFlashSocketName;
+    UFUNCTION()
+    bool CanReload() const;
     
-    UPROPERTY(EditAnywhere)
-    float MaxRange;
+    FTimerHandle TimerHandle_StopReload;
     
-    UPROPERTY(EditAnywhere)
-    float RateOfFire;
+    FTimerHandle TimerHandle_ReloadWeapon;
     
-    UPROPERTY(EditDefaultsOnly, Category = "Weapon", meta = (ClampMin=0.0f))
-    float BulletSpread;
+    float GetEquipStartedTime() const;
+
+    float GetEquipDuration() const;
+
+    /** last time when this weapon was switched to */
+    float EquipStartedTime;
+
+    /** how much time weapon needs to be equipped */
+    float EquipDuration;
+
+    bool bIsEquipped;
+
+    bool bPendingEquip;
     
-    UPROPERTY(EditAnywhere)
-    float Damage;
+    void OnEnterInventory(AShooterCharacter* NewOwner);
     
-    UPROPERTY(EditAnywhere)
-    int32 MaxAmmo;
+    FORCEINLINE EInventorySlot GetStorageSlot()
+    {
+        return StorageSlot;
+    }
     
-    UPROPERTY(EditAnywhere)
-    int32 ClipSize;
+    /* The character socket to store this item at. */
+    UPROPERTY(EditDefaultsOnly, Category = "Weapon")
+    EInventorySlot StorageSlot;
+
+    FTimerHandle TimerHandle_HandleFiring;
+
+    FTimerHandle EquipFinishedTimerHandle;
     
-    UPROPERTY(EditAnywhere)
-    int32 AmmoInClip;
     
+
 };

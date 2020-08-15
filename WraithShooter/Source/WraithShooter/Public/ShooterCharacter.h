@@ -19,10 +19,21 @@ class AShooterPlayerState;
 class USoundBase;
 class UDamageType;
 
-//MARK: Delegate Decleration
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnAiming, bool, IsAiming);
-
 //MARK: ShooterCharacter Class
+
+UENUM()
+enum class EInventorySlot : uint8
+{
+    /* For currently equipped items/weapons */
+    Hands,
+
+    /* For primary weapons on spine bone */
+    Primary,
+
+    /* Storage for small items like flashlight on pelvis */
+    Secondary,
+};
+
 UCLASS()
 class WRAITHSHOOTER_API AShooterCharacter : public ACharacter, public IWraithUIInterface, public SkillStructures // inherited IWraithUIInterface and SkillStructures
 {
@@ -57,6 +68,10 @@ public:
     //MARK:Action Bindind Decleration
     void CanJump();
     
+    void StartCrouch();
+    
+    void StopCrouch();
+    
     void Aim();
     
     void StopAim();
@@ -75,6 +90,13 @@ public:
     
     void PickObjects();
     
+    void DoubleJump();
+    
+    void BackDash();
+    
+    UFUNCTION(BlueprintImplementableEvent, Category = ShooterCharacter)
+    void Zoom(bool CanZoom);
+    
 public:
     //MARK:Variables
     
@@ -84,14 +106,17 @@ public:
     UPROPERTY(EditAnywhere, Category = ShooterCharacter)
     float BaseYawValue;
     
-    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = ShooterCharacter)
-    FName GunAttachSocket;
-    
-    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = ShooterCharacter)
-    FName GunHostlerSocket;
-    
-    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = ShooterCharacter)
-    FName FootSocketName;
+    /* Attachpoint for active weapon/item in hands */
+    UPROPERTY(EditDefaultsOnly, Category = "Sockets")
+    FName WeaponAttachPoint;
+
+    /* Attachpoint for items carried on the belt/pelvis. */
+    UPROPERTY(EditDefaultsOnly, Category = "Sockets")
+    FName PelvisAttachPoint;
+
+    /* Attachpoint for primary weapons */
+    UPROPERTY(EditDefaultsOnly, Category = "Sockets")
+    FName SpineAttachPoint;
     
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ShooterCharacter)
     float Energy;
@@ -114,15 +139,6 @@ public:
     UPROPERTY(EditAnywhere, Category = ShooterCharacter)
     bool bIsAiming;
     
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SoundFX)
-    USoundBase* JumpSound;
-    
-    UPROPERTY(EditAnywhere, BlueprintReadWrite,  Category = SoundFX)
-    USoundBase* LandSound;
-    
-    UPROPERTY(BlueprintAssignable, Category = GameMode)
-    FOnAiming OnAiming;
-    
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SkillsInfo)
     bool bIsOffensiveAbilityReady = true;
 
@@ -144,7 +160,28 @@ public:
     FSkillData DoubleJumpData;
     
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = BackDash)
-    bool bHasBackDash = false;
+    bool bHasBackDash;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = BackDash)
+    FVector BackDashLeftAmount;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = BackDash)
+    FVector BackDashRightAmount;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = BackDash)
+    FVector BackDashForwardAmount;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = BackDash)
+    FVector BackDashAmount;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = BackDash)
+    bool bIsBackDashing;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = BackDash)
+    bool bIsBackDashReady;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = BackDash)
+    float BackDashCooldown;
     
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = BackDash)
     FSkillData BackDashData;
@@ -248,6 +285,8 @@ protected:
     UPROPERTY(BlueprintReadOnly)
     AGun* Gun;
     
+    AGun* PreviousGun;
+    
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gun)
     TArray<TSubclassOf<AGun>> GunClass;
     
@@ -280,6 +319,9 @@ public:
 public:
     //MARK: Return Functions
     
+    UFUNCTION()
+    AGun* GetCurrentWeapon() const;
+    
     UFUNCTION(BlueprintPure)
     bool IsDead() const;
     
@@ -306,6 +348,18 @@ public:
     
     UFUNCTION()
     bool ObjectTrace(FHitResult& Hit, FVector& ShotDirection);
+    
+    UFUNCTION()
+    FName GetInventoryAttachPoint(EInventorySlot Slot) const;
+    
+    void OnEquipSecondaryWeapon();
+    
+    void OnEquipPrimaryWeapon();
+    
+    bool WeaponSlotAvailable(EInventorySlot CheckSlot);
+    
+    UFUNCTION(BlueprintCallable, Category = "Animation")
+    void SwapToNewWeaponMesh();
     
 public:
     
@@ -336,9 +390,7 @@ public:
     
     //Declare override of interface
     virtual FString GetTestName() override;
-    
-    virtual void PostInitializeComponents() override;
-    
+
     //Declared function must be implmented in c++
     bool ReactToPlayerEntered();
     bool ReactToPlayerEntered_Implementation() override;

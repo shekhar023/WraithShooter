@@ -22,6 +22,7 @@ void EmptyLinkFunctionForGeneratedCodeSkillStructures() {}
 	COREUOBJECT_API UClass* Z_Construct_UClass_UClass();
 	SLATECORE_API UScriptStruct* Z_Construct_UScriptStruct_FSlateBrush();
 	WRAITHSHOOTER_API UScriptStruct* Z_Construct_UScriptStruct_FSkillData();
+	ENGINE_API UClass* Z_Construct_UClass_UParticleSystem_NoRegister();
 	SLATECORE_API UScriptStruct* Z_Construct_UScriptStruct_FSlateColor();
 // End Cross Module References
 	static UEnum* ESkills_StaticEnum()
@@ -380,6 +381,10 @@ static struct FScriptStruct_WraithShooter_StaticRegisterNativesFSkillData
 		static void NewProp_bIsMagicSkill_SetBit(void* Obj);
 		static const UE4CodeGen_Private::FBoolPropertyParams NewProp_bIsMagicSkill;
 #if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_VFX_MetaData[];
+#endif
+		static const UE4CodeGen_Private::FObjectPropertyParams NewProp_VFX;
+#if WITH_METADATA
 		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_SkillFontColor_MetaData[];
 #endif
 		static const UE4CodeGen_Private::FStructPropertyParams NewProp_SkillFontColor;
@@ -435,6 +440,13 @@ static struct FScriptStruct_WraithShooter_StaticRegisterNativesFSkillData
 	}
 	const UE4CodeGen_Private::FBoolPropertyParams Z_Construct_UScriptStruct_FSkillData_Statics::NewProp_bIsMagicSkill = { "bIsMagicSkill", nullptr, (EPropertyFlags)0x0010000000000005, UE4CodeGen_Private::EPropertyGenFlags::Bool | UE4CodeGen_Private::EPropertyGenFlags::NativeBool, RF_Public|RF_Transient|RF_MarkAsNative, 1, sizeof(bool), sizeof(FSkillData), &Z_Construct_UScriptStruct_FSkillData_Statics::NewProp_bIsMagicSkill_SetBit, METADATA_PARAMS(Z_Construct_UScriptStruct_FSkillData_Statics::NewProp_bIsMagicSkill_MetaData, UE_ARRAY_COUNT(Z_Construct_UScriptStruct_FSkillData_Statics::NewProp_bIsMagicSkill_MetaData)) };
 #if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UScriptStruct_FSkillData_Statics::NewProp_VFX_MetaData[] = {
+		{ "Category", "SkillData" },
+		{ "ModuleRelativePath", "Public/SkillStructures.h" },
+	};
+#endif
+	const UE4CodeGen_Private::FObjectPropertyParams Z_Construct_UScriptStruct_FSkillData_Statics::NewProp_VFX = { "VFX", nullptr, (EPropertyFlags)0x0010000000000005, UE4CodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(FSkillData, VFX), Z_Construct_UClass_UParticleSystem_NoRegister, METADATA_PARAMS(Z_Construct_UScriptStruct_FSkillData_Statics::NewProp_VFX_MetaData, UE_ARRAY_COUNT(Z_Construct_UScriptStruct_FSkillData_Statics::NewProp_VFX_MetaData)) };
+#if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UScriptStruct_FSkillData_Statics::NewProp_SkillFontColor_MetaData[] = {
 		{ "Category", "SkillData" },
 		{ "ModuleRelativePath", "Public/SkillStructures.h" },
@@ -485,6 +497,7 @@ static struct FScriptStruct_WraithShooter_StaticRegisterNativesFSkillData
 	const UE4CodeGen_Private::FTextPropertyParams Z_Construct_UScriptStruct_FSkillData_Statics::NewProp_Title = { "Title", nullptr, (EPropertyFlags)0x0010000000000005, UE4CodeGen_Private::EPropertyGenFlags::Text, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(FSkillData, Title), METADATA_PARAMS(Z_Construct_UScriptStruct_FSkillData_Statics::NewProp_Title_MetaData, UE_ARRAY_COUNT(Z_Construct_UScriptStruct_FSkillData_Statics::NewProp_Title_MetaData)) };
 	const UE4CodeGen_Private::FPropertyParamsBase* const Z_Construct_UScriptStruct_FSkillData_Statics::PropPointers[] = {
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UScriptStruct_FSkillData_Statics::NewProp_bIsMagicSkill,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UScriptStruct_FSkillData_Statics::NewProp_VFX,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UScriptStruct_FSkillData_Statics::NewProp_SkillFontColor,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UScriptStruct_FSkillData_Statics::NewProp_SkillBorderColor,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UScriptStruct_FSkillData_Statics::NewProp_SkillImage,
@@ -521,7 +534,7 @@ static struct FScriptStruct_WraithShooter_StaticRegisterNativesFSkillData
 		}
 		return ReturnStruct;
 	}
-	uint32 Get_Z_Construct_UScriptStruct_FSkillData_Hash() { return 2907143114U; }
+	uint32 Get_Z_Construct_UScriptStruct_FSkillData_Hash() { return 3232979768U; }
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
 #ifdef _MSC_VER
 #pragma warning (pop)
