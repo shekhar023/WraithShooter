@@ -61,6 +61,22 @@
 			"Type": "DynamicLibrary"
 		},
 		{
+			"Path": "$(EngineDir)/Plugins/Runtime/ApexDestruction/Binaries/Mac/UE4Editor-ApexDestruction.dylib",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/Runtime/ApexDestruction/Binaries/Mac/UE4Editor-ApexDestruction.dSYM",
+			"Type": "SymbolFile"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/Runtime/ApexDestruction/Binaries/Mac/UE4Editor-ApexDestructionEditor.dylib",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/Runtime/ApexDestruction/Binaries/Mac/UE4Editor-ApexDestructionEditor.dSYM",
+			"Type": "SymbolFile"
+		},
+		{
 			"Path": "$(EngineDir)/Plugins/2D/Paper2D/Binaries/Mac/UE4Editor-Paper2D.dylib",
 			"Type": "DynamicLibrary"
 		},
@@ -4217,6 +4233,10 @@
 			"Type": "RequiredResource"
 		},
 		{
+			"Path": "$(EngineDir)/Plugins/Runtime/ApexDestruction/Binaries/Mac/UE4Editor.modules",
+			"Type": "RequiredResource"
+		},
+		{
 			"Path": "$(EngineDir)/Plugins/2D/Paper2D/Binaries/Mac/UE4Editor.modules",
 			"Type": "RequiredResource"
 		},
@@ -4615,6 +4635,10 @@
 			"Type": "UFS"
 		},
 		{
+			"Path": "$(EngineDir)/Plugins/Runtime/ApexDestruction/ApexDestruction.uplugin",
+			"Type": "UFS"
+		},
+		{
 			"Path": "$(EngineDir)/Plugins/2D/Paper2D/Paper2D.uplugin",
 			"Type": "UFS"
 		},
@@ -5001,6 +5025,46 @@
 		{
 			"Path": "$(EngineDir)/Plugins/Media/WebMMedia/WebMMedia.uplugin",
 			"Type": "UFS"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/ThirdParty/PhysX3/Mac/libPhysX3PROFILE.dylib",
+			"Type": "NonUFS"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/ThirdParty/PhysX3/Mac/libPhysX3CookingPROFILE.dylib",
+			"Type": "NonUFS"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/ThirdParty/PhysX3/Mac/libPhysX3CommonPROFILE.dylib",
+			"Type": "NonUFS"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/ThirdParty/PhysX3/Mac/libPxFoundationPROFILE.dylib",
+			"Type": "NonUFS"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/ThirdParty/PhysX3/Mac/libPxPvdSDKPROFILE.dylib",
+			"Type": "NonUFS"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/ThirdParty/PhysX3/Mac/libAPEX_ClothingPROFILE.dylib",
+			"Type": "NonUFS"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/ThirdParty/PhysX3/Mac/libAPEX_LegacyPROFILE.dylib",
+			"Type": "NonUFS"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/ThirdParty/PhysX3/Mac/libApexFrameworkPROFILE.dylib",
+			"Type": "NonUFS"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/ThirdParty/PhysX3/Mac/libAPEX_DestructiblePROFILE.dylib",
+			"Type": "NonUFS"
+		},
+		{
+			"Path": "$(EngineDir)/Binaries/ThirdParty/PhysX3/Mac/libNvClothPROFILE.dylib",
+			"Type": "NonUFS"
 		},
 		{
 			"Path": "$(EngineDir)/Binaries/ThirdParty/svn/Mac/bin/apr-1-config",
@@ -7576,42 +7640,6 @@
 		},
 		{
 			"Path": "$(EngineDir)/Binaries/ThirdParty/svn/Mac/share/pkgconfig/libsvn_wc.pc",
-			"Type": "NonUFS"
-		},
-		{
-			"Path": "$(EngineDir)/Binaries/ThirdParty/PhysX3/Mac/libPhysX3PROFILE.dylib",
-			"Type": "NonUFS"
-		},
-		{
-			"Path": "$(EngineDir)/Binaries/ThirdParty/PhysX3/Mac/libPhysX3CookingPROFILE.dylib",
-			"Type": "NonUFS"
-		},
-		{
-			"Path": "$(EngineDir)/Binaries/ThirdParty/PhysX3/Mac/libPhysX3CommonPROFILE.dylib",
-			"Type": "NonUFS"
-		},
-		{
-			"Path": "$(EngineDir)/Binaries/ThirdParty/PhysX3/Mac/libPxFoundationPROFILE.dylib",
-			"Type": "NonUFS"
-		},
-		{
-			"Path": "$(EngineDir)/Binaries/ThirdParty/PhysX3/Mac/libPxPvdSDKPROFILE.dylib",
-			"Type": "NonUFS"
-		},
-		{
-			"Path": "$(EngineDir)/Binaries/ThirdParty/PhysX3/Mac/libAPEX_ClothingPROFILE.dylib",
-			"Type": "NonUFS"
-		},
-		{
-			"Path": "$(EngineDir)/Binaries/ThirdParty/PhysX3/Mac/libAPEX_LegacyPROFILE.dylib",
-			"Type": "NonUFS"
-		},
-		{
-			"Path": "$(EngineDir)/Binaries/ThirdParty/PhysX3/Mac/libApexFrameworkPROFILE.dylib",
-			"Type": "NonUFS"
-		},
-		{
-			"Path": "$(EngineDir)/Binaries/ThirdParty/PhysX3/Mac/libNvClothPROFILE.dylib",
 			"Type": "NonUFS"
 		},
 		{

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "WraithUIInterface.h"
+#include "Components/TimelineComponent.h"
 #include "GameFramework/Character.h"
 #include "SkillStructures.h"
 #include "ShooterCharacter.generated.h"
@@ -18,22 +19,29 @@ class UTextRenderComponent;
 class AShooterPlayerState;
 class USoundBase;
 class UDamageType;
+class UCurveFloat;
+class AMagicPill;
+class AWraithProjectile;
+class USceneComponent;
 
-//MARK: ShooterCharacter Class
-
+//MARK:ENUM for sockets
 UENUM()
 enum class EInventorySlot : uint8
 {
     /* For currently equipped items/weapons */
     Hands,
 
-    /* For primary weapons on spine bone */
+    /* For Primary weapons on spine bone */
     Primary,
 
-    /* Storage for small items like flashlight on pelvis */
+   /* For Secondary weapons on spine bone */
     Secondary,
+    
+    /* For Side weapons on Pelvis bone */
+    Side,
+    
 };
-
+//MARK: ShooterCharacter Class
 UCLASS()
 class WRAITHSHOOTER_API AShooterCharacter : public ACharacter, public IWraithUIInterface, public SkillStructures // inherited IWraithUIInterface and SkillStructures
 {
@@ -92,10 +100,22 @@ public:
     
     void DoubleJump();
     
+    void StartBackDash();
+    
     void BackDash();
+    
+    FTimerHandle BackDash_TimerHandle;
     
     UFUNCTION(BlueprintImplementableEvent, Category = ShooterCharacter)
     void Zoom(bool CanZoom);
+    
+    UFUNCTION()
+    void UpdateEnergy(FSkillsAttributes AbilityAttributes);
+    
+    UFUNCTION()
+    bool HaveEnoughEnergyToUseAbility(FSkillsAttributes AbilityAttributes);
+    
+    void CastOffensiveAblity();
     
 public:
     //MARK:Variables
@@ -110,21 +130,30 @@ public:
     UPROPERTY(EditDefaultsOnly, Category = "Sockets")
     FName WeaponAttachPoint;
 
-    /* Attachpoint for items carried on the belt/pelvis. */
-    UPROPERTY(EditDefaultsOnly, Category = "Sockets")
-    FName PelvisAttachPoint;
-
     /* Attachpoint for primary weapons */
     UPROPERTY(EditDefaultsOnly, Category = "Sockets")
-    FName SpineAttachPoint;
+    FName PrimaryWeaponAttachPoint;
     
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ShooterCharacter)
+    /* Attachpoint for items carried on the belt/pelvis. */
+    UPROPERTY(EditDefaultsOnly, Category = "Sockets")
+    FName SecondaryWeaponAttachPoint;
+    
+    UPROPERTY(EditDefaultsOnly, Category = "Sockets")
+    FName SideWeaponAttachPoint;
+    
+    UPROPERTY(EditDefaultsOnly, Category = "Sockets")
+    FName FireballSocket;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Mesh)
+    USceneComponent* MuzzleLocation;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ShooterCharacter,  meta = (ClampMin= 0.0f))
     float Energy;
     
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ShooterCharacter)
     float MaxHealth;
     
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ShooterCharacter)
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ShooterCharacter, meta = (ClampMin= 0.0f))
     float Health;
     
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ShooterCharacter)
@@ -141,6 +170,15 @@ public:
     
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SkillsInfo)
     bool bIsOffensiveAbilityReady = true;
+    
+ /*   UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = TimeLine)
+    UCurveFloat* CurveFloat;
+    
+    FTimeline BackDashTimeline;
+    
+    UFUNCTION()
+    void BackDashTimelineTrack(float DirectionToDash);
+  */
 
 public:
     //MARK: Offensive Skills Variables and Data
@@ -159,6 +197,7 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = DoubleJump)
     FSkillData DoubleJumpData;
     
+    //MARK: BackDash Variables
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = BackDash)
     bool bHasBackDash;
     
@@ -186,8 +225,24 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = BackDash)
     FSkillData BackDashData;
     
+    //MARK: Fireball Variables
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Fireball)
-    bool bHasFireball = false;
+    bool bHasFireball;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Fireball)
+    bool bUsedFireball;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Fireball)
+    bool bFireballReady;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Fireball)
+    bool bIsFireballAiming;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Fireball)
+    float FireballCooldown;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Fireball)
+    float SpawnFireballDelay;
     
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Fireball)
     FSkillData FireballData;
@@ -195,6 +250,20 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Fireball)
     FSkillsAttributes FireballAttributes;
     
+    FTimerHandle Fireball_TimerHandle;
+    
+    FTimerHandle FireballCooldown_TimerHandle;
+    
+    void SpawnFireball();
+    
+    void CanUseFireball();
+    
+    void AimFirball();
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Fireball)
+    TSubclassOf<AWraithProjectile> FireballClass;
+    
+    //MARK: ElectroSpark Variables
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ElectroSpark)
     bool bHasElectroSpark = false;
     
@@ -204,6 +273,7 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ElectroSpark)
     FSkillsAttributes ElectroSparkAttributes;
     
+    //MARK: Bloodlust Variables
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Bloodlust)
     bool bHasBloodlust = false;
     
@@ -298,8 +368,10 @@ protected:
     //MARK: Gun Functions
     void SpawnInventory();
     
-    void SwitchWeapon();
+    void NextWeapon();
     
+    void PreviousWeapon();
+
     void EquipWeapon(AGun* Weapon);
     
     void SetCurrentWeapon(AGun* NewWeapon, AGun* LastWeapon);
@@ -356,6 +428,8 @@ public:
     
     void OnEquipPrimaryWeapon();
     
+    void OnEquipSideWeapon();
+    
     bool WeaponSlotAvailable(EInventorySlot CheckSlot);
     
     UFUNCTION(BlueprintCallable, Category = "Animation")
@@ -378,9 +452,6 @@ public:
     
     UFUNCTION()
     void MakeVFXInvisible();
-    
-    UFUNCTION()
-    void PlaySoundEffects();
 
 public:
     //MARK: Virtual function Take Damage, GetTestName, PostInitializeComponents, ReactToPlayerEntered, ReactToPlayerEntered_Implementation
@@ -400,4 +471,11 @@ public:
 public:
     // Called to bind functionality to input
     virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+    
+    DECLARE_EVENT(AShooterCharacter, FUseFireBall);
+    
+    //Declare an event using above Signature
+    FUseFireBall ShootFireball;
+    
+    void UseFireball();
 };

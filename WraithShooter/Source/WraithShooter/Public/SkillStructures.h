@@ -98,6 +98,9 @@ public:
     float Damage;
     
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SkillsAttributes)
+    float DamageRadius;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SkillsAttributes)
     TSubclassOf<UDamageType> DamageType;
 };
 

@@ -17,7 +17,7 @@ AMagicPill::AMagicPill()
 
     PillMesh = CreateDefaultSubobject<UStaticMeshComponent>("BaseMeshComponent");
     PillMesh->SetSimulatePhysics(false);
-    PillMesh->SetupAttachment(RootComponent);
+    //PillMesh->SetupAttachment(RootComponent);
 
 }
 

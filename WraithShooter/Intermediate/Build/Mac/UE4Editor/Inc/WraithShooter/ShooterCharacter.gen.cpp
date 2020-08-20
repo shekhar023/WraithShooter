@@ -20,6 +20,7 @@ void EmptyLinkFunctionForGeneratedCodeShooterCharacter() {}
 	ENGINE_API UClass* Z_Construct_UClass_ACharacter();
 	WRAITHSHOOTER_API UClass* Z_Construct_UClass_AGun_NoRegister();
 	ENGINE_API UClass* Z_Construct_UClass_USkeletalMeshComponent_NoRegister();
+	WRAITHSHOOTER_API UScriptStruct* Z_Construct_UScriptStruct_FSkillsAttributes();
 	COREUOBJECT_API UScriptStruct* Z_Construct_UScriptStruct_FVector();
 	ENGINE_API UScriptStruct* Z_Construct_UScriptStruct_FHitResult();
 	AIMODULE_API UClass* Z_Construct_UClass_UBehaviorTree_NoRegister();
@@ -29,8 +30,9 @@ void EmptyLinkFunctionForGeneratedCodeShooterCharacter() {}
 	WRAITHSHOOTER_API UEnum* Z_Construct_UEnum_WraithShooter_ESkills();
 	WRAITHSHOOTER_API UEnum* Z_Construct_UEnum_WraithShooter_EDefensiveAbility();
 	WRAITHSHOOTER_API UEnum* Z_Construct_UEnum_WraithShooter_EOffensiveAbility();
-	WRAITHSHOOTER_API UScriptStruct* Z_Construct_UScriptStruct_FSkillsAttributes();
 	WRAITHSHOOTER_API UScriptStruct* Z_Construct_UScriptStruct_FSkillData();
+	WRAITHSHOOTER_API UClass* Z_Construct_UClass_AWraithProjectile_NoRegister();
+	ENGINE_API UClass* Z_Construct_UClass_USceneComponent_NoRegister();
 	WRAITHSHOOTER_API UClass* Z_Construct_UClass_UWraithUIInterface_NoRegister();
 // End Cross Module References
 	static UEnum* EInventorySlot_StaticEnum()
@@ -47,7 +49,7 @@ void EmptyLinkFunctionForGeneratedCodeShooterCharacter() {}
 		return EInventorySlot_StaticEnum();
 	}
 	static FCompiledInDeferEnum Z_CompiledInDeferEnum_UEnum_EInventorySlot(EInventorySlot_StaticEnum, TEXT("/Script/WraithShooter"), TEXT("EInventorySlot"), false, nullptr, nullptr);
-	uint32 Get_Z_Construct_UEnum_WraithShooter_EInventorySlot_Hash() { return 4289505284U; }
+	uint32 Get_Z_Construct_UEnum_WraithShooter_EInventorySlot_Hash() { return 4171169627U; }
 	UEnum* Z_Construct_UEnum_WraithShooter_EInventorySlot()
 	{
 #if WITH_HOT_RELOAD
@@ -62,21 +64,25 @@ void EmptyLinkFunctionForGeneratedCodeShooterCharacter() {}
 				{ "EInventorySlot::Hands", (int64)EInventorySlot::Hands },
 				{ "EInventorySlot::Primary", (int64)EInventorySlot::Primary },
 				{ "EInventorySlot::Secondary", (int64)EInventorySlot::Secondary },
+				{ "EInventorySlot::Side", (int64)EInventorySlot::Side },
 			};
 #if WITH_METADATA
 			const UE4CodeGen_Private::FMetaDataPairParam Enum_MetaDataParams[] = {
-				{ "Comment", "//MARK: ShooterCharacter Class\n" },
+				{ "Comment", "//MARK:ENUM for sockets\n" },
 				{ "Hands.Comment", "/* For currently equipped items/weapons */" },
 				{ "Hands.Name", "EInventorySlot::Hands" },
 				{ "Hands.ToolTip", "For currently equipped items/weapons" },
 				{ "ModuleRelativePath", "Public/ShooterCharacter.h" },
-				{ "Primary.Comment", "/* For primary weapons on spine bone */" },
+				{ "Primary.Comment", "/* For Primary weapons on spine bone */" },
 				{ "Primary.Name", "EInventorySlot::Primary" },
-				{ "Primary.ToolTip", "For primary weapons on spine bone" },
-				{ "Secondary.Comment", "/* Storage for small items like flashlight on pelvis */" },
+				{ "Primary.ToolTip", "For Primary weapons on spine bone" },
+				{ "Secondary.Comment", "/* For Secondary weapons on spine bone */" },
 				{ "Secondary.Name", "EInventorySlot::Secondary" },
-				{ "Secondary.ToolTip", "Storage for small items like flashlight on pelvis" },
-				{ "ToolTip", "MARK: ShooterCharacter Class" },
+				{ "Secondary.ToolTip", "For Secondary weapons on spine bone" },
+				{ "Side.Comment", "/* For Side weapons on Pelvis bone */" },
+				{ "Side.Name", "EInventorySlot::Side" },
+				{ "Side.ToolTip", "For Side weapons on Pelvis bone" },
+				{ "ToolTip", "MARK:ENUM for sockets" },
 			};
 #endif
 			static const UE4CodeGen_Private::FEnumParams EnumParams = {
@@ -94,13 +100,6 @@ void EmptyLinkFunctionForGeneratedCodeShooterCharacter() {}
 			UE4CodeGen_Private::ConstructUEnum(ReturnEnum, EnumParams);
 		}
 		return ReturnEnum;
-	}
-	DEFINE_FUNCTION(AShooterCharacter::execPlaySoundEffects)
-	{
-		P_FINISH;
-		P_NATIVE_BEGIN;
-		P_THIS->PlaySoundEffects();
-		P_NATIVE_END;
 	}
 	DEFINE_FUNCTION(AShooterCharacter::execMakeVFXInvisible)
 	{
@@ -217,6 +216,22 @@ void EmptyLinkFunctionForGeneratedCodeShooterCharacter() {}
 		*(AGun**)Z_Param__Result=P_THIS->GetCurrentWeapon();
 		P_NATIVE_END;
 	}
+	DEFINE_FUNCTION(AShooterCharacter::execHaveEnoughEnergyToUseAbility)
+	{
+		P_GET_STRUCT(FSkillsAttributes,Z_Param_AbilityAttributes);
+		P_FINISH;
+		P_NATIVE_BEGIN;
+		*(bool*)Z_Param__Result=P_THIS->HaveEnoughEnergyToUseAbility(Z_Param_AbilityAttributes);
+		P_NATIVE_END;
+	}
+	DEFINE_FUNCTION(AShooterCharacter::execUpdateEnergy)
+	{
+		P_GET_STRUCT(FSkillsAttributes,Z_Param_AbilityAttributes);
+		P_FINISH;
+		P_NATIVE_BEGIN;
+		P_THIS->UpdateEnergy(Z_Param_AbilityAttributes);
+		P_NATIVE_END;
+	}
 	static FName NAME_AShooterCharacter_Zoom = FName(TEXT("Zoom"));
 	void AShooterCharacter::Zoom(bool CanZoom)
 	{
@@ -238,13 +253,14 @@ void EmptyLinkFunctionForGeneratedCodeShooterCharacter() {}
 			{ "GetPawnMesh", &AShooterCharacter::execGetPawnMesh },
 			{ "GetScoreValue", &AShooterCharacter::execGetScoreValue },
 			{ "GetWeaponAttachPoint", &AShooterCharacter::execGetWeaponAttachPoint },
+			{ "HaveEnoughEnergyToUseAbility", &AShooterCharacter::execHaveEnoughEnergyToUseAbility },
 			{ "IsDead", &AShooterCharacter::execIsDead },
 			{ "MakeVFXInvisible", &AShooterCharacter::execMakeVFXInvisible },
 			{ "MakeVFXVisible", &AShooterCharacter::execMakeVFXVisible },
 			{ "ObjectTrace", &AShooterCharacter::execObjectTrace },
-			{ "PlaySoundEffects", &AShooterCharacter::execPlaySoundEffects },
 			{ "SwapToNewWeaponMesh", &AShooterCharacter::execSwapToNewWeaponMesh },
 			{ "UnBindDelegates", &AShooterCharacter::execUnBindDelegates },
+			{ "UpdateEnergy", &AShooterCharacter::execUpdateEnergy },
 		};
 		FNativeFunctionRegistrar::RegisterFunctions(Class, Funcs, UE_ARRAY_COUNT(Funcs));
 	}
@@ -582,6 +598,47 @@ void EmptyLinkFunctionForGeneratedCodeShooterCharacter() {}
 		}
 		return ReturnFunction;
 	}
+	struct Z_Construct_UFunction_AShooterCharacter_HaveEnoughEnergyToUseAbility_Statics
+	{
+		struct ShooterCharacter_eventHaveEnoughEnergyToUseAbility_Parms
+		{
+			FSkillsAttributes AbilityAttributes;
+			bool ReturnValue;
+		};
+		static void NewProp_ReturnValue_SetBit(void* Obj);
+		static const UE4CodeGen_Private::FBoolPropertyParams NewProp_ReturnValue;
+		static const UE4CodeGen_Private::FStructPropertyParams NewProp_AbilityAttributes;
+		static const UE4CodeGen_Private::FPropertyParamsBase* const PropPointers[];
+#if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam Function_MetaDataParams[];
+#endif
+		static const UE4CodeGen_Private::FFunctionParams FuncParams;
+	};
+	void Z_Construct_UFunction_AShooterCharacter_HaveEnoughEnergyToUseAbility_Statics::NewProp_ReturnValue_SetBit(void* Obj)
+	{
+		((ShooterCharacter_eventHaveEnoughEnergyToUseAbility_Parms*)Obj)->ReturnValue = 1;
+	}
+	const UE4CodeGen_Private::FBoolPropertyParams Z_Construct_UFunction_AShooterCharacter_HaveEnoughEnergyToUseAbility_Statics::NewProp_ReturnValue = { "ReturnValue", nullptr, (EPropertyFlags)0x0010000000000580, UE4CodeGen_Private::EPropertyGenFlags::Bool | UE4CodeGen_Private::EPropertyGenFlags::NativeBool, RF_Public|RF_Transient|RF_MarkAsNative, 1, sizeof(bool), sizeof(ShooterCharacter_eventHaveEnoughEnergyToUseAbility_Parms), &Z_Construct_UFunction_AShooterCharacter_HaveEnoughEnergyToUseAbility_Statics::NewProp_ReturnValue_SetBit, METADATA_PARAMS(nullptr, 0) };
+	const UE4CodeGen_Private::FStructPropertyParams Z_Construct_UFunction_AShooterCharacter_HaveEnoughEnergyToUseAbility_Statics::NewProp_AbilityAttributes = { "AbilityAttributes", nullptr, (EPropertyFlags)0x0010000000000080, UE4CodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(ShooterCharacter_eventHaveEnoughEnergyToUseAbility_Parms, AbilityAttributes), Z_Construct_UScriptStruct_FSkillsAttributes, METADATA_PARAMS(nullptr, 0) };
+	const UE4CodeGen_Private::FPropertyParamsBase* const Z_Construct_UFunction_AShooterCharacter_HaveEnoughEnergyToUseAbility_Statics::PropPointers[] = {
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_AShooterCharacter_HaveEnoughEnergyToUseAbility_Statics::NewProp_ReturnValue,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_AShooterCharacter_HaveEnoughEnergyToUseAbility_Statics::NewProp_AbilityAttributes,
+	};
+#if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_AShooterCharacter_HaveEnoughEnergyToUseAbility_Statics::Function_MetaDataParams[] = {
+		{ "ModuleRelativePath", "Public/ShooterCharacter.h" },
+	};
+#endif
+	const UE4CodeGen_Private::FFunctionParams Z_Construct_UFunction_AShooterCharacter_HaveEnoughEnergyToUseAbility_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_AShooterCharacter, nullptr, "HaveEnoughEnergyToUseAbility", nullptr, nullptr, sizeof(ShooterCharacter_eventHaveEnoughEnergyToUseAbility_Parms), Z_Construct_UFunction_AShooterCharacter_HaveEnoughEnergyToUseAbility_Statics::PropPointers, UE_ARRAY_COUNT(Z_Construct_UFunction_AShooterCharacter_HaveEnoughEnergyToUseAbility_Statics::PropPointers), RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x00020401, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_AShooterCharacter_HaveEnoughEnergyToUseAbility_Statics::Function_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UFunction_AShooterCharacter_HaveEnoughEnergyToUseAbility_Statics::Function_MetaDataParams)) };
+	UFunction* Z_Construct_UFunction_AShooterCharacter_HaveEnoughEnergyToUseAbility()
+	{
+		static UFunction* ReturnFunction = nullptr;
+		if (!ReturnFunction)
+		{
+			UE4CodeGen_Private::ConstructUFunction(ReturnFunction, Z_Construct_UFunction_AShooterCharacter_HaveEnoughEnergyToUseAbility_Statics::FuncParams);
+		}
+		return ReturnFunction;
+	}
 	struct Z_Construct_UFunction_AShooterCharacter_IsDead_Statics
 	{
 		struct ShooterCharacter_eventIsDead_Parms
@@ -710,28 +767,6 @@ void EmptyLinkFunctionForGeneratedCodeShooterCharacter() {}
 		}
 		return ReturnFunction;
 	}
-	struct Z_Construct_UFunction_AShooterCharacter_PlaySoundEffects_Statics
-	{
-#if WITH_METADATA
-		static const UE4CodeGen_Private::FMetaDataPairParam Function_MetaDataParams[];
-#endif
-		static const UE4CodeGen_Private::FFunctionParams FuncParams;
-	};
-#if WITH_METADATA
-	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_AShooterCharacter_PlaySoundEffects_Statics::Function_MetaDataParams[] = {
-		{ "ModuleRelativePath", "Public/ShooterCharacter.h" },
-	};
-#endif
-	const UE4CodeGen_Private::FFunctionParams Z_Construct_UFunction_AShooterCharacter_PlaySoundEffects_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_AShooterCharacter, nullptr, "PlaySoundEffects", nullptr, nullptr, 0, nullptr, 0, RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x00020401, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_AShooterCharacter_PlaySoundEffects_Statics::Function_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UFunction_AShooterCharacter_PlaySoundEffects_Statics::Function_MetaDataParams)) };
-	UFunction* Z_Construct_UFunction_AShooterCharacter_PlaySoundEffects()
-	{
-		static UFunction* ReturnFunction = nullptr;
-		if (!ReturnFunction)
-		{
-			UE4CodeGen_Private::ConstructUFunction(ReturnFunction, Z_Construct_UFunction_AShooterCharacter_PlaySoundEffects_Statics::FuncParams);
-		}
-		return ReturnFunction;
-	}
 	struct Z_Construct_UFunction_AShooterCharacter_SwapToNewWeaponMesh_Statics
 	{
 #if WITH_METADATA
@@ -774,6 +809,38 @@ void EmptyLinkFunctionForGeneratedCodeShooterCharacter() {}
 		if (!ReturnFunction)
 		{
 			UE4CodeGen_Private::ConstructUFunction(ReturnFunction, Z_Construct_UFunction_AShooterCharacter_UnBindDelegates_Statics::FuncParams);
+		}
+		return ReturnFunction;
+	}
+	struct Z_Construct_UFunction_AShooterCharacter_UpdateEnergy_Statics
+	{
+		struct ShooterCharacter_eventUpdateEnergy_Parms
+		{
+			FSkillsAttributes AbilityAttributes;
+		};
+		static const UE4CodeGen_Private::FStructPropertyParams NewProp_AbilityAttributes;
+		static const UE4CodeGen_Private::FPropertyParamsBase* const PropPointers[];
+#if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam Function_MetaDataParams[];
+#endif
+		static const UE4CodeGen_Private::FFunctionParams FuncParams;
+	};
+	const UE4CodeGen_Private::FStructPropertyParams Z_Construct_UFunction_AShooterCharacter_UpdateEnergy_Statics::NewProp_AbilityAttributes = { "AbilityAttributes", nullptr, (EPropertyFlags)0x0010000000000080, UE4CodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(ShooterCharacter_eventUpdateEnergy_Parms, AbilityAttributes), Z_Construct_UScriptStruct_FSkillsAttributes, METADATA_PARAMS(nullptr, 0) };
+	const UE4CodeGen_Private::FPropertyParamsBase* const Z_Construct_UFunction_AShooterCharacter_UpdateEnergy_Statics::PropPointers[] = {
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_AShooterCharacter_UpdateEnergy_Statics::NewProp_AbilityAttributes,
+	};
+#if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_AShooterCharacter_UpdateEnergy_Statics::Function_MetaDataParams[] = {
+		{ "ModuleRelativePath", "Public/ShooterCharacter.h" },
+	};
+#endif
+	const UE4CodeGen_Private::FFunctionParams Z_Construct_UFunction_AShooterCharacter_UpdateEnergy_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_AShooterCharacter, nullptr, "UpdateEnergy", nullptr, nullptr, sizeof(ShooterCharacter_eventUpdateEnergy_Parms), Z_Construct_UFunction_AShooterCharacter_UpdateEnergy_Statics::PropPointers, UE_ARRAY_COUNT(Z_Construct_UFunction_AShooterCharacter_UpdateEnergy_Statics::PropPointers), RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x00020401, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_AShooterCharacter_UpdateEnergy_Statics::Function_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UFunction_AShooterCharacter_UpdateEnergy_Statics::Function_MetaDataParams)) };
+	UFunction* Z_Construct_UFunction_AShooterCharacter_UpdateEnergy()
+	{
+		static UFunction* ReturnFunction = nullptr;
+		if (!ReturnFunction)
+		{
+			UE4CodeGen_Private::ConstructUFunction(ReturnFunction, Z_Construct_UFunction_AShooterCharacter_UpdateEnergy_Statics::FuncParams);
 		}
 		return ReturnFunction;
 	}
@@ -968,6 +1035,10 @@ void EmptyLinkFunctionForGeneratedCodeShooterCharacter() {}
 		static void NewProp_bHasElectroSpark_SetBit(void* Obj);
 		static const UE4CodeGen_Private::FBoolPropertyParams NewProp_bHasElectroSpark;
 #if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_FireballClass_MetaData[];
+#endif
+		static const UE4CodeGen_Private::FClassPropertyParams NewProp_FireballClass;
+#if WITH_METADATA
 		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_FireballAttributes_MetaData[];
 #endif
 		static const UE4CodeGen_Private::FStructPropertyParams NewProp_FireballAttributes;
@@ -975,6 +1046,29 @@ void EmptyLinkFunctionForGeneratedCodeShooterCharacter() {}
 		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_FireballData_MetaData[];
 #endif
 		static const UE4CodeGen_Private::FStructPropertyParams NewProp_FireballData;
+#if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_SpawnFireballDelay_MetaData[];
+#endif
+		static const UE4CodeGen_Private::FFloatPropertyParams NewProp_SpawnFireballDelay;
+#if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_FireballCooldown_MetaData[];
+#endif
+		static const UE4CodeGen_Private::FFloatPropertyParams NewProp_FireballCooldown;
+#if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_bIsFireballAiming_MetaData[];
+#endif
+		static void NewProp_bIsFireballAiming_SetBit(void* Obj);
+		static const UE4CodeGen_Private::FBoolPropertyParams NewProp_bIsFireballAiming;
+#if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_bFireballReady_MetaData[];
+#endif
+		static void NewProp_bFireballReady_SetBit(void* Obj);
+		static const UE4CodeGen_Private::FBoolPropertyParams NewProp_bFireballReady;
+#if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_bUsedFireball_MetaData[];
+#endif
+		static void NewProp_bUsedFireball_SetBit(void* Obj);
+		static const UE4CodeGen_Private::FBoolPropertyParams NewProp_bUsedFireball;
 #if WITH_METADATA
 		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_bHasFireball_MetaData[];
 #endif
@@ -1077,13 +1171,25 @@ void EmptyLinkFunctionForGeneratedCodeShooterCharacter() {}
 #endif
 		static const UE4CodeGen_Private::FFloatPropertyParams NewProp_Energy;
 #if WITH_METADATA
-		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_SpineAttachPoint_MetaData[];
+		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_MuzzleLocation_MetaData[];
 #endif
-		static const UE4CodeGen_Private::FNamePropertyParams NewProp_SpineAttachPoint;
+		static const UE4CodeGen_Private::FObjectPropertyParams NewProp_MuzzleLocation;
 #if WITH_METADATA
-		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_PelvisAttachPoint_MetaData[];
+		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_FireballSocket_MetaData[];
 #endif
-		static const UE4CodeGen_Private::FNamePropertyParams NewProp_PelvisAttachPoint;
+		static const UE4CodeGen_Private::FNamePropertyParams NewProp_FireballSocket;
+#if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_SideWeaponAttachPoint_MetaData[];
+#endif
+		static const UE4CodeGen_Private::FNamePropertyParams NewProp_SideWeaponAttachPoint;
+#if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_SecondaryWeaponAttachPoint_MetaData[];
+#endif
+		static const UE4CodeGen_Private::FNamePropertyParams NewProp_SecondaryWeaponAttachPoint;
+#if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_PrimaryWeaponAttachPoint_MetaData[];
+#endif
+		static const UE4CodeGen_Private::FNamePropertyParams NewProp_PrimaryWeaponAttachPoint;
 #if WITH_METADATA
 		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_WeaponAttachPoint_MetaData[];
 #endif
@@ -1116,20 +1222,23 @@ void EmptyLinkFunctionForGeneratedCodeShooterCharacter() {}
 		{ &Z_Construct_UFunction_AShooterCharacter_GetPawnMesh, "GetPawnMesh" }, // 1891782298
 		{ &Z_Construct_UFunction_AShooterCharacter_GetScoreValue, "GetScoreValue" }, // 3613444367
 		{ &Z_Construct_UFunction_AShooterCharacter_GetWeaponAttachPoint, "GetWeaponAttachPoint" }, // 1066273628
+		{ &Z_Construct_UFunction_AShooterCharacter_HaveEnoughEnergyToUseAbility, "HaveEnoughEnergyToUseAbility" }, // 2885352627
 		{ &Z_Construct_UFunction_AShooterCharacter_IsDead, "IsDead" }, // 2180583953
 		{ &Z_Construct_UFunction_AShooterCharacter_MakeVFXInvisible, "MakeVFXInvisible" }, // 995759127
 		{ &Z_Construct_UFunction_AShooterCharacter_MakeVFXVisible, "MakeVFXVisible" }, // 464836617
 		{ &Z_Construct_UFunction_AShooterCharacter_ObjectTrace, "ObjectTrace" }, // 2898214006
-		{ &Z_Construct_UFunction_AShooterCharacter_PlaySoundEffects, "PlaySoundEffects" }, // 4167234361
 		{ &Z_Construct_UFunction_AShooterCharacter_SwapToNewWeaponMesh, "SwapToNewWeaponMesh" }, // 4133600744
 		{ &Z_Construct_UFunction_AShooterCharacter_UnBindDelegates, "UnBindDelegates" }, // 17716327
+		{ &Z_Construct_UFunction_AShooterCharacter_UpdateEnergy, "UpdateEnergy" }, // 2886178637
 		{ &Z_Construct_UFunction_AShooterCharacter_Zoom, "Zoom" }, // 1593723912
 	};
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AShooterCharacter_Statics::Class_MetaDataParams[] = {
+		{ "Comment", "//MARK: ShooterCharacter Class\n" },
 		{ "HideCategories", "Navigation" },
 		{ "IncludePath", "ShooterCharacter.h" },
 		{ "ModuleRelativePath", "Public/ShooterCharacter.h" },
+		{ "ToolTip", "MARK: ShooterCharacter Class" },
 	};
 #endif
 #if WITH_METADATA
@@ -1376,7 +1485,9 @@ void EmptyLinkFunctionForGeneratedCodeShooterCharacter() {}
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bHasBloodlust_MetaData[] = {
 		{ "Category", "Bloodlust" },
+		{ "Comment", "//MARK: Bloodlust Variables\n" },
 		{ "ModuleRelativePath", "Public/ShooterCharacter.h" },
+		{ "ToolTip", "MARK: Bloodlust Variables" },
 	};
 #endif
 	void Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bHasBloodlust_SetBit(void* Obj)
@@ -1401,7 +1512,9 @@ void EmptyLinkFunctionForGeneratedCodeShooterCharacter() {}
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bHasElectroSpark_MetaData[] = {
 		{ "Category", "ElectroSpark" },
+		{ "Comment", "//MARK: ElectroSpark Variables\n" },
 		{ "ModuleRelativePath", "Public/ShooterCharacter.h" },
+		{ "ToolTip", "MARK: ElectroSpark Variables" },
 	};
 #endif
 	void Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bHasElectroSpark_SetBit(void* Obj)
@@ -1409,6 +1522,13 @@ void EmptyLinkFunctionForGeneratedCodeShooterCharacter() {}
 		((AShooterCharacter*)Obj)->bHasElectroSpark = 1;
 	}
 	const UE4CodeGen_Private::FBoolPropertyParams Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bHasElectroSpark = { "bHasElectroSpark", nullptr, (EPropertyFlags)0x0010000000000005, UE4CodeGen_Private::EPropertyGenFlags::Bool | UE4CodeGen_Private::EPropertyGenFlags::NativeBool, RF_Public|RF_Transient|RF_MarkAsNative, 1, sizeof(bool), sizeof(AShooterCharacter), &Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bHasElectroSpark_SetBit, METADATA_PARAMS(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bHasElectroSpark_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bHasElectroSpark_MetaData)) };
+#if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AShooterCharacter_Statics::NewProp_FireballClass_MetaData[] = {
+		{ "Category", "Fireball" },
+		{ "ModuleRelativePath", "Public/ShooterCharacter.h" },
+	};
+#endif
+	const UE4CodeGen_Private::FClassPropertyParams Z_Construct_UClass_AShooterCharacter_Statics::NewProp_FireballClass = { "FireballClass", nullptr, (EPropertyFlags)0x0014000000000005, UE4CodeGen_Private::EPropertyGenFlags::Class, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AShooterCharacter, FireballClass), Z_Construct_UClass_AWraithProjectile_NoRegister, Z_Construct_UClass_UClass, METADATA_PARAMS(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_FireballClass_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_FireballClass_MetaData)) };
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AShooterCharacter_Statics::NewProp_FireballAttributes_MetaData[] = {
 		{ "Category", "Fireball" },
@@ -1424,9 +1544,58 @@ void EmptyLinkFunctionForGeneratedCodeShooterCharacter() {}
 #endif
 	const UE4CodeGen_Private::FStructPropertyParams Z_Construct_UClass_AShooterCharacter_Statics::NewProp_FireballData = { "FireballData", nullptr, (EPropertyFlags)0x0010000000000005, UE4CodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AShooterCharacter, FireballData), Z_Construct_UScriptStruct_FSkillData, METADATA_PARAMS(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_FireballData_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_FireballData_MetaData)) };
 #if WITH_METADATA
-	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bHasFireball_MetaData[] = {
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AShooterCharacter_Statics::NewProp_SpawnFireballDelay_MetaData[] = {
 		{ "Category", "Fireball" },
 		{ "ModuleRelativePath", "Public/ShooterCharacter.h" },
+	};
+#endif
+	const UE4CodeGen_Private::FFloatPropertyParams Z_Construct_UClass_AShooterCharacter_Statics::NewProp_SpawnFireballDelay = { "SpawnFireballDelay", nullptr, (EPropertyFlags)0x0010000000000005, UE4CodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AShooterCharacter, SpawnFireballDelay), METADATA_PARAMS(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_SpawnFireballDelay_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_SpawnFireballDelay_MetaData)) };
+#if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AShooterCharacter_Statics::NewProp_FireballCooldown_MetaData[] = {
+		{ "Category", "Fireball" },
+		{ "ModuleRelativePath", "Public/ShooterCharacter.h" },
+	};
+#endif
+	const UE4CodeGen_Private::FFloatPropertyParams Z_Construct_UClass_AShooterCharacter_Statics::NewProp_FireballCooldown = { "FireballCooldown", nullptr, (EPropertyFlags)0x0010000000000005, UE4CodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AShooterCharacter, FireballCooldown), METADATA_PARAMS(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_FireballCooldown_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_FireballCooldown_MetaData)) };
+#if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bIsFireballAiming_MetaData[] = {
+		{ "Category", "Fireball" },
+		{ "ModuleRelativePath", "Public/ShooterCharacter.h" },
+	};
+#endif
+	void Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bIsFireballAiming_SetBit(void* Obj)
+	{
+		((AShooterCharacter*)Obj)->bIsFireballAiming = 1;
+	}
+	const UE4CodeGen_Private::FBoolPropertyParams Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bIsFireballAiming = { "bIsFireballAiming", nullptr, (EPropertyFlags)0x0010000000000005, UE4CodeGen_Private::EPropertyGenFlags::Bool | UE4CodeGen_Private::EPropertyGenFlags::NativeBool, RF_Public|RF_Transient|RF_MarkAsNative, 1, sizeof(bool), sizeof(AShooterCharacter), &Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bIsFireballAiming_SetBit, METADATA_PARAMS(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bIsFireballAiming_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bIsFireballAiming_MetaData)) };
+#if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bFireballReady_MetaData[] = {
+		{ "Category", "Fireball" },
+		{ "ModuleRelativePath", "Public/ShooterCharacter.h" },
+	};
+#endif
+	void Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bFireballReady_SetBit(void* Obj)
+	{
+		((AShooterCharacter*)Obj)->bFireballReady = 1;
+	}
+	const UE4CodeGen_Private::FBoolPropertyParams Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bFireballReady = { "bFireballReady", nullptr, (EPropertyFlags)0x0010000000000005, UE4CodeGen_Private::EPropertyGenFlags::Bool | UE4CodeGen_Private::EPropertyGenFlags::NativeBool, RF_Public|RF_Transient|RF_MarkAsNative, 1, sizeof(bool), sizeof(AShooterCharacter), &Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bFireballReady_SetBit, METADATA_PARAMS(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bFireballReady_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bFireballReady_MetaData)) };
+#if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bUsedFireball_MetaData[] = {
+		{ "Category", "Fireball" },
+		{ "ModuleRelativePath", "Public/ShooterCharacter.h" },
+	};
+#endif
+	void Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bUsedFireball_SetBit(void* Obj)
+	{
+		((AShooterCharacter*)Obj)->bUsedFireball = 1;
+	}
+	const UE4CodeGen_Private::FBoolPropertyParams Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bUsedFireball = { "bUsedFireball", nullptr, (EPropertyFlags)0x0010000000000005, UE4CodeGen_Private::EPropertyGenFlags::Bool | UE4CodeGen_Private::EPropertyGenFlags::NativeBool, RF_Public|RF_Transient|RF_MarkAsNative, 1, sizeof(bool), sizeof(AShooterCharacter), &Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bUsedFireball_SetBit, METADATA_PARAMS(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bUsedFireball_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bUsedFireball_MetaData)) };
+#if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bHasFireball_MetaData[] = {
+		{ "Category", "Fireball" },
+		{ "Comment", "//MARK: Fireball Variables\n" },
+		{ "ModuleRelativePath", "Public/ShooterCharacter.h" },
+		{ "ToolTip", "MARK: Fireball Variables" },
 	};
 #endif
 	void Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bHasFireball_SetBit(void* Obj)
@@ -1501,7 +1670,9 @@ void EmptyLinkFunctionForGeneratedCodeShooterCharacter() {}
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bHasBackDash_MetaData[] = {
 		{ "Category", "BackDash" },
+		{ "Comment", "//MARK: BackDash Variables\n" },
 		{ "ModuleRelativePath", "Public/ShooterCharacter.h" },
+		{ "ToolTip", "MARK: BackDash Variables" },
 	};
 #endif
 	void Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bHasBackDash_SetBit(void* Obj)
@@ -1608,6 +1779,7 @@ void EmptyLinkFunctionForGeneratedCodeShooterCharacter() {}
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AShooterCharacter_Statics::NewProp_Health_MetaData[] = {
 		{ "Category", "ShooterCharacter" },
+		{ "ClampMin", "0.000000" },
 		{ "ModuleRelativePath", "Public/ShooterCharacter.h" },
 	};
 #endif
@@ -1622,28 +1794,51 @@ void EmptyLinkFunctionForGeneratedCodeShooterCharacter() {}
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AShooterCharacter_Statics::NewProp_Energy_MetaData[] = {
 		{ "Category", "ShooterCharacter" },
+		{ "ClampMin", "0.000000" },
 		{ "ModuleRelativePath", "Public/ShooterCharacter.h" },
 	};
 #endif
 	const UE4CodeGen_Private::FFloatPropertyParams Z_Construct_UClass_AShooterCharacter_Statics::NewProp_Energy = { "Energy", nullptr, (EPropertyFlags)0x0010000000000005, UE4CodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AShooterCharacter, Energy), METADATA_PARAMS(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_Energy_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_Energy_MetaData)) };
 #if WITH_METADATA
-	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AShooterCharacter_Statics::NewProp_SpineAttachPoint_MetaData[] = {
-		{ "Category", "Sockets" },
-		{ "Comment", "/* Attachpoint for primary weapons */" },
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AShooterCharacter_Statics::NewProp_MuzzleLocation_MetaData[] = {
+		{ "Category", "Mesh" },
+		{ "EditInline", "true" },
 		{ "ModuleRelativePath", "Public/ShooterCharacter.h" },
-		{ "ToolTip", "Attachpoint for primary weapons" },
 	};
 #endif
-	const UE4CodeGen_Private::FNamePropertyParams Z_Construct_UClass_AShooterCharacter_Statics::NewProp_SpineAttachPoint = { "SpineAttachPoint", nullptr, (EPropertyFlags)0x0010000000010001, UE4CodeGen_Private::EPropertyGenFlags::Name, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AShooterCharacter, SpineAttachPoint), METADATA_PARAMS(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_SpineAttachPoint_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_SpineAttachPoint_MetaData)) };
+	const UE4CodeGen_Private::FObjectPropertyParams Z_Construct_UClass_AShooterCharacter_Statics::NewProp_MuzzleLocation = { "MuzzleLocation", nullptr, (EPropertyFlags)0x001000000008000d, UE4CodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AShooterCharacter, MuzzleLocation), Z_Construct_UClass_USceneComponent_NoRegister, METADATA_PARAMS(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_MuzzleLocation_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_MuzzleLocation_MetaData)) };
 #if WITH_METADATA
-	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AShooterCharacter_Statics::NewProp_PelvisAttachPoint_MetaData[] = {
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AShooterCharacter_Statics::NewProp_FireballSocket_MetaData[] = {
+		{ "Category", "Sockets" },
+		{ "ModuleRelativePath", "Public/ShooterCharacter.h" },
+	};
+#endif
+	const UE4CodeGen_Private::FNamePropertyParams Z_Construct_UClass_AShooterCharacter_Statics::NewProp_FireballSocket = { "FireballSocket", nullptr, (EPropertyFlags)0x0010000000010001, UE4CodeGen_Private::EPropertyGenFlags::Name, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AShooterCharacter, FireballSocket), METADATA_PARAMS(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_FireballSocket_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_FireballSocket_MetaData)) };
+#if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AShooterCharacter_Statics::NewProp_SideWeaponAttachPoint_MetaData[] = {
+		{ "Category", "Sockets" },
+		{ "ModuleRelativePath", "Public/ShooterCharacter.h" },
+	};
+#endif
+	const UE4CodeGen_Private::FNamePropertyParams Z_Construct_UClass_AShooterCharacter_Statics::NewProp_SideWeaponAttachPoint = { "SideWeaponAttachPoint", nullptr, (EPropertyFlags)0x0010000000010001, UE4CodeGen_Private::EPropertyGenFlags::Name, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AShooterCharacter, SideWeaponAttachPoint), METADATA_PARAMS(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_SideWeaponAttachPoint_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_SideWeaponAttachPoint_MetaData)) };
+#if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AShooterCharacter_Statics::NewProp_SecondaryWeaponAttachPoint_MetaData[] = {
 		{ "Category", "Sockets" },
 		{ "Comment", "/* Attachpoint for items carried on the belt/pelvis. */" },
 		{ "ModuleRelativePath", "Public/ShooterCharacter.h" },
 		{ "ToolTip", "Attachpoint for items carried on the belt/pelvis." },
 	};
 #endif
-	const UE4CodeGen_Private::FNamePropertyParams Z_Construct_UClass_AShooterCharacter_Statics::NewProp_PelvisAttachPoint = { "PelvisAttachPoint", nullptr, (EPropertyFlags)0x0010000000010001, UE4CodeGen_Private::EPropertyGenFlags::Name, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AShooterCharacter, PelvisAttachPoint), METADATA_PARAMS(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_PelvisAttachPoint_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_PelvisAttachPoint_MetaData)) };
+	const UE4CodeGen_Private::FNamePropertyParams Z_Construct_UClass_AShooterCharacter_Statics::NewProp_SecondaryWeaponAttachPoint = { "SecondaryWeaponAttachPoint", nullptr, (EPropertyFlags)0x0010000000010001, UE4CodeGen_Private::EPropertyGenFlags::Name, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AShooterCharacter, SecondaryWeaponAttachPoint), METADATA_PARAMS(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_SecondaryWeaponAttachPoint_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_SecondaryWeaponAttachPoint_MetaData)) };
+#if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AShooterCharacter_Statics::NewProp_PrimaryWeaponAttachPoint_MetaData[] = {
+		{ "Category", "Sockets" },
+		{ "Comment", "/* Attachpoint for primary weapons */" },
+		{ "ModuleRelativePath", "Public/ShooterCharacter.h" },
+		{ "ToolTip", "Attachpoint for primary weapons" },
+	};
+#endif
+	const UE4CodeGen_Private::FNamePropertyParams Z_Construct_UClass_AShooterCharacter_Statics::NewProp_PrimaryWeaponAttachPoint = { "PrimaryWeaponAttachPoint", nullptr, (EPropertyFlags)0x0010000000010001, UE4CodeGen_Private::EPropertyGenFlags::Name, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AShooterCharacter, PrimaryWeaponAttachPoint), METADATA_PARAMS(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_PrimaryWeaponAttachPoint_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AShooterCharacter_Statics::NewProp_PrimaryWeaponAttachPoint_MetaData)) };
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AShooterCharacter_Statics::NewProp_WeaponAttachPoint_MetaData[] = {
 		{ "Category", "Sockets" },
@@ -1708,8 +1903,14 @@ void EmptyLinkFunctionForGeneratedCodeShooterCharacter() {}
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterCharacter_Statics::NewProp_ElectroSparkAttributes,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterCharacter_Statics::NewProp_ElectroSparkData,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bHasElectroSpark,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterCharacter_Statics::NewProp_FireballClass,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterCharacter_Statics::NewProp_FireballAttributes,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterCharacter_Statics::NewProp_FireballData,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterCharacter_Statics::NewProp_SpawnFireballDelay,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterCharacter_Statics::NewProp_FireballCooldown,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bIsFireballAiming,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bFireballReady,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bUsedFireball,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterCharacter_Statics::NewProp_bHasFireball,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterCharacter_Statics::NewProp_BackDashData,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterCharacter_Statics::NewProp_BackDashCooldown,
@@ -1733,8 +1934,11 @@ void EmptyLinkFunctionForGeneratedCodeShooterCharacter() {}
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterCharacter_Statics::NewProp_Health,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterCharacter_Statics::NewProp_MaxHealth,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterCharacter_Statics::NewProp_Energy,
-		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterCharacter_Statics::NewProp_SpineAttachPoint,
-		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterCharacter_Statics::NewProp_PelvisAttachPoint,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterCharacter_Statics::NewProp_MuzzleLocation,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterCharacter_Statics::NewProp_FireballSocket,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterCharacter_Statics::NewProp_SideWeaponAttachPoint,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterCharacter_Statics::NewProp_SecondaryWeaponAttachPoint,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterCharacter_Statics::NewProp_PrimaryWeaponAttachPoint,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterCharacter_Statics::NewProp_WeaponAttachPoint,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterCharacter_Statics::NewProp_BaseYawValue,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterCharacter_Statics::NewProp_BasePitchValue,
@@ -1769,7 +1973,7 @@ void EmptyLinkFunctionForGeneratedCodeShooterCharacter() {}
 		}
 		return OuterClass;
 	}
-	IMPLEMENT_CLASS(AShooterCharacter, 3498655411);
+	IMPLEMENT_CLASS(AShooterCharacter, 441811698);
 	template<> WRAITHSHOOTER_API UClass* StaticClass<AShooterCharacter>()
 	{
 		return AShooterCharacter::StaticClass();

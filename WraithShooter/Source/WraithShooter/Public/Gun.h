@@ -93,8 +93,6 @@ protected:
     // Derived from RateOfFire
     float TimeBetweenShots;
     
-    bool GunTrace(FHitResult& Hit, FVector& ShotDirection);
-    
     void CalculateAmmo();
     
     void PlayFireEffects(FVector TraceEnd);
@@ -123,6 +121,8 @@ protected:
 public:	
     // Sets default values for this actor's properties
     AGun();
+    
+    bool GunTrace(FHitResult& Hit, FVector& ShotDirection);
     
     void PullTrigger();
     
@@ -244,10 +244,7 @@ public:
     
     void OnEnterInventory(AShooterCharacter* NewOwner);
     
-    FORCEINLINE EInventorySlot GetStorageSlot()
-    {
-        return StorageSlot;
-    }
+    EInventorySlot GetStorageSlot();
     
     /* The character socket to store this item at. */
     UPROPERTY(EditDefaultsOnly, Category = "Weapon")

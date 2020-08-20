@@ -2651,6 +2651,8 @@
   /Users/Shekhar/Documents/Unreal\ Projects/WraithShooter/WraithShooter/Source/WraithShooter/Public/ShooterCharacter.h \
   /Users/Shekhar/Documents/Unreal\ Projects/WraithShooter/WraithShooter/Source/WraithShooter/Public/WraithUIInterface.h \
   /Users/Shekhar/Documents/Unreal\ Projects/WraithShooter/WraithShooter/Intermediate/Build/Mac/UE4Editor/Inc/WraithShooter/WraithUIInterface.generated.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Engine/Classes/Components/TimelineComponent.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Intermediate/Build/Mac/UE4Editor/Inc/Engine/TimelineComponent.generated.h \
   /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Engine/Classes/GameFramework/Character.h \
   /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Engine/Classes/GameFramework/RootMotionSource.h \
   /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Intermediate/Build/Mac/UE4Editor/Inc/Engine/RootMotionSource.generated.h \
@@ -2714,4 +2716,67 @@
   /Users/Shekhar/Documents/Unreal\ Projects/WraithShooter/WraithShooter/Intermediate/Build/Mac/UE4Editor/Inc/WraithShooter/ShooterPlayerState.generated.h \
   /Users/Shekhar/Documents/Unreal\ Projects/WraithShooter/WraithShooter/Source/WraithShooter/Public/MagicPill.h \
   /Users/Shekhar/Documents/Unreal\ Projects/WraithShooter/WraithShooter/Intermediate/Build/Mac/UE4Editor/Inc/WraithShooter/MagicPill.generated.h \
-  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Engine/Public/DrawDebugHelpers.h
+  /Users/Shekhar/Documents/Unreal\ Projects/WraithShooter/WraithShooter/Source/WraithShooter/Public/WraithProjectile.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Core/Public/Core.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Core/Public/Misc/MonolithicHeaderBoilerplate.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Core/Public/GenericPlatform/GenericPlatformNamedPipe.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Core/Public/HAL/PlatformNamedPipe.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Core/Public/GenericPlatform/GenericPlatformCriticalSection.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Core/Public/HAL/PlatformFile.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Core/Public/Mac/MacPlatformFile.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Core/Public/Apple/ApplePlatformFile.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Core/Public/HAL/PlatformIncludes.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Core/Public/Misc/MessageDialog.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Core/Public/ProfilingDebugging/ScopedDebugInfo.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Core/Public/ProfilingDebugging/ExternalProfiler.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Core/Public/Misc/StringUtility.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Core/Public/Serialization/NameAsStringProxyArchive.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Core/Public/Containers/MRUArray.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Core/Public/Containers/TransArray.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Core/Public/Containers/ArrayBuilder.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Core/Public/Misc/SingleThreadEvent.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Core/Public/HAL/ThreadManager.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Core/Public/Containers/StaticBitArray.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Core/Public/Containers/MapBuilder.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Core/Public/HAL/ThreadingBase.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Core/Public/Internationalization/TextLocalizationManagerGlobals.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Core/Public/Internationalization/Culture.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Core/Public/Logging/LogSuppressionInterface.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Core/Public/HAL/OutputDevices.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Core/Public/Logging/LogScopedVerbosityOverride.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Core/Public/Misc/OutputDeviceNull.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Core/Public/Misc/OutputDeviceMemory.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Core/Public/Misc/OutputDeviceFile.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Core/Public/Misc/OutputDeviceDebug.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Core/Public/Misc/OutputDeviceArchiveWrapper.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Core/Public/Misc/OutputDeviceAnsiError.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Core/Public/Misc/TimeGuard.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Core/Public/Serialization/LargeMemoryWriter.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Core/Public/Serialization/LargeMemoryData.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Core/Public/Serialization/LargeMemoryReader.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Core/Public/Serialization/BufferArchive.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Core/Public/Serialization/ArrayReader.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Core/Public/Serialization/ArrayWriter.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Core/Public/Serialization/BufferWriter.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Core/Public/Misc/WildcardString.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Core/Public/Containers/CircularQueue.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Core/Public/Misc/OutputDeviceHelper.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Core/Public/Misc/ScopedSlowTask.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Core/Public/Misc/CallbackDevice.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Core/Public/Misc/LocalTimestampDirectoryVisitor.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Core/Public/UObject/BlueprintsObjectVersion.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Core/Public/UObject/BuildObjectVersion.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Core/Public/UObject/CoreObjectVersion.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Core/Public/UObject/EditorObjectVersion.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Core/Public/UObject/FrameworkObjectVersion.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Core/Public/UObject/MobileObjectVersion.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Core/Public/UObject/NetworkingObjectVersion.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Core/Public/UObject/OnlineObjectVersion.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Core/Public/UObject/PlatformObjectVersion.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Core/Public/UObject/SequencerObjectVersion.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Core/Public/UObject/VRObjectVersion.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Core/Public/Misc/OutputDeviceConsole.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Core/Public/Misc/MonitoredProcess.h \
+  /Users/Shekhar/Documents/Unreal\ Projects/WraithShooter/WraithShooter/Intermediate/Build/Mac/UE4Editor/Inc/WraithShooter/WraithProjectile.generated.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Engine/Public/DrawDebugHelpers.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Engine/Public/EngineUtils.h

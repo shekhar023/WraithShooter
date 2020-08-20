@@ -245,6 +245,10 @@ static struct FScriptStruct_WraithShooter_StaticRegisterNativesFSkillsAttributes
 #endif
 		static const UE4CodeGen_Private::FClassPropertyParams NewProp_DamageType;
 #if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_DamageRadius_MetaData[];
+#endif
+		static const UE4CodeGen_Private::FFloatPropertyParams NewProp_DamageRadius;
+#if WITH_METADATA
 		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_Damage_MetaData[];
 #endif
 		static const UE4CodeGen_Private::FFloatPropertyParams NewProp_Damage;
@@ -284,6 +288,13 @@ static struct FScriptStruct_WraithShooter_StaticRegisterNativesFSkillsAttributes
 #endif
 	const UE4CodeGen_Private::FClassPropertyParams Z_Construct_UScriptStruct_FSkillsAttributes_Statics::NewProp_DamageType = { "DamageType", nullptr, (EPropertyFlags)0x0014000000000005, UE4CodeGen_Private::EPropertyGenFlags::Class, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(FSkillsAttributes, DamageType), Z_Construct_UClass_UDamageType_NoRegister, Z_Construct_UClass_UClass, METADATA_PARAMS(Z_Construct_UScriptStruct_FSkillsAttributes_Statics::NewProp_DamageType_MetaData, UE_ARRAY_COUNT(Z_Construct_UScriptStruct_FSkillsAttributes_Statics::NewProp_DamageType_MetaData)) };
 #if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UScriptStruct_FSkillsAttributes_Statics::NewProp_DamageRadius_MetaData[] = {
+		{ "Category", "SkillsAttributes" },
+		{ "ModuleRelativePath", "Public/SkillStructures.h" },
+	};
+#endif
+	const UE4CodeGen_Private::FFloatPropertyParams Z_Construct_UScriptStruct_FSkillsAttributes_Statics::NewProp_DamageRadius = { "DamageRadius", nullptr, (EPropertyFlags)0x0010000000000005, UE4CodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(FSkillsAttributes, DamageRadius), METADATA_PARAMS(Z_Construct_UScriptStruct_FSkillsAttributes_Statics::NewProp_DamageRadius_MetaData, UE_ARRAY_COUNT(Z_Construct_UScriptStruct_FSkillsAttributes_Statics::NewProp_DamageRadius_MetaData)) };
+#if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UScriptStruct_FSkillsAttributes_Statics::NewProp_Damage_MetaData[] = {
 		{ "Category", "SkillsAttributes" },
 		{ "ModuleRelativePath", "Public/SkillStructures.h" },
@@ -313,6 +324,7 @@ static struct FScriptStruct_WraithShooter_StaticRegisterNativesFSkillsAttributes
 	const UE4CodeGen_Private::FTextPropertyParams Z_Construct_UScriptStruct_FSkillsAttributes_Statics::NewProp_Name = { "Name", nullptr, (EPropertyFlags)0x0010000000000005, UE4CodeGen_Private::EPropertyGenFlags::Text, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(FSkillsAttributes, Name), METADATA_PARAMS(Z_Construct_UScriptStruct_FSkillsAttributes_Statics::NewProp_Name_MetaData, UE_ARRAY_COUNT(Z_Construct_UScriptStruct_FSkillsAttributes_Statics::NewProp_Name_MetaData)) };
 	const UE4CodeGen_Private::FPropertyParamsBase* const Z_Construct_UScriptStruct_FSkillsAttributes_Statics::PropPointers[] = {
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UScriptStruct_FSkillsAttributes_Statics::NewProp_DamageType,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UScriptStruct_FSkillsAttributes_Statics::NewProp_DamageRadius,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UScriptStruct_FSkillsAttributes_Statics::NewProp_Damage,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UScriptStruct_FSkillsAttributes_Statics::NewProp_EnergyCost,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UScriptStruct_FSkillsAttributes_Statics::NewProp_IconSlate,
@@ -346,7 +358,7 @@ static struct FScriptStruct_WraithShooter_StaticRegisterNativesFSkillsAttributes
 		}
 		return ReturnStruct;
 	}
-	uint32 Get_Z_Construct_UScriptStruct_FSkillsAttributes_Hash() { return 2588797698U; }
+	uint32 Get_Z_Construct_UScriptStruct_FSkillsAttributes_Hash() { return 3137214818U; }
 class UScriptStruct* FSkillData::StaticStruct()
 {
 	static class UScriptStruct* Singleton = NULL;

@@ -18,7 +18,10 @@
 #include "ShooterPlayerController.h"
 #include "ShooterPlayerState.h"
 #include "MagicPill.h"
+#include "WraithProjectile.h"
+#include "Components/TimelineComponent.h"
 #include "DrawDebugHelpers.h"
+#include "EngineUtils.h"
 
 
 static int32 DebugWeaponDrawing = 0;
@@ -44,17 +47,28 @@ AShooterCharacter::AShooterCharacter()
     bCanInteract = false;
     bIsBackDashing = false;
     bHasBackDash = false;
-    
     bIsBackDashReady = true;
     
     
+    bHasFireball = false;
+    bUsedFireball = false;
+    bFireballReady = true;
+    bIsFireballAiming = false;
+    FireballCooldown = 1.13f;
+    SpawnFireballDelay = 1.0f;
+    
     WeaponAttachPoint = TEXT("AttachWeapon");
-    SpineAttachPoint = TEXT("WeaponHostler");
-    PelvisAttachPoint = TEXT("PelvisSocket");
+    SecondaryWeaponAttachPoint = TEXT("SecondaryWeaponAttachPoint");
+    PrimaryWeaponAttachPoint = TEXT("PrimaryWeaponAttachPoint");
+    SideWeaponAttachPoint = TEXT("SideWeaponWeaponAttachPoint");
+    FireballSocket = TEXT("FireballAttachPoint");
     
     //Sets up particle system of the character.
     VisualFX = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("VFX"));
     VisualFX->SetupAttachment(RootComponent);
+    
+    MuzzleLocation = CreateDefaultSubobject<USceneComponent>(TEXT("MuzzleLocation"));
+    MuzzleLocation->SetupAttachment(GetMesh());
     
     HealthText = CreateDefaultSubobject<UTextRenderComponent>(TEXT("HealthText"));
     HealthText->SetupAttachment(RootComponent);
@@ -121,6 +135,8 @@ void AShooterCharacter::BeginPlay()
     
     // Call BindDelegates
     BindDelegates();
+    
+    ShootFireball.AddUObject(this, &AShooterCharacter::UseFireball);
 
 }
 
@@ -219,7 +235,7 @@ void AShooterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
     
     PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &AShooterCharacter::CanJump);
     PlayerInputComponent->BindAction("Crouch", IE_Pressed, this, &AShooterCharacter::StartCrouch);
-    PlayerInputComponent->BindAction("BackDash", IE_Pressed, this, &AShooterCharacter::BackDash);
+    //PlayerInputComponent->BindAction("BackDash", IE_Pressed, this, &AShooterCharacter::StartBackDash);
     
     PlayerInputComponent->BindAction("Shoot", IE_Pressed, this, &AShooterCharacter::StartShoot);
     PlayerInputComponent->BindAction("Shoot", IE_Released, this, &AShooterCharacter::StopShoot);
@@ -229,12 +245,17 @@ void AShooterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
     
     PlayerInputComponent->BindAction("Reload", IE_Pressed, this, &AShooterCharacter::Reload);
     
-    PlayerInputComponent->BindAction("SwitchWeapon", IE_Pressed, this, &AShooterCharacter::SwitchWeapon);
+    PlayerInputComponent->BindAction("SwitchToNextWeapon", IE_Pressed, this, &AShooterCharacter::NextWeapon);
+    PlayerInputComponent->BindAction("SwitchToPreviousWeapon", IE_Pressed, this, &AShooterCharacter::PreviousWeapon);
     
     PlayerInputComponent->BindAction("EquipPrimaryWeapon", IE_Pressed, this, &AShooterCharacter::OnEquipPrimaryWeapon);
     PlayerInputComponent->BindAction("EquipSecondaryWeapon", IE_Pressed, this, &AShooterCharacter::OnEquipSecondaryWeapon);
+    PlayerInputComponent->BindAction("EquipSideWeapon", IE_Pressed, this, &AShooterCharacter::OnEquipSecondaryWeapon);
     
     PlayerInputComponent->BindAction("PickingUp", IE_Pressed, this, &AShooterCharacter::PickObjects);
+    
+    PlayerInputComponent->BindAction("OffensiveAbility", IE_Pressed, this, &AShooterCharacter::AimFirball);
+    PlayerInputComponent->BindAction("OffensiveAbility", IE_Released, this, &AShooterCharacter::CastOffensiveAblity);
     
 }
 
@@ -308,11 +329,44 @@ void AShooterCharacter::Landed(const FHitResult& Hit)
     JumpCount = 0;
 }
 
-void AShooterCharacter::BackDash()
+/*void AShooterCharacter::StartBackDash()
 {
-   
+    if(bHasBackDash == false && bIsBackDashReady == false && GetCharacterMovement()->IsFalling() == true){return;}
+    
+    bIsBackDashReady = false;
+    
+    GetWorldTimerManager().SetTimer(BackDash_TimerHandle, this, &AShooterCharacter::BackDash, BackDashCooldown, false);
 }
 
+void AShooterCharacter::BackDash()
+{
+    bIsBackDashReady = true;
+    
+    bIsBackDashing = true;
+    
+
+   
+    if(GetActorRotation().Yaw >= 0)
+    {
+       UE_LOG(LogTemp, Warning, TEXT("World Roation: %f" ), GetActorRotation().Yaw);
+        if(CurveFloat)
+        {
+            FOnTimelineFloat TimelineProgress;
+            TimelineProgress.BindUFunction(this, FName("BackDashTimelineTrack"));
+            BackDashTimeline.AddInterpFloat(CurveFloat, TimelineProgress);
+            BackDashTimeline.SetLooping(false);
+            BackDashTimeline.PlayFromStart();
+        }
+    }
+}
+void AShooterCharacter::BackDashTimelineTrack(f)
+{
+    auto NewEndLocation =  GetActorLocation() + BackDashLeftAmount;
+    auto NewLocation = FMath::Lerp(GetActorLocation(), NewEndLocation, BackDashTimeline.GetTimelineLength());
+    GetCapsuleComponent()->SetRelativeLocation(NewLocation);
+    UE_LOG(LogTemp, Warning, TEXT("BackDashTimeline Time: %f" ), BackDashTimeline.GetTimelineLength());
+    
+}*/
 void AShooterCharacter::LookUpRate(float AxisValue)
 {
     AddControllerPitchInput(AxisValue * BasePitchValue * GetWorld()->GetDeltaSeconds());
@@ -377,8 +431,71 @@ void AShooterCharacter::Reload()
     Gun->StartReload();
 }
 
+//MARK: Use OffensiveAblity
+void AShooterCharacter::CastOffensiveAblity()
+{
+    switch (OffensiveAbilitySlotted)
+       {
+           case EOffensiveAbility::Fireball:
+               ShootFireball.Broadcast();
+               break;
+           case EOffensiveAbility::ElectroSpark:
+               break;
+           default:
+               // Not implemented.
+               break;
+       }
+}
+
+void AShooterCharacter::AimFirball()
+{
+    bIsFireballAiming = true;
+}
+
+void AShooterCharacter::UseFireball()
+{
+    if(HaveEnoughEnergyToUseAbility(FireballAttributes) == false || bFireballReady == false || bUsedFireball == false || bIsUsingMist == true){return;}
+    
+    if(bIsFireballAiming == true)
+    {
+        UpdateEnergy(FireballAttributes);
+        bUsedFireball = true;
+        bFireballReady = false;
+        bIsFireballAiming = false;
+        
+        GetWorldTimerManager().SetTimer(Fireball_TimerHandle, this, &AShooterCharacter::SpawnFireball, SpawnFireballDelay, false);
+        GetWorldTimerManager().SetTimer(FireballCooldown_TimerHandle, this, &AShooterCharacter::CanUseFireball, FireballCooldown, false);
+    }
+}
+
+void AShooterCharacter::SpawnFireball()
+{
+    if(FireballClass)
+    {
+        UWorld* const World = GetWorld();
+        
+        auto GunOffset = FVector(100.0f, 0.0f, 10.0f);
+        const FRotator SpawnRotation = GetControlRotation();
+        const FVector SpawnLocation = ((MuzzleLocation != nullptr) ? MuzzleLocation->GetComponentLocation() : GetActorLocation()) + SpawnRotation.RotateVector(GunOffset);
+        FActorSpawnParameters SpawnInfo;
+        SpawnInfo.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
+        
+        World->SpawnActor<AWraithProjectile>(FireballClass,SpawnLocation, SpawnRotation, SpawnInfo);
+    }
+    
+    
+}
+void AShooterCharacter::CanUseFireball()
+{
+    bUsedFireball = false;
+    bFireballReady = true;
+
+    GetWorldTimerManager().ClearTimer(Fireball_TimerHandle);
+    GetWorldTimerManager().ClearTimer(FireballCooldown_TimerHandle);
+}
+
 //MARK:SwitchWeapon
-void AShooterCharacter::SwitchWeapon()
+void AShooterCharacter::NextWeapon()
 {
     AShooterPlayerController* MyPC = Cast<AShooterPlayerController>(Controller);
     if (MyPC)
@@ -388,6 +505,20 @@ void AShooterCharacter::SwitchWeapon()
             const int32 CurrentWeaponIndex = Inventory.IndexOfByKey(Gun);
             AGun* NextWeapon = Inventory[(CurrentWeaponIndex + 1) % Inventory.Num()];
             EquipWeapon(NextWeapon);
+        }
+    }
+}
+
+void AShooterCharacter::PreviousWeapon()
+{
+    AShooterPlayerController* MyPC = Cast<AShooterPlayerController>(Controller);
+    if (MyPC)
+    {
+        if(Inventory.Num() >= 2)
+        {
+            const int32 CurrentWeaponIndex = Inventory.IndexOfByKey(Gun);
+            AGun* PreviousWeapon = Inventory[(CurrentWeaponIndex - 1 + Inventory.Num()) % Inventory.Num()];
+            EquipWeapon(PreviousWeapon);
         }
     }
 }
@@ -419,6 +550,23 @@ void AShooterCharacter::OnEquipSecondaryWeapon()
         {
             AGun* Weapon = Inventory[i];
             if (Weapon->GetStorageSlot() == EInventorySlot::Secondary)
+            {
+                EquipWeapon(Weapon);
+            }
+        }
+    }
+}
+
+void AShooterCharacter::OnEquipSideWeapon()
+{
+
+    if (Inventory.Num() >= 3)
+    {
+        /* Find first weapon that uses secondary slot. */
+        for (int32 i = 0; i < Inventory.Num(); i++)
+        {
+            AGun* Weapon = Inventory[i];
+            if (Weapon->GetStorageSlot() == EInventorySlot::Side)
             {
                 EquipWeapon(Weapon);
             }
@@ -496,26 +644,24 @@ FString AShooterCharacter::GetTestName()
     return MyName;
 }
 
-
-
 FName AShooterCharacter::GetInventoryAttachPoint(EInventorySlot Slot) const
 {
     /* Return the socket name for the specified storage slot */
     switch (Slot)
     {
-    case EInventorySlot::Hands:
-        return WeaponAttachPoint;
-    case EInventorySlot::Primary:
-        return SpineAttachPoint;
-    case EInventorySlot::Secondary:
-        return PelvisAttachPoint;
-    default:
-        // Not implemented.
-        return "";
+        case EInventorySlot::Hands:
+            return WeaponAttachPoint;
+        case EInventorySlot::Primary:
+            return PrimaryWeaponAttachPoint;
+        case EInventorySlot::Secondary:
+            return SecondaryWeaponAttachPoint;
+        case EInventorySlot::Side:
+            return SideWeaponAttachPoint;
+        default:
+            // Not implemented.
+            return "";
     }
 }
-
-
 
 //GetWeaponAttachPoint
 FName AShooterCharacter::GetWeaponAttachPoint() const
@@ -526,14 +672,14 @@ FName AShooterCharacter::GetWeaponAttachPoint() const
 //Get WeaponHostlerPoint
 FName AShooterCharacter::GetGunHostlerPoint() const
 {
-    return SpineAttachPoint;
+    return PrimaryWeaponAttachPoint;
 }
-
 
 AGun* AShooterCharacter::GetCurrentWeapon() const
 {
     return Gun;
 }
+
 //GetPawnMesh
 USkeletalMeshComponent* AShooterCharacter::GetPawnMesh() const
 {
@@ -578,8 +724,6 @@ bool AShooterCharacter::ObjectTrace(FHitResult& Hit, FVector& ShotDirection)
     FRotator Rotation;
     
     OwnerController->GetPlayerViewPoint(Location, Rotation);
-    
-    ShotDirection = -Rotation.Vector();
 
     FVector EndPoint = Location + Rotation.Vector() * InteractTraceLength;
     
@@ -621,6 +765,22 @@ float AShooterCharacter::TakeDamage(float DamageAmount, struct FDamageEvent cons
     return DamageToApply;
 }
 
+void AShooterCharacter::UpdateEnergy(FSkillsAttributes AbilityAttributes)
+{
+    if(Energy <= AbilityAttributes.EnergyCost)
+        return;
+    
+    Energy -= AbilityAttributes.EnergyCost;
+}
+
+bool AShooterCharacter::HaveEnoughEnergyToUseAbility(FSkillsAttributes AbilityAttributes)
+{
+    if(AbilityAttributes.EnergyCost <= GetEnergy())
+        return true;
+    else
+        return false;
+}
+
 //MARK: VFX functions
 
 //MakeVFXVisible Binded to CharacterVisualEffectsDelegateStart Delegate
@@ -643,9 +803,4 @@ bool AShooterCharacter::ReactToPlayerEntered_Implementation()
     HealthText->SetText(FText::FromString(FString::Printf(TEXT("HP: %0.f "), GetHealth())));
     return true;
     
-}
-
-void AShooterCharacter::PlaySoundEffects()
-{
-   
 }

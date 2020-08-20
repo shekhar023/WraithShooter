@@ -104,6 +104,11 @@ bool AGun::IsPlayerAiming()
     return false;
 }
 
+EInventorySlot AGun::GetStorageSlot()
+{
+    return StorageSlot;
+}
+
 //MARK: Set Owner and Get Owner
 void AGun::SetOwningPawn(AShooterCharacter* MyPawn)
 {
@@ -363,6 +368,12 @@ void AGun::PlayImpactEffects(EPhysicalSurface MySurfaceType, FVector ImpactPoint
 }
 
 //MARK: Weapon Equiping and Dequiping functions
+void AGun::OnEnterInventory(AShooterCharacter* NewOwner)
+{
+    SetOwningPawn(NewOwner);
+    AttachMeshToPawn(StorageSlot);
+}
+
 void AGun::OnEquip(bool bPlayAnimation)
 {
     bPendingEquip = true;
@@ -385,20 +396,6 @@ void AGun::OnEquip(bool bPlayAnimation)
     else
     {
         OnEquipFinished();
-    }
-}
-
-void AGun::OnEquipFinished()
-{
-    AttachMeshToPawn();
-
-    bIsEquipped = true;
-    bPendingEquip = false;
-
-        // Try to reload empty clip
-    if (CurrentAmmoInClip <= 0 && CanReload())
-    {
-        StartReload();
     }
 }
 
@@ -431,10 +428,19 @@ void AGun::OnUnEquip()
     }
 
 }
-void AGun::OnEnterInventory(AShooterCharacter* NewOwner)
+
+void AGun::OnEquipFinished()
 {
-    SetOwningPawn(NewOwner);
-    AttachMeshToPawn(StorageSlot);
+    AttachMeshToPawn();
+
+    bIsEquipped = true;
+    bPendingEquip = false;
+
+        // Try to reload empty clip
+    if (CurrentAmmoInClip <= 0 && CanReload())
+    {
+        StartReload();
+    }
 }
 
 void AGun::AttachMeshToPawn(EInventorySlot Slot)

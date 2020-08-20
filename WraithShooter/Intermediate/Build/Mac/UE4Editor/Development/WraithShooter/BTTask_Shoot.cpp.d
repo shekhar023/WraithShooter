@@ -2708,6 +2708,8 @@
   /Users/Shekhar/Documents/Unreal\ Projects/WraithShooter/WraithShooter/Source/WraithShooter/Public/ShooterCharacter.h \
   /Users/Shekhar/Documents/Unreal\ Projects/WraithShooter/WraithShooter/Source/WraithShooter/Public/WraithUIInterface.h \
   /Users/Shekhar/Documents/Unreal\ Projects/WraithShooter/WraithShooter/Intermediate/Build/Mac/UE4Editor/Inc/WraithShooter/WraithUIInterface.generated.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Engine/Classes/Components/TimelineComponent.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Intermediate/Build/Mac/UE4Editor/Inc/Engine/TimelineComponent.generated.h \
   /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Engine/Classes/GameFramework/Character.h \
   /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Engine/Classes/GameFramework/RootMotionSource.h \
   /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Intermediate/Build/Mac/UE4Editor/Inc/Engine/RootMotionSource.generated.h \
