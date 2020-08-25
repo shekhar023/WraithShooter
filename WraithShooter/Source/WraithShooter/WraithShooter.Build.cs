@@ -8,7 +8,7 @@ public class WraithShooter : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "GameplayTasks", "UMG", "AIModule", "ApexDestruction" });
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "GameplayTasks", "UMG", "AIModule", "ApexDestruction", "Niagara" });
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 

@@ -23,6 +23,7 @@ class UCurveFloat;
 class AMagicPill;
 class AWraithProjectile;
 class USceneComponent;
+class UFloatingPawnMovement;
 
 //MARK:ENUM for sockets
 UENUM()
@@ -171,6 +172,7 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SkillsInfo)
     bool bIsOffensiveAbilityReady = true;
     
+    //MARK: TimeLine
  /*   UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = TimeLine)
     UCurveFloat* CurveFloat;
     
@@ -254,24 +256,45 @@ public:
     
     FTimerHandle FireballCooldown_TimerHandle;
     
+    FTimerHandle DrawPath_TimerHandle;
+    
     void SpawnFireball();
     
     void CanUseFireball();
     
     void AimFirball();
     
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Projectile)
+    float TimeToDrawAndDestroyArc;
+    
+    UFUNCTION(BlueprintImplementableEvent, Category = Fireball)
+    void DrawThrowArc();
+    
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Fireball)
     TSubclassOf<AWraithProjectile> FireballClass;
     
     //MARK: ElectroSpark Variables
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ElectroSpark)
-    bool bHasElectroSpark = false;
+    bool bHasElectroSpark;
     
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ElectroSpark)
+    bool bUsedElectroSpark;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ElectroSpark)
+    bool bElectroSparkReady;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ElectroSpark)
+    float ElectroSparkCooldown;
+
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ElectroSpark)
     FSkillData ElectroSparkData;
     
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ElectroSpark)
     FSkillsAttributes ElectroSparkAttributes;
+    
+    void ElectroSparkOn();
+    
+    void ElectroSparkOff();
     
     //MARK: Bloodlust Variables
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Bloodlust)
@@ -385,6 +408,9 @@ public:
     UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Effects)
     UParticleSystemComponent* VisualFX;
     
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Components)
+    UFloatingPawnMovement* FloatingComp;
+    
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = AIBehavior)
     UBehaviorTree* ShooterBT;
 
@@ -472,10 +498,14 @@ public:
     // Called to bind functionality to input
     virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
     
-    DECLARE_EVENT(AShooterCharacter, FUseFireBall);
+    DECLARE_EVENT(AShooterCharacter, FUseOffensiveAbility);
     
     //Declare an event using above Signature
-    FUseFireBall ShootFireball;
+    FUseOffensiveAbility ShootFireball;
+    
+    FUseOffensiveAbility ShootElectroSpark;
     
     void UseFireball();
+    
+    void UseElectroSpark();
 };

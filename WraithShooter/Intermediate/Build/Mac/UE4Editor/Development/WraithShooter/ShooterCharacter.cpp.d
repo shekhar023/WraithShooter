@@ -2668,11 +2668,7 @@
   /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Intermediate/Build/Mac/UE4Editor/Inc/Engine/CapsuleComponent.generated.h \
   /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Engine/Classes/Components/TextRenderComponent.h \
   /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Intermediate/Build/Mac/UE4Editor/Inc/Engine/TextRenderComponent.generated.h \
-  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Engine/Classes/GameFramework/CharacterMovementComponent.h \
-  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Engine/Classes/AI/Navigation/NavigationAvoidanceTypes.h \
-  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Intermediate/Build/Mac/UE4Editor/Inc/Engine/NavigationAvoidanceTypes.generated.h \
-  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Engine/Public/AI/RVOAvoidanceInterface.h \
-  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Intermediate/Build/Mac/UE4Editor/Inc/Engine/RVOAvoidanceInterface.generated.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Engine/Classes/GameFramework/FloatingPawnMovement.h \
   /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Engine/Classes/GameFramework/PawnMovementComponent.h \
   /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Engine/Classes/GameFramework/NavMovementComponent.h \
   /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Engine/Classes/AI/Navigation/PathFollowingAgentInterface.h \
@@ -2681,6 +2677,12 @@
   /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Intermediate/Build/Mac/UE4Editor/Inc/Engine/MovementComponent.generated.h \
   /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Intermediate/Build/Mac/UE4Editor/Inc/Engine/NavMovementComponent.generated.h \
   /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Intermediate/Build/Mac/UE4Editor/Inc/Engine/PawnMovementComponent.generated.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Intermediate/Build/Mac/UE4Editor/Inc/Engine/FloatingPawnMovement.generated.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Engine/Classes/GameFramework/CharacterMovementComponent.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Engine/Classes/AI/Navigation/NavigationAvoidanceTypes.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Intermediate/Build/Mac/UE4Editor/Inc/Engine/NavigationAvoidanceTypes.generated.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Engine/Public/AI/RVOAvoidanceInterface.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Intermediate/Build/Mac/UE4Editor/Inc/Engine/RVOAvoidanceInterface.generated.h \
   /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Engine/Classes/Interfaces/NetworkPredictionInterface.h \
   /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Intermediate/Build/Mac/UE4Editor/Inc/Engine/NetworkPredictionInterface.generated.h \
   /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Intermediate/Build/Mac/UE4Editor/Inc/Engine/CharacterMovementComponent.generated.h \

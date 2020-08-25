@@ -13,6 +13,9 @@
 #include "Animation/AnimMontage.h"
 #include "Animation/AnimInstance.h"
 #include "Animation/AnimationAsset.h"
+#include "NiagaraSystem.h"
+#include "NiagaraComponent.h"
+#include "NiagaraFunctionLibrary.h"
 
 // Sets default values
 AGun::AGun()
@@ -140,7 +143,7 @@ void AGun::StopAutomaticFire()
 }
 
 //MARK: Gun Trace
-bool AGun::GunTrace(FHitResult& Hit, FVector& ShotDirection)
+bool AGun::GunTrace(FHitResult& Hit, FVector& ShotDirection, FVector& EndPoint)
 {
     AController* OwnerController = GetOwnerController();
     if(!OwnerController){return false;}
@@ -155,7 +158,7 @@ bool AGun::GunTrace(FHitResult& Hit, FVector& ShotDirection)
     float HalfRad = FMath::DegreesToRadians(BulletSpread);
     ShotDirection = FMath::VRandCone(ShotDirection, HalfRad, HalfRad);
     
-    FVector EndPoint = Location + Rotation.Vector() * MaxRange;
+    EndPoint = Location + Rotation.Vector() * MaxRange;
     
     FCollisionQueryParams Params;
     Params.AddIgnoredActor(GetOwner());
@@ -174,12 +177,13 @@ void AGun::PullTrigger()
     {
         FHitResult Hit;
         FVector ShotDirection;
-        bool bSuccess = GunTrace(Hit, ShotDirection);
+        FVector EndPoint;
+        bool bSuccess = GunTrace(Hit, ShotDirection, EndPoint);
         SurfaceType = SurfaceType_Default;
         
         if(bSuccess)
         {
-            PlayFireEffects(Hit.ImpactPoint);
+            PlayFireEffects(EndPoint, Hit.ImpactPoint);
             SurfaceType = UPhysicalMaterial::DetermineSurfaceType(Hit.PhysMaterial.Get());
             PlayImpactEffects(SurfaceType, Hit.ImpactPoint);
             AActor* HitActor = Hit.GetActor();
@@ -294,7 +298,7 @@ void AGun::Reload()
 }
 
 //MARK: Weapon Effects
-void AGun::PlayFireEffects(FVector TraceEnd)
+void AGun::PlayFireEffects(FVector TraceEndPoint, FVector TraceEnd)
 {
     if(MuzzleSound)
     {
@@ -313,10 +317,10 @@ void AGun::PlayFireEffects(FVector TraceEnd)
     if (TracerEffect)
     {
         FVector MuzzleLocation = Mesh->GetSocketLocation(MuzzleFlashSocketName);
-        UParticleSystemComponent* TracerComp = UGameplayStatics::SpawnEmitterAttached(TracerEffect, Mesh, MuzzleFlashSocketName);
+        UNiagaraComponent* TracerComp = UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), TracerEffect, MuzzleLocation);
         if (TracerComp)
         {
-            TracerComp->SetVectorParameter(TracerTargetName, TraceEnd);
+            TracerComp->SetVectorParameter(TEXT("BeamEnd"), TraceEndPoint);
         }
     }
     

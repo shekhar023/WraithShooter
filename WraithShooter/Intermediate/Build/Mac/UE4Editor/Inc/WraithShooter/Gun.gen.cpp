@@ -22,6 +22,7 @@ void EmptyLinkFunctionForGeneratedCodeGun() {}
 	WRAITHSHOOTER_API UEnum* Z_Construct_UEnum_WraithShooter_EInventorySlot();
 	ENGINE_API UClass* Z_Construct_UClass_USoundBase_NoRegister();
 	ENGINE_API UClass* Z_Construct_UClass_UParticleSystem_NoRegister();
+	NIAGARA_API UClass* Z_Construct_UClass_UNiagaraSystem_NoRegister();
 	ENGINE_API UClass* Z_Construct_UClass_UCameraShake_NoRegister();
 	COREUOBJECT_API UClass* Z_Construct_UClass_UClass();
 	ENGINE_API UEnum* Z_Construct_UEnum_Engine_EPhysicalSurface();
@@ -665,7 +666,7 @@ void EmptyLinkFunctionForGeneratedCodeGun() {}
 		{ "ModuleRelativePath", "Public/Gun.h" },
 	};
 #endif
-	const UE4CodeGen_Private::FObjectPropertyParams Z_Construct_UClass_AGun_Statics::NewProp_TracerEffect = { "TracerEffect", nullptr, (EPropertyFlags)0x0010000000010015, UE4CodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AGun, TracerEffect), Z_Construct_UClass_UParticleSystem_NoRegister, METADATA_PARAMS(Z_Construct_UClass_AGun_Statics::NewProp_TracerEffect_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AGun_Statics::NewProp_TracerEffect_MetaData)) };
+	const UE4CodeGen_Private::FObjectPropertyParams Z_Construct_UClass_AGun_Statics::NewProp_TracerEffect = { "TracerEffect", nullptr, (EPropertyFlags)0x0010000000010015, UE4CodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AGun, TracerEffect), Z_Construct_UClass_UNiagaraSystem_NoRegister, METADATA_PARAMS(Z_Construct_UClass_AGun_Statics::NewProp_TracerEffect_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AGun_Statics::NewProp_TracerEffect_MetaData)) };
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AGun_Statics::NewProp_FireCamShake_MetaData[] = {
 		{ "Category", "Weapon" },
@@ -872,7 +873,7 @@ void EmptyLinkFunctionForGeneratedCodeGun() {}
 		}
 		return OuterClass;
 	}
-	IMPLEMENT_CLASS(AGun, 557245108);
+	IMPLEMENT_CLASS(AGun, 1471582595);
 	template<> WRAITHSHOOTER_API UClass* StaticClass<AGun>()
 	{
 		return AGun::StaticClass();

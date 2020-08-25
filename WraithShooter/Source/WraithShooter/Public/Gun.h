@@ -12,6 +12,7 @@ class UCameraShake;
 class UParticleSystem;
 class UAnimMontage;
 class UAnimationAsset;
+class UNiagaraSystem;
 
 namespace EWeaponState
 {
@@ -95,7 +96,7 @@ protected:
     
     void CalculateAmmo();
     
-    void PlayFireEffects(FVector TraceEnd);
+    void PlayFireEffects(FVector TraceEndPoint, FVector TraceEnd);
     
     void PlayImpactEffects(EPhysicalSurface MySurfaceType, FVector ImpactPoint);
     
@@ -122,7 +123,7 @@ public:
     // Sets default values for this actor's properties
     AGun();
     
-    bool GunTrace(FHitResult& Hit, FVector& ShotDirection);
+    bool GunTrace(FHitResult& Hit, FVector& ShotDirection, FVector& EndPoint);
     
     void PullTrigger();
     
@@ -165,7 +166,7 @@ public:
     TSubclassOf<UCameraShake> FireCamShake;
     
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
-    UParticleSystem* TracerEffect;
+    UNiagaraSystem* TracerEffect;
     
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
     UParticleSystem* ImpactEffect;

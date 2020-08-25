@@ -12,6 +12,7 @@ class UStaticMeshComponent;
 class UProjectileMovementComponent;
 class UParticleSystem;
 class USoundBase;
+class UNiagaraSystem;
 
 UCLASS()
 class WRAITHSHOOTER_API AWraithProjectile : public AActor
@@ -42,8 +43,14 @@ class WRAITHSHOOTER_API AWraithProjectile : public AActor
     UPROPERTY(EditAnywhere, Category = Projectile)
     float DamageRadius = 500.f;
     
+    UPROPERTY(EditDefaultsOnly, Category = Projectile)
+    TSubclassOf<UCameraShake> ProjectileCameraShake;
+    
     UPROPERTY(EditAnywhere, Category = Projectile)
     TSubclassOf < class UDamageType > DamageType;
+    
+    UPROPERTY(EditAnywhere, Category = Projectile)
+    UNiagaraSystem* ExplosionSystem;
     
     UPROPERTY(EditAnywhere, Category = FX)
     UParticleSystem* ExplosionParticles;

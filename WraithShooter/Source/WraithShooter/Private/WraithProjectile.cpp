@@ -14,6 +14,9 @@
 #include "ShooterCharacter.h"
 #include "Math/Quat.h"
 #include "DrawDebugHelpers.h"
+#include "NiagaraSystem.h"
+#include "NiagaraComponent.h"
+#include "NiagaraFunctionLibrary.h"
 
 
 // Sets default values
@@ -50,17 +53,13 @@ AWraithProjectile::AWraithProjectile()
 void AWraithProjectile::BeginPlay()
 {
 	Super::BeginPlay();
-    
-    FTimerHandle Handle;
-    GetWorldTimerManager().SetTimer(Handle, this, &AWraithProjectile::OnDetonate, 5.f, false);
-	
 }
 
 void AWraithProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit)
 {
     if((OtherActor != NULL) && (OtherActor != this) && (OtherComponent != NULL))
     {
-        OnDetonate();
+       OnDetonate();
     }
 }
 
@@ -74,8 +73,16 @@ AController* AWraithProjectile::GetOwnerController() const
 
 void AWraithProjectile::OnDetonate()
 {
-    UParticleSystemComponent* Explosion = UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ExplosionParticles, GetActorTransform());
-    Explosion->SetRelativeScale3D(FVector(FXScale));
+    if (ExplosionSystem)
+    {
+        UNiagaraComponent* ExpolsionComp = UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), ExplosionSystem, GetActorLocation());
+    }
+    
+    if(ExplosionParticles)
+    {
+        UParticleSystemComponent* Explosion = UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ExplosionParticles, GetActorTransform());
+        Explosion->SetRelativeScale3D(FVector(FXScale));
+    }
     
     UGameplayStatics::PlaySoundAtLocation(GetWorld(), ExplosionSound, GetActorLocation());
     
@@ -88,22 +95,29 @@ void AWraithProjectile::OnDetonate()
     FCollisionShape CollisionShape;
     CollisionShape.ShapeType = ECollisionShape::Sphere;
     CollisionShape.SetSphere(Radius);
-    
-    DrawDebugSphere(GetWorld(), GetActorLocation(), CollisionShape.GetSphereRadius(), 50, FColor::Cyan, true);
-    
+
     bool bHitSuccess = GetWorld()->SweepMultiByChannel(HitActors, StartTrace, EndTrace, FQuat::Identity, ECollisionChannel::ECC_GameTraceChannel3, CollisionShape);
     
     if(bHitSuccess)
     {
+       
+        
         for(auto& Actors : HitActors)
         {
+            
+            if(ProjectileCameraShake)
+            {
+                UGameplayStatics::PlayWorldCameraShake(GetWorld(), ProjectileCameraShake, Actors.ImpactPoint, 0.0f, 200.f, 1.0f, false);
+                UE_LOG(LogTemp,  Warning, TEXT("Playing CameraShake"));
+            }
+            
             UStaticMeshComponent* SM = Cast<UStaticMeshComponent>((Actors.GetActor()));
             ADestructibleActor* DA = Cast<ADestructibleActor>((Actors.GetActor()));
             AShooterCharacter* MyCharacter = Cast<AShooterCharacter>((Actors.GetActor()));
             
             if(SM)
             {
-                SM->AddRadialImpulse(GetActorLocation(), ImpulseRadius, ImpulseStrength, ERadialImpulseFalloff::RIF_Constant, true);
+                SM->AddRadialImpulse(GetActorLocation(), ImpulseRadius, ImpulseStrength, ERadialImpulseFalloff::RIF_Constant, false);
             }
             if(DA)
             {

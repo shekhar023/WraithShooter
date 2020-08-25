@@ -5,6 +5,7 @@
 #include "Gun.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/TextRenderComponent.h"
+#include "GameFramework/FloatingPawnMovement.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "WraithShooter/WraithShooterGameModeBase.h"
@@ -37,6 +38,7 @@ AShooterCharacter::AShooterCharacter()
     CharacterScore = 100.f;
     Energy = 50.f;
     JumpCount = 0;
+    TimeToDrawAndDestroyArc = .01f;
     BackDashCooldown = 0.35f;
     BackDashLeftAmount.X = -20.f;
     BackDashRightAmount.X = 20.f;
@@ -57,12 +59,19 @@ AShooterCharacter::AShooterCharacter()
     FireballCooldown = 1.13f;
     SpawnFireballDelay = 1.0f;
     
+    
+    bHasElectroSpark = false;
+    bUsedElectroSpark = false;
+    bElectroSparkReady = true;
+    ElectroSparkCooldown = 2.1f;
+    
     WeaponAttachPoint = TEXT("AttachWeapon");
     SecondaryWeaponAttachPoint = TEXT("SecondaryWeaponAttachPoint");
     PrimaryWeaponAttachPoint = TEXT("PrimaryWeaponAttachPoint");
     SideWeaponAttachPoint = TEXT("SideWeaponWeaponAttachPoint");
     FireballSocket = TEXT("FireballAttachPoint");
     
+    FloatingComp = CreateDefaultSubobject<UFloatingPawnMovement>(TEXT("FloatingComp"));
     //Sets up particle system of the character.
     VisualFX = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("VFX"));
     VisualFX->SetupAttachment(RootComponent);
@@ -137,6 +146,7 @@ void AShooterCharacter::BeginPlay()
     BindDelegates();
     
     ShootFireball.AddUObject(this, &AShooterCharacter::UseFireball);
+    ShootElectroSpark.AddUObject(this, &AShooterCharacter::UseElectroSpark);
 
 }
 
@@ -255,7 +265,7 @@ void AShooterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
     PlayerInputComponent->BindAction("PickingUp", IE_Pressed, this, &AShooterCharacter::PickObjects);
     
     PlayerInputComponent->BindAction("OffensiveAbility", IE_Pressed, this, &AShooterCharacter::AimFirball);
-    PlayerInputComponent->BindAction("OffensiveAbility", IE_Released, this, &AShooterCharacter::CastOffensiveAblity);
+   PlayerInputComponent->BindAction("OffensiveAbility", IE_Released, this, &AShooterCharacter::CastOffensiveAblity);
     
 }
 
@@ -329,6 +339,7 @@ void AShooterCharacter::Landed(const FHitResult& Hit)
     JumpCount = 0;
 }
 
+//MARK: TODO Backdash and Timeline
 /*void AShooterCharacter::StartBackDash()
 {
     if(bHasBackDash == false && bIsBackDashReady == false && GetCharacterMovement()->IsFalling() == true){return;}
@@ -341,11 +352,8 @@ void AShooterCharacter::Landed(const FHitResult& Hit)
 void AShooterCharacter::BackDash()
 {
     bIsBackDashReady = true;
-    
     bIsBackDashing = true;
     
-
-   
     if(GetActorRotation().Yaw >= 0)
     {
        UE_LOG(LogTemp, Warning, TEXT("World Roation: %f" ), GetActorRotation().Yaw);
@@ -367,6 +375,7 @@ void AShooterCharacter::BackDashTimelineTrack(f)
     UE_LOG(LogTemp, Warning, TEXT("BackDashTimeline Time: %f" ), BackDashTimeline.GetTimelineLength());
     
 }*/
+
 void AShooterCharacter::LookUpRate(float AxisValue)
 {
     AddControllerPitchInput(AxisValue * BasePitchValue * GetWorld()->GetDeltaSeconds());
@@ -399,7 +408,10 @@ void AShooterCharacter::StartShoot()
 {
     if(Gun)
     {
-        Gun->StartAutomaticFire();
+        if(bIsFireballAiming == false)
+        {
+            Gun->StartAutomaticFire();
+        }
     }
 }
 //StopShooting function
@@ -407,6 +419,7 @@ void AShooterCharacter::StopShoot()
 {
     if(Gun)
     {
+       
         Gun->StopAutomaticFire();
     }
 }
@@ -440,30 +453,41 @@ void AShooterCharacter::CastOffensiveAblity()
                ShootFireball.Broadcast();
                break;
            case EOffensiveAbility::ElectroSpark:
+               ShootElectroSpark.Broadcast();
                break;
            default:
                // Not implemented.
                break;
        }
 }
-
+//MARK: Exlposive Grenade
 void AShooterCharacter::AimFirball()
 {
-    bIsFireballAiming = true;
+     StopShoot();
+    if(bFireballReady == true)
+    {
+        bIsFireballAiming = true;
+        GetWorldTimerManager().SetTimer(DrawPath_TimerHandle, this, &AShooterCharacter::DrawThrowArc, TimeToDrawAndDestroyArc, true);
+    }
+    else{
+        bIsFireballAiming = false;
+    }
 }
 
 void AShooterCharacter::UseFireball()
 {
-    if(HaveEnoughEnergyToUseAbility(FireballAttributes) == false || bFireballReady == false || bUsedFireball == false || bIsUsingMist == true){return;}
+    if(HaveEnoughEnergyToUseAbility(FireballAttributes) == false && bUsedFireball == false && bIsUsingMist == true){return;}
     
-    if(bIsFireballAiming == true)
+    UE_LOG(LogTemp, Warning, TEXT("UseFireball"));
+    UpdateEnergy(FireballAttributes);
+    if(bIsFireballAiming)
     {
-        UpdateEnergy(FireballAttributes);
         bUsedFireball = true;
         bFireballReady = false;
         bIsFireballAiming = false;
-        
+    
         GetWorldTimerManager().SetTimer(Fireball_TimerHandle, this, &AShooterCharacter::SpawnFireball, SpawnFireballDelay, false);
+        
         GetWorldTimerManager().SetTimer(FireballCooldown_TimerHandle, this, &AShooterCharacter::CanUseFireball, FireballCooldown, false);
     }
 }
@@ -472,6 +496,7 @@ void AShooterCharacter::SpawnFireball()
 {
     if(FireballClass)
     {
+        UE_LOG(LogTemp, Warning, TEXT("SpawnFireball"));
         UWorld* const World = GetWorld();
         
         auto GunOffset = FVector(100.0f, 0.0f, 10.0f);
@@ -481,19 +506,58 @@ void AShooterCharacter::SpawnFireball()
         SpawnInfo.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
         
         World->SpawnActor<AWraithProjectile>(FireballClass,SpawnLocation, SpawnRotation, SpawnInfo);
+        GetWorldTimerManager().ClearTimer(DrawPath_TimerHandle);
     }
-    
-    
+    bFireballReady == false;
 }
+
 void AShooterCharacter::CanUseFireball()
 {
     bUsedFireball = false;
     bFireballReady = true;
-
+    
     GetWorldTimerManager().ClearTimer(Fireball_TimerHandle);
     GetWorldTimerManager().ClearTimer(FireballCooldown_TimerHandle);
+    
 }
 
+//MARK:ElectroSpark
+
+void AShooterCharacter::ElectroSparkOn()
+{
+    APlayerController* PlayerController = Cast<APlayerController>(GetController());
+    if(GetCharacterMovement()->IsFalling() == false)
+    {
+        DisableInput(PlayerController);
+    }
+    
+    if(GetCharacterMovement()->IsFalling() == true)
+    {
+        FloatingComp->Activate();
+        GetCharacterMovement()->Deactivate();
+        DisableInput(PlayerController);
+    }
+}
+
+void AShooterCharacter::ElectroSparkOff()
+{
+    APlayerController* PlayerController = Cast<APlayerController>(GetController());
+    
+    EnableInput(PlayerController);
+    FloatingComp->Deactivate();
+    GetCharacterMovement()->Activate();
+}
+//TODO: Timeline for Electrospark
+void AShooterCharacter::UseElectroSpark()
+{
+    if(HaveEnoughEnergyToUseAbility(ElectroSparkAttributes) == false && bUsedElectroSpark == false && bIsUsingMist == true){return;}
+    
+    UE_LOG(LogTemp, Warning, TEXT("UseElectroSpark"));
+    UpdateEnergy(ElectroSparkAttributes);
+    
+    bUsedElectroSpark = true;
+    bElectroSparkReady = false;
+}
 //MARK:SwitchWeapon
 void AShooterCharacter::NextWeapon()
 {
@@ -767,7 +831,7 @@ float AShooterCharacter::TakeDamage(float DamageAmount, struct FDamageEvent cons
 
 void AShooterCharacter::UpdateEnergy(FSkillsAttributes AbilityAttributes)
 {
-    if(Energy <= AbilityAttributes.EnergyCost)
+    if(Energy < AbilityAttributes.EnergyCost)
         return;
     
     Energy -= AbilityAttributes.EnergyCost;
@@ -775,7 +839,7 @@ void AShooterCharacter::UpdateEnergy(FSkillsAttributes AbilityAttributes)
 
 bool AShooterCharacter::HaveEnoughEnergyToUseAbility(FSkillsAttributes AbilityAttributes)
 {
-    if(AbilityAttributes.EnergyCost <= GetEnergy())
+    if(AbilityAttributes.EnergyCost <= Energy)
         return true;
     else
         return false;

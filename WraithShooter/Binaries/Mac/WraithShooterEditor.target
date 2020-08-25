@@ -77,6 +77,22 @@
 			"Type": "SymbolFile"
 		},
 		{
+			"Path": "$(EngineDir)/Plugins/Experimental/Landmass/Binaries/Mac/UE4Editor-Landmass.dylib",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/Experimental/Landmass/Binaries/Mac/UE4Editor-Landmass.dSYM",
+			"Type": "SymbolFile"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/Experimental/Landmass/Binaries/Mac/UE4Editor-LandmassEditor.dylib",
+			"Type": "DynamicLibrary"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/Experimental/Landmass/Binaries/Mac/UE4Editor-LandmassEditor.dSYM",
+			"Type": "SymbolFile"
+		},
+		{
 			"Path": "$(EngineDir)/Plugins/2D/Paper2D/Binaries/Mac/UE4Editor-Paper2D.dylib",
 			"Type": "DynamicLibrary"
 		},
@@ -4237,6 +4253,10 @@
 			"Type": "RequiredResource"
 		},
 		{
+			"Path": "$(EngineDir)/Plugins/Experimental/Landmass/Binaries/Mac/UE4Editor.modules",
+			"Type": "RequiredResource"
+		},
+		{
 			"Path": "$(EngineDir)/Plugins/2D/Paper2D/Binaries/Mac/UE4Editor.modules",
 			"Type": "RequiredResource"
 		},
@@ -4636,6 +4656,10 @@
 		},
 		{
 			"Path": "$(EngineDir)/Plugins/Runtime/ApexDestruction/ApexDestruction.uplugin",
+			"Type": "UFS"
+		},
+		{
+			"Path": "$(EngineDir)/Plugins/Experimental/Landmass/Landmass.uplugin",
 			"Type": "UFS"
 		},
 		{
