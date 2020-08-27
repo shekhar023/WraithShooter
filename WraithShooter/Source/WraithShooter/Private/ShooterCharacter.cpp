@@ -51,11 +51,12 @@ AShooterCharacter::AShooterCharacter()
     bHasBackDash = false;
     bIsBackDashReady = true;
     
+    bIsOffensiveAbilityReady =true;
     
     bHasFireball = false;
     bUsedFireball = false;
     bFireballReady = true;
-    bIsFireballAiming = false;
+    bIsGrenadeAiming = false;
     FireballCooldown = 1.13f;
     SpawnFireballDelay = 1.0f;
     
@@ -64,6 +65,7 @@ AShooterCharacter::AShooterCharacter()
     bUsedElectroSpark = false;
     bElectroSparkReady = true;
     ElectroSparkCooldown = 2.1f;
+    SpawnElectroSparkDelay = 1.0f;
     
     WeaponAttachPoint = TEXT("AttachWeapon");
     SecondaryWeaponAttachPoint = TEXT("SecondaryWeaponAttachPoint");
@@ -76,8 +78,8 @@ AShooterCharacter::AShooterCharacter()
     VisualFX = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("VFX"));
     VisualFX->SetupAttachment(RootComponent);
     
-    MuzzleLocation = CreateDefaultSubobject<USceneComponent>(TEXT("MuzzleLocation"));
-    MuzzleLocation->SetupAttachment(GetMesh());
+    GrenadeSpawnLocation = CreateDefaultSubobject<USceneComponent>(TEXT("GrenadeSpawnLocation"));
+    GrenadeSpawnLocation->SetupAttachment(GetMesh());
     
     HealthText = CreateDefaultSubobject<UTextRenderComponent>(TEXT("HealthText"));
     HealthText->SetupAttachment(RootComponent);
@@ -89,7 +91,6 @@ AShooterCharacter::AShooterCharacter()
     {
         VisualFX->SetTemplate(ParticleSystem.Object);
     }
-
 }
 //MARK:BindDelegates -> Function implemented in this class
 void AShooterCharacter::BindDelegates()
@@ -408,7 +409,7 @@ void AShooterCharacter::StartShoot()
 {
     if(Gun)
     {
-        if(bIsFireballAiming == false)
+        if(bIsGrenadeAiming == false)
         {
             Gun->StartAutomaticFire();
         }
@@ -464,31 +465,36 @@ void AShooterCharacter::CastOffensiveAblity()
 void AShooterCharacter::AimFirball()
 {
      StopShoot();
-    if(bFireballReady == true)
+    if(bIsOffensiveAbilityReady)
     {
-        bIsFireballAiming = true;
+        bIsGrenadeAiming = true;
         GetWorldTimerManager().SetTimer(DrawPath_TimerHandle, this, &AShooterCharacter::DrawThrowArc, TimeToDrawAndDestroyArc, true);
     }
-    else{
-        bIsFireballAiming = false;
+    else
+    {
+        bIsGrenadeAiming = false;
     }
 }
 
 void AShooterCharacter::UseFireball()
 {
-    if(HaveEnoughEnergyToUseAbility(FireballAttributes) == false && bUsedFireball == false && bIsUsingMist == true){return;}
-    
-    UE_LOG(LogTemp, Warning, TEXT("UseFireball"));
-    UpdateEnergy(FireballAttributes);
-    if(bIsFireballAiming)
+    if(HaveEnoughEnergyToUseAbility(FireballAttributes) && bFireballReady == true && !bIsUsingMist)
     {
-        bUsedFireball = true;
-        bFireballReady = false;
-        bIsFireballAiming = false;
-    
-        GetWorldTimerManager().SetTimer(Fireball_TimerHandle, this, &AShooterCharacter::SpawnFireball, SpawnFireballDelay, false);
+        UpdateEnergy(FireballAttributes);
+        CameraEffects();
         
-        GetWorldTimerManager().SetTimer(FireballCooldown_TimerHandle, this, &AShooterCharacter::CanUseFireball, FireballCooldown, false);
+        UE_LOG(LogTemp, Warning, TEXT("UseFireball"));
+       
+        if(bIsGrenadeAiming)
+        {
+            bUsedFireball = true;
+            bFireballReady = false;
+            bIsGrenadeAiming = false;
+            
+            GetWorldTimerManager().SetTimer(Fireball_TimerHandle, this, &AShooterCharacter::SpawnFireball, SpawnFireballDelay, false);
+            
+            GetWorldTimerManager().SetTimer(FireballCooldown_TimerHandle, this, &AShooterCharacter::CanUseFireball, FireballCooldown, false);
+        }
     }
 }
 
@@ -496,30 +502,33 @@ void AShooterCharacter::SpawnFireball()
 {
     if(FireballClass)
     {
-        UE_LOG(LogTemp, Warning, TEXT("SpawnFireball"));
-        UWorld* const World = GetWorld();
         
+        UE_LOG(LogTemp, Warning, TEXT("SpawnFireball"));
+        //Params for Spawning Actors from GrenadeSpawnLocation
         auto GunOffset = FVector(100.0f, 0.0f, 10.0f);
         const FRotator SpawnRotation = GetControlRotation();
-        const FVector SpawnLocation = ((MuzzleLocation != nullptr) ? MuzzleLocation->GetComponentLocation() : GetActorLocation()) + SpawnRotation.RotateVector(GunOffset);
+        const FVector SpawnLocation = ((GrenadeSpawnLocation != nullptr) ? GrenadeSpawnLocation->GetComponentLocation() : GetActorLocation()) + SpawnRotation.RotateVector(GunOffset);
         FActorSpawnParameters SpawnInfo;
         SpawnInfo.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
         
-        World->SpawnActor<AWraithProjectile>(FireballClass,SpawnLocation, SpawnRotation, SpawnInfo);
+        GetWorld()->SpawnActor<AWraithProjectile>(FireballClass,SpawnLocation, SpawnRotation, SpawnInfo);
         GetWorldTimerManager().ClearTimer(DrawPath_TimerHandle);
     }
-    bFireballReady == false;
+    //bFireballReady == false;
+    bIsOffensiveAbilityReady = false;
 }
 
 void AShooterCharacter::CanUseFireball()
 {
     bUsedFireball = false;
     bFireballReady = true;
+    bIsOffensiveAbilityReady = true;
     
     GetWorldTimerManager().ClearTimer(Fireball_TimerHandle);
     GetWorldTimerManager().ClearTimer(FireballCooldown_TimerHandle);
     
 }
+
 
 //MARK:ElectroSpark
 
@@ -547,17 +556,63 @@ void AShooterCharacter::ElectroSparkOff()
     FloatingComp->Deactivate();
     GetCharacterMovement()->Activate();
 }
-//TODO: Timeline for Electrospark
+
 void AShooterCharacter::UseElectroSpark()
 {
-    if(HaveEnoughEnergyToUseAbility(ElectroSparkAttributes) == false && bUsedElectroSpark == false && bIsUsingMist == true){return;}
-    
-    UE_LOG(LogTemp, Warning, TEXT("UseElectroSpark"));
-    UpdateEnergy(ElectroSparkAttributes);
-    
-    bUsedElectroSpark = true;
-    bElectroSparkReady = false;
+    if(HaveEnoughEnergyToUseAbility(ElectroSparkAttributes)  &&  bElectroSparkReady == true && !bIsUsingMist)
+    {
+        UpdateEnergy(ElectroSparkAttributes);
+        CameraEffects();
+        
+        UE_LOG(LogTemp, Warning, TEXT("ElectroSpark"));
+        
+        if(bIsGrenadeAiming)
+        {
+            bUsedElectroSpark = true;
+            bElectroSparkReady = false;
+            bIsGrenadeAiming = false;
+            
+            ElectroSparkOn();
+            
+            GetWorldTimerManager().SetTimer(ElectroSpark_TimerHandle, this, &AShooterCharacter::SpawnElectroSpark, SpawnElectroSparkDelay, false);
+            
+            GetWorldTimerManager().SetTimer(ElectroSparkCoolDown_TimerHandle, this, &AShooterCharacter::CanUseElectroSpark, ElectroSparkCooldown, false);
+        }
+    }
 }
+
+void AShooterCharacter::SpawnElectroSpark()
+{
+    if(ElectroSparkClass)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("SpawnElectroSpark"));
+        UWorld* const World = GetWorld();
+        
+        //Params for Spawning Actors from GrenadeSpawnLocation
+        auto GunOffset = FVector(100.0f, 0.0f, 10.0f);
+        const FRotator SpawnRotation = GetControlRotation();
+        const FVector SpawnLocation = ((GrenadeSpawnLocation != nullptr) ? GrenadeSpawnLocation->GetComponentLocation() : GetActorLocation()) + SpawnRotation.RotateVector(GunOffset);
+        FActorSpawnParameters SpawnInfo;
+        SpawnInfo.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
+        
+        World->SpawnActor<AWraithProjectile>(ElectroSparkClass,SpawnLocation, SpawnRotation, SpawnInfo);
+        
+        GetWorldTimerManager().ClearTimer(DrawPath_TimerHandle);
+    }
+    bUsedElectroSpark = false;
+    bIsOffensiveAbilityReady = false;
+}
+
+void AShooterCharacter::CanUseElectroSpark()
+{
+    bElectroSparkReady = true;
+    bIsOffensiveAbilityReady = true;
+    ElectroSparkOff();
+    GetWorldTimerManager().ClearTimer(ElectroSpark_TimerHandle);
+    GetWorldTimerManager().ClearTimer(ElectroSparkCoolDown_TimerHandle);
+    
+}
+
 //MARK:SwitchWeapon
 void AShooterCharacter::NextWeapon()
 {
@@ -805,6 +860,7 @@ bool AShooterCharacter::ObjectTrace(FHitResult& Hit, FVector& ShotDirection)
     return GetWorld()->LineTraceSingleByChannel(Hit, Location, EndPoint, ECollisionChannel::ECC_GameTraceChannel1, Params);
 }
 
+
 //MARK: TakeDamage
 float AShooterCharacter::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser)
 {
@@ -829,6 +885,7 @@ float AShooterCharacter::TakeDamage(float DamageAmount, struct FDamageEvent cons
     return DamageToApply;
 }
 
+//MARK:Update Energy
 void AShooterCharacter::UpdateEnergy(FSkillsAttributes AbilityAttributes)
 {
     if(Energy < AbilityAttributes.EnergyCost)
@@ -844,7 +901,6 @@ bool AShooterCharacter::HaveEnoughEnergyToUseAbility(FSkillsAttributes AbilityAt
     else
         return false;
 }
-
 //MARK: VFX functions
 
 //MakeVFXVisible Binded to CharacterVisualEffectsDelegateStart Delegate
@@ -860,6 +916,14 @@ void AShooterCharacter::MakeVFXInvisible()
     VisualFX->DeactivateSystem();
 }
 
+void AShooterCharacter::CameraEffects()
+{
+    APlayerController* PlayerController = Cast<APlayerController>(GetController());
+    if (PlayerController)
+    {
+        PlayerController->ClientPlayCameraShake(ProjectileCameraShake);
+    }
+}
 //MARK: Interface Function
 bool AShooterCharacter::ReactToPlayerEntered_Implementation()
 {

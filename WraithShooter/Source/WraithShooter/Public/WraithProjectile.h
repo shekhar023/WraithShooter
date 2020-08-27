@@ -19,8 +19,7 @@ class WRAITHSHOOTER_API AWraithProjectile : public AActor
 {
     GENERATED_BODY()
     
-    UPROPERTY(VisibleDefaultsOnly, Category = Projectile)
-    USphereComponent* CollisionComp;
+    
     
     UPROPERTY(VisibleDefaultsOnly, Category = Projectile)
     UProjectileMovementComponent* ProjectileMovement;
@@ -32,19 +31,16 @@ class WRAITHSHOOTER_API AWraithProjectile : public AActor
     float Radius = 1000.f;
     
     UPROPERTY(EditAnywhere, Category = Projectile)
-    float ImpulseRadius = 1000.f;
+    float ImpulseRadius = 500;
     
     UPROPERTY(EditAnywhere, Category = Projectile)
-    float ImpulseStrength = 5000.f;
+    float ImpulseStrength = 500;
     
     UPROPERTY(EditAnywhere, Category = Projectile)
     float RadiusDamage = 50.f;
     
     UPROPERTY(EditAnywhere, Category = Projectile)
     float DamageRadius = 500.f;
-    
-    UPROPERTY(EditDefaultsOnly, Category = Projectile)
-    TSubclassOf<UCameraShake> ProjectileCameraShake;
     
     UPROPERTY(EditAnywhere, Category = Projectile)
     TSubclassOf < class UDamageType > DamageType;
@@ -63,6 +59,9 @@ public:
     AWraithProjectile();
     
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Projectile)
+    USphereComponent* CollisionComp;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Projectile)
     UStaticMeshComponent* MeshComp;
     
     UFUNCTION()
@@ -72,6 +71,14 @@ public:
     
     FORCEINLINE UProjectileMovementComponent* GetProjectileMovement() const { return ProjectileMovement; }
     
+    FTimerHandle Destroy_Handle;
+    
+    void DestroyProjectile();
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Projectile)
+    float DestroyDelay;
+
+    
 protected:
     // Called when the game starts or when spawned
     virtual void BeginPlay() override;
@@ -80,4 +87,5 @@ protected:
     void OnDetonate();
     
     AController* GetOwnerController() const;
+   
 };

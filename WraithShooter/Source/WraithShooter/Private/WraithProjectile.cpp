@@ -12,11 +12,11 @@
 #include "DestructibleActor.h"
 #include "DestructibleComponent.h"
 #include "ShooterCharacter.h"
-#include "Math/Quat.h"
 #include "DrawDebugHelpers.h"
 #include "NiagaraSystem.h"
 #include "NiagaraComponent.h"
 #include "NiagaraFunctionLibrary.h"
+#include "TimerManager.h"
 
 
 // Sets default values
@@ -43,7 +43,7 @@ AWraithProjectile::AWraithProjectile()
     ProjectileMovement->bShouldBounce = true;
     
     InitialLifeSpan = 3.0f;
-    
+    DestroyDelay = 0.0f;
     FXScale = 2.f;
     
     
@@ -53,6 +53,7 @@ AWraithProjectile::AWraithProjectile()
 void AWraithProjectile::BeginPlay()
 {
 	Super::BeginPlay();
+   
 }
 
 void AWraithProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit)
@@ -104,13 +105,6 @@ void AWraithProjectile::OnDetonate()
         
         for(auto& Actors : HitActors)
         {
-            
-            if(ProjectileCameraShake)
-            {
-                UGameplayStatics::PlayWorldCameraShake(GetWorld(), ProjectileCameraShake, Actors.ImpactPoint, 0.0f, 200.f, 1.0f, false);
-                UE_LOG(LogTemp,  Warning, TEXT("Playing CameraShake"));
-            }
-            
             UStaticMeshComponent* SM = Cast<UStaticMeshComponent>((Actors.GetActor()));
             ADestructibleActor* DA = Cast<ADestructibleActor>((Actors.GetActor()));
             AShooterCharacter* MyCharacter = Cast<AShooterCharacter>((Actors.GetActor()));
@@ -121,17 +115,18 @@ void AWraithProjectile::OnDetonate()
             }
             if(DA)
             {
-                DA->GetDestructibleComponent()->ApplyRadiusDamage(RadiusDamage, Actors.ImpactPoint, DamageRadius, ImpulseStrength, false);
+                DA->GetDestructibleComponent()->ApplyRadiusDamage(RadiusDamage, Actors.ImpactPoint, RadiusDamage, ImpulseStrength, false);
             }
             else if(MyCharacter)
             {
-                UGameplayStatics::ApplyRadialDamage(GetWorld(), MyCharacter->FireballAttributes.Damage, GetActorLocation(), MyCharacter->FireballAttributes.DamageRadius, MyCharacter->FireballAttributes.DamageType, TArray<AActor*>(), this);
+                 
+                 UGameplayStatics::ApplyRadialDamage(GetWorld(), RadiusDamage, GetActorLocation(), DamageRadius, DamageType, TArray<AActor*>(), this);
+                 
+                UE_LOG(LogTemp, Warning, TEXT("Radius Damage and Damage radius: %f and %f"),RadiusDamage, DamageRadius);
                 
-                UE_LOG(LogTemp, Warning, TEXT("FireBall Damage and damage radius: %f and %f"),MyCharacter->FireballAttributes.Damage, MyCharacter->FireballAttributes.DamageRadius);
             }
         }
     }
     
     Destroy();
-    
 }

@@ -25,7 +25,7 @@ void EmptyLinkFunctionForGeneratedCodeWraithShooter_init() {}
 				SingletonFuncArray,
 				UE_ARRAY_COUNT(SingletonFuncArray),
 				PKG_CompiledIn | 0x00000000,
-				0xCD858520,
+				0xD7B61444,
 				0x6033CA9E,
 				METADATA_PARAMS(nullptr, 0)
 			};

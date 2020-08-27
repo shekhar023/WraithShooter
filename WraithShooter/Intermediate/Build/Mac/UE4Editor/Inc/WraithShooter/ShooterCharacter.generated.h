@@ -8,6 +8,9 @@
 #include "UObject/ScriptMacros.h"
 
 PRAGMA_DISABLE_DEPRECATION_WARNINGS
+struct FDamageEvent;
+class AController;
+class AActor;
 enum class EInventorySlot : uint8;
 struct FHitResult;
 struct FVector;
@@ -22,6 +25,7 @@ struct FSkillsAttributes;
 #define WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_49_SPARSE_DATA
 #define WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_49_RPC_WRAPPERS \
  \
+	DECLARE_FUNCTION(execTakeDamage); \
 	DECLARE_FUNCTION(execMakeVFXInvisible); \
 	DECLARE_FUNCTION(execMakeVFXVisible); \
 	DECLARE_FUNCTION(execUnBindDelegates); \
@@ -38,12 +42,17 @@ struct FSkillsAttributes;
 	DECLARE_FUNCTION(execGetbIsAiming); \
 	DECLARE_FUNCTION(execIsDead); \
 	DECLARE_FUNCTION(execGetCurrentWeapon); \
+	DECLARE_FUNCTION(execCanUseElectroSpark); \
+	DECLARE_FUNCTION(execSpawnElectroSpark); \
+	DECLARE_FUNCTION(execElectroSparkOff); \
+	DECLARE_FUNCTION(execElectroSparkOn); \
 	DECLARE_FUNCTION(execHaveEnoughEnergyToUseAbility); \
 	DECLARE_FUNCTION(execUpdateEnergy);
 
 
 #define WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_49_RPC_WRAPPERS_NO_PURE_DECLS \
  \
+	DECLARE_FUNCTION(execTakeDamage); \
 	DECLARE_FUNCTION(execMakeVFXInvisible); \
 	DECLARE_FUNCTION(execMakeVFXVisible); \
 	DECLARE_FUNCTION(execUnBindDelegates); \
@@ -60,6 +69,10 @@ struct FSkillsAttributes;
 	DECLARE_FUNCTION(execGetbIsAiming); \
 	DECLARE_FUNCTION(execIsDead); \
 	DECLARE_FUNCTION(execGetCurrentWeapon); \
+	DECLARE_FUNCTION(execCanUseElectroSpark); \
+	DECLARE_FUNCTION(execSpawnElectroSpark); \
+	DECLARE_FUNCTION(execElectroSparkOff); \
+	DECLARE_FUNCTION(execElectroSparkOn); \
 	DECLARE_FUNCTION(execHaveEnoughEnergyToUseAbility); \
 	DECLARE_FUNCTION(execUpdateEnergy);
 

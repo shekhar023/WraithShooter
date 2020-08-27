@@ -110,10 +110,10 @@ public:
     UFUNCTION(BlueprintImplementableEvent, Category = ShooterCharacter)
     void Zoom(bool CanZoom);
     
-    UFUNCTION()
+    UFUNCTION(BlueprintCallable, Category = ShooterCharacter)
     void UpdateEnergy(FSkillsAttributes AbilityAttributes);
     
-    UFUNCTION()
+    UFUNCTION(BlueprintCallable, Category = ShooterCharacter)
     bool HaveEnoughEnergyToUseAbility(FSkillsAttributes AbilityAttributes);
     
     void CastOffensiveAblity();
@@ -146,7 +146,7 @@ public:
     FName FireballSocket;
     
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Mesh)
-    USceneComponent* MuzzleLocation;
+    USceneComponent* GrenadeSpawnLocation;
     
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ShooterCharacter,  meta = (ClampMin= 0.0f))
     float Energy;
@@ -170,7 +170,12 @@ public:
     bool bIsAiming;
     
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SkillsInfo)
-    bool bIsOffensiveAbilityReady = true;
+    bool bIsOffensiveAbilityReady;
+    
+    UPROPERTY(EditDefaultsOnly, Category = Projectile)
+    TSubclassOf<UCameraShake> ProjectileCameraShake;
+    
+    void CameraEffects();
     
     //MARK: TimeLine
  /*   UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = TimeLine)
@@ -184,6 +189,7 @@ public:
 
 public:
     //MARK: Offensive Skills Variables and Data
+    
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = DoubleJump)
     bool bHasDoubleJump = false;
     
@@ -237,8 +243,8 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Fireball)
     bool bFireballReady;
     
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Fireball)
-    bool bIsFireballAiming;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Projectile)
+    bool bIsGrenadeAiming;
     
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Fireball)
     float FireballCooldown;
@@ -267,7 +273,7 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Projectile)
     float TimeToDrawAndDestroyArc;
     
-    UFUNCTION(BlueprintImplementableEvent, Category = Fireball)
+    UFUNCTION(BlueprintCallable, BlueprintImplementableEvent, Category = Fireball)
     void DrawThrowArc();
     
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Fireball)
@@ -285,16 +291,34 @@ public:
     
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ElectroSpark)
     float ElectroSparkCooldown;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ElectroSpark)
+    float SpawnElectroSparkDelay;
+
+    UFUNCTION(BlueprintCallable)
+    void ElectroSparkOn();
+    
+    UFUNCTION(BlueprintCallable)
+    void ElectroSparkOff();
+    
+    UFUNCTION()
+   void SpawnElectroSpark();
+    
+    UFUNCTION(BlueprintCallable)
+    void CanUseElectroSpark();
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ElectroSpark)
-    FSkillData ElectroSparkData;
+    TSubclassOf<AWraithProjectile> ElectroSparkClass;
     
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ElectroSpark)
+    FSkillData ElectroSparkData;
+       
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ElectroSpark)
     FSkillsAttributes ElectroSparkAttributes;
     
-    void ElectroSparkOn();
+    FTimerHandle ElectroSparkCoolDown_TimerHandle;
     
-    void ElectroSparkOff();
+    FTimerHandle ElectroSpark_TimerHandle;
     
     //MARK: Bloodlust Variables
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Bloodlust)
@@ -371,6 +395,15 @@ public:
     
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SkillsInfo)
     ESkills SkillAcquired;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SkillsInfo)
+    FSkillsAttributes CurrentSkillAttributes;
+    
+    FSkillsAttributes GetCurrentSkillAttributes() const;
+    
+    void UpdateAttributes(FSkillsAttributes SkillsAttributes);
+    
+    
     
 protected:
     
@@ -458,9 +491,9 @@ public:
     
     bool WeaponSlotAvailable(EInventorySlot CheckSlot);
     
-    UFUNCTION(BlueprintCallable, Category = "Animation")
+    UFUNCTION(BlueprintCallable, Category = Animation)
     void SwapToNewWeaponMesh();
-    
+ 
 public:
     
     //MARK: Function for Binding Delegates created in WraithShooterGameModeBase.h
@@ -483,6 +516,7 @@ public:
     //MARK: Virtual function Take Damage, GetTestName, PostInitializeComponents, ReactToPlayerEntered, ReactToPlayerEntered_Implementation
     
     //damage function
+    UFUNCTION(BlueprintCallable, Category = ShooterCharacter)
     virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
     
     //Declare override of interface
@@ -507,5 +541,8 @@ public:
     
     void UseFireball();
     
+  
     void UseElectroSpark();
+    
+    void RadiusDamage();
 };

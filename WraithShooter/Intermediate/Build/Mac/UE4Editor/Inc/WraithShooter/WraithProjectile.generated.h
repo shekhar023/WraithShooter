@@ -73,7 +73,6 @@ DEFINE_VTABLE_PTR_HELPER_CTOR_CALLER(AWraithProjectile); \
 
 
 #define WraithShooter_Source_WraithShooter_Public_WraithProjectile_h_20_PRIVATE_PROPERTY_OFFSET \
-	FORCEINLINE static uint32 __PPO__CollisionComp() { return STRUCT_OFFSET(AWraithProjectile, CollisionComp); } \
 	FORCEINLINE static uint32 __PPO__ProjectileMovement() { return STRUCT_OFFSET(AWraithProjectile, ProjectileMovement); } \
 	FORCEINLINE static uint32 __PPO__FXScale() { return STRUCT_OFFSET(AWraithProjectile, FXScale); } \
 	FORCEINLINE static uint32 __PPO__Radius() { return STRUCT_OFFSET(AWraithProjectile, Radius); } \
@@ -81,7 +80,6 @@ DEFINE_VTABLE_PTR_HELPER_CTOR_CALLER(AWraithProjectile); \
 	FORCEINLINE static uint32 __PPO__ImpulseStrength() { return STRUCT_OFFSET(AWraithProjectile, ImpulseStrength); } \
 	FORCEINLINE static uint32 __PPO__RadiusDamage() { return STRUCT_OFFSET(AWraithProjectile, RadiusDamage); } \
 	FORCEINLINE static uint32 __PPO__DamageRadius() { return STRUCT_OFFSET(AWraithProjectile, DamageRadius); } \
-	FORCEINLINE static uint32 __PPO__ProjectileCameraShake() { return STRUCT_OFFSET(AWraithProjectile, ProjectileCameraShake); } \
 	FORCEINLINE static uint32 __PPO__DamageType() { return STRUCT_OFFSET(AWraithProjectile, DamageType); } \
 	FORCEINLINE static uint32 __PPO__ExplosionSystem() { return STRUCT_OFFSET(AWraithProjectile, ExplosionSystem); } \
 	FORCEINLINE static uint32 __PPO__ExplosionParticles() { return STRUCT_OFFSET(AWraithProjectile, ExplosionParticles); } \
