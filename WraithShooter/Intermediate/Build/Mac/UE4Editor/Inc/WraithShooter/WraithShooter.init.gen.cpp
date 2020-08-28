@@ -25,8 +25,8 @@ void EmptyLinkFunctionForGeneratedCodeWraithShooter_init() {}
 				SingletonFuncArray,
 				UE_ARRAY_COUNT(SingletonFuncArray),
 				PKG_CompiledIn | 0x00000000,
-				0xD7B61444,
-				0x6033CA9E,
+				0xC5E1476B,
+				0x3230F7F8,
 				METADATA_PARAMS(nullptr, 0)
 			};
 			UE4CodeGen_Private::ConstructUPackage(ReturnPackage, PackageParams);

@@ -2733,9 +2733,11 @@
   /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Engine/Classes/Particles/Emitter.h \
   /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Intermediate/Build/Mac/UE4Editor/Inc/Engine/Emitter.generated.h \
   /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Intermediate/Build/Mac/UE4Editor/Inc/Engine/ParticleSystemComponent.generated.h \
-  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Engine/Classes/Components/SphereComponent.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Engine/Classes/Components/CapsuleComponent.h \
   /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Engine/Classes/Components/ShapeComponent.h \
   /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Intermediate/Build/Mac/UE4Editor/Inc/Engine/ShapeComponent.generated.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Intermediate/Build/Mac/UE4Editor/Inc/Engine/CapsuleComponent.generated.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Engine/Classes/Components/SphereComponent.h \
   /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Intermediate/Build/Mac/UE4Editor/Inc/Engine/SphereComponent.generated.h \
   /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Engine/Classes/Kismet/GameplayStatics.h \
   /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Engine/Classes/Kismet/KismetSystemLibrary.h \

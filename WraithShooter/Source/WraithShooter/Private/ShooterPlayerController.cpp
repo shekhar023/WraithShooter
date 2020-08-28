@@ -7,25 +7,24 @@
 #include "Kismet/GameplayStatics.h"
 #include "Blueprint/UserWidget.h"
 #include "EngineUtils.h"
+#include "HUD/WraithShooterHUD.h"
 
 
 void AShooterPlayerController::BeginPlay()
 {
     Super::BeginPlay();
     
-    HUD = CreateWidget(this, HUDClass);
-    
-    if(HUD != nullptr)
-    {
-        HUD->AddToViewport();
-    }
 }
 
 void AShooterPlayerController::GameHasEnded(class AActor* EndGameFocus, bool bIsWinner)
 {
     Super::GameHasEnded(EndGameFocus, bIsWinner);
     
-    HUD->RemoveFromViewport();
+    AWraithShooterHUD* HUDRef = Cast<AWraithShooterHUD>(GetHUD());
+    if(HUDRef)
+    {
+        HUDRef->GetHUDReference()->RemoveFromViewport();
+    }
     
     if(bIsWinner)
     {

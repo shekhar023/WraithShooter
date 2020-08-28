@@ -35,8 +35,9 @@ AShooterCharacter::AShooterCharacter()
     BaseYawValue = 45.f;
     InteractTraceLength = 100;
     MaxHealth = 100.f;
+    MaxEnergy = 100.f;
     CharacterScore = 100.f;
-    Energy = 50.f;
+    
     JumpCount = 0;
     TimeToDrawAndDestroyArc = .01f;
     BackDashCooldown = 0.35f;
@@ -52,6 +53,7 @@ AShooterCharacter::AShooterCharacter()
     bIsBackDashReady = true;
     
     bIsOffensiveAbilityReady =true;
+    bIsDefensiveAbilityReady = false;
     
     bHasFireball = false;
     bUsedFireball = false;
@@ -66,6 +68,12 @@ AShooterCharacter::AShooterCharacter()
     bElectroSparkReady = true;
     ElectroSparkCooldown = 2.1f;
     SpawnElectroSparkDelay = 1.0f;
+    
+    bHasArticBlast = false;
+    bUsedArticBlast = false;
+    bArticBlastReady = true;
+    ArticBlastCooldown = 2.1f;
+    SpawnArticBlastDelay = 1.0f;
     
     WeaponAttachPoint = TEXT("AttachWeapon");
     SecondaryWeaponAttachPoint = TEXT("SecondaryWeaponAttachPoint");
@@ -135,6 +143,7 @@ void AShooterCharacter::BeginPlay()
     Super::BeginPlay();
     //Set Health Default Value
     Health = MaxHealth;
+    Energy = MaxEnergy;
     
     SetTextComponents();
     
@@ -461,14 +470,17 @@ void AShooterCharacter::CastOffensiveAblity()
                break;
        }
 }
+
 //MARK: Exlposive Grenade
 void AShooterCharacter::AimFirball()
 {
      StopShoot();
+    
     if(bIsOffensiveAbilityReady)
     {
         bIsGrenadeAiming = true;
-        GetWorldTimerManager().SetTimer(DrawPath_TimerHandle, this, &AShooterCharacter::DrawThrowArc, TimeToDrawAndDestroyArc, true);
+        
+         GetWorldTimerManager().SetTimer(DrawPath_TimerHandle, this, &AShooterCharacter::DrawThrowArc, TimeToDrawAndDestroyArc, true);
     }
     else
     {
@@ -484,7 +496,7 @@ void AShooterCharacter::UseFireball()
         CameraEffects();
         
         UE_LOG(LogTemp, Warning, TEXT("UseFireball"));
-       
+        
         if(bIsGrenadeAiming)
         {
             bUsedFireball = true;
@@ -899,7 +911,11 @@ bool AShooterCharacter::HaveEnoughEnergyToUseAbility(FSkillsAttributes AbilityAt
     if(AbilityAttributes.EnergyCost <= Energy)
         return true;
     else
+    {
+        bIsGrenadeAiming = false;
         return false;
+    }
+        
 }
 //MARK: VFX functions
 

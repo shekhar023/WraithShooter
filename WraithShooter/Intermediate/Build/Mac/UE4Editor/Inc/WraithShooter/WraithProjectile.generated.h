@@ -17,20 +17,22 @@ struct FHitResult;
 #endif
 #define WRAITHSHOOTER_WraithProjectile_generated_h
 
-#define WraithShooter_Source_WraithShooter_Public_WraithProjectile_h_20_SPARSE_DATA
-#define WraithShooter_Source_WraithShooter_Public_WraithProjectile_h_20_RPC_WRAPPERS \
+#define WraithShooter_Source_WraithShooter_Public_WraithProjectile_h_21_SPARSE_DATA
+#define WraithShooter_Source_WraithShooter_Public_WraithProjectile_h_21_RPC_WRAPPERS \
  \
 	DECLARE_FUNCTION(execOnDetonate); \
 	DECLARE_FUNCTION(execOnHit);
 
 
-#define WraithShooter_Source_WraithShooter_Public_WraithProjectile_h_20_RPC_WRAPPERS_NO_PURE_DECLS \
+#define WraithShooter_Source_WraithShooter_Public_WraithProjectile_h_21_RPC_WRAPPERS_NO_PURE_DECLS \
  \
 	DECLARE_FUNCTION(execOnDetonate); \
 	DECLARE_FUNCTION(execOnHit);
 
 
-#define WraithShooter_Source_WraithShooter_Public_WraithProjectile_h_20_INCLASS_NO_PURE_DECLS \
+#define WraithShooter_Source_WraithShooter_Public_WraithProjectile_h_21_EVENT_PARMS
+#define WraithShooter_Source_WraithShooter_Public_WraithProjectile_h_21_CALLBACK_WRAPPERS
+#define WraithShooter_Source_WraithShooter_Public_WraithProjectile_h_21_INCLASS_NO_PURE_DECLS \
 private: \
 	static void StaticRegisterNativesAWraithProjectile(); \
 	friend struct Z_Construct_UClass_AWraithProjectile_Statics; \
@@ -39,7 +41,7 @@ public: \
 	DECLARE_SERIALIZER(AWraithProjectile)
 
 
-#define WraithShooter_Source_WraithShooter_Public_WraithProjectile_h_20_INCLASS \
+#define WraithShooter_Source_WraithShooter_Public_WraithProjectile_h_21_INCLASS \
 private: \
 	static void StaticRegisterNativesAWraithProjectile(); \
 	friend struct Z_Construct_UClass_AWraithProjectile_Statics; \
@@ -48,7 +50,7 @@ public: \
 	DECLARE_SERIALIZER(AWraithProjectile)
 
 
-#define WraithShooter_Source_WraithShooter_Public_WraithProjectile_h_20_STANDARD_CONSTRUCTORS \
+#define WraithShooter_Source_WraithShooter_Public_WraithProjectile_h_21_STANDARD_CONSTRUCTORS \
 	/** Standard constructor, called after all reflected properties have been initialized */ \
 	NO_API AWraithProjectile(const FObjectInitializer& ObjectInitializer); \
 	DEFINE_DEFAULT_OBJECT_INITIALIZER_CONSTRUCTOR_CALL(AWraithProjectile) \
@@ -61,7 +63,7 @@ private: \
 public:
 
 
-#define WraithShooter_Source_WraithShooter_Public_WraithProjectile_h_20_ENHANCED_CONSTRUCTORS \
+#define WraithShooter_Source_WraithShooter_Public_WraithProjectile_h_21_ENHANCED_CONSTRUCTORS \
 private: \
 	/** Private move- and copy-constructors, should never be used */ \
 	NO_API AWraithProjectile(AWraithProjectile&&); \
@@ -72,41 +74,33 @@ DEFINE_VTABLE_PTR_HELPER_CTOR_CALLER(AWraithProjectile); \
 	DEFINE_DEFAULT_CONSTRUCTOR_CALL(AWraithProjectile)
 
 
-#define WraithShooter_Source_WraithShooter_Public_WraithProjectile_h_20_PRIVATE_PROPERTY_OFFSET \
-	FORCEINLINE static uint32 __PPO__ProjectileMovement() { return STRUCT_OFFSET(AWraithProjectile, ProjectileMovement); } \
-	FORCEINLINE static uint32 __PPO__FXScale() { return STRUCT_OFFSET(AWraithProjectile, FXScale); } \
-	FORCEINLINE static uint32 __PPO__Radius() { return STRUCT_OFFSET(AWraithProjectile, Radius); } \
-	FORCEINLINE static uint32 __PPO__ImpulseRadius() { return STRUCT_OFFSET(AWraithProjectile, ImpulseRadius); } \
-	FORCEINLINE static uint32 __PPO__ImpulseStrength() { return STRUCT_OFFSET(AWraithProjectile, ImpulseStrength); } \
-	FORCEINLINE static uint32 __PPO__RadiusDamage() { return STRUCT_OFFSET(AWraithProjectile, RadiusDamage); } \
-	FORCEINLINE static uint32 __PPO__DamageRadius() { return STRUCT_OFFSET(AWraithProjectile, DamageRadius); } \
-	FORCEINLINE static uint32 __PPO__DamageType() { return STRUCT_OFFSET(AWraithProjectile, DamageType); } \
-	FORCEINLINE static uint32 __PPO__ExplosionSystem() { return STRUCT_OFFSET(AWraithProjectile, ExplosionSystem); } \
-	FORCEINLINE static uint32 __PPO__ExplosionParticles() { return STRUCT_OFFSET(AWraithProjectile, ExplosionParticles); } \
-	FORCEINLINE static uint32 __PPO__ExplosionSound() { return STRUCT_OFFSET(AWraithProjectile, ExplosionSound); }
+#define WraithShooter_Source_WraithShooter_Public_WraithProjectile_h_21_PRIVATE_PROPERTY_OFFSET
+#define WraithShooter_Source_WraithShooter_Public_WraithProjectile_h_18_PROLOG \
+	WraithShooter_Source_WraithShooter_Public_WraithProjectile_h_21_EVENT_PARMS
 
 
-#define WraithShooter_Source_WraithShooter_Public_WraithProjectile_h_17_PROLOG
-#define WraithShooter_Source_WraithShooter_Public_WraithProjectile_h_20_GENERATED_BODY_LEGACY \
+#define WraithShooter_Source_WraithShooter_Public_WraithProjectile_h_21_GENERATED_BODY_LEGACY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \
 public: \
-	WraithShooter_Source_WraithShooter_Public_WraithProjectile_h_20_PRIVATE_PROPERTY_OFFSET \
-	WraithShooter_Source_WraithShooter_Public_WraithProjectile_h_20_SPARSE_DATA \
-	WraithShooter_Source_WraithShooter_Public_WraithProjectile_h_20_RPC_WRAPPERS \
-	WraithShooter_Source_WraithShooter_Public_WraithProjectile_h_20_INCLASS \
-	WraithShooter_Source_WraithShooter_Public_WraithProjectile_h_20_STANDARD_CONSTRUCTORS \
+	WraithShooter_Source_WraithShooter_Public_WraithProjectile_h_21_PRIVATE_PROPERTY_OFFSET \
+	WraithShooter_Source_WraithShooter_Public_WraithProjectile_h_21_SPARSE_DATA \
+	WraithShooter_Source_WraithShooter_Public_WraithProjectile_h_21_RPC_WRAPPERS \
+	WraithShooter_Source_WraithShooter_Public_WraithProjectile_h_21_CALLBACK_WRAPPERS \
+	WraithShooter_Source_WraithShooter_Public_WraithProjectile_h_21_INCLASS \
+	WraithShooter_Source_WraithShooter_Public_WraithProjectile_h_21_STANDARD_CONSTRUCTORS \
 public: \
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
 
 
-#define WraithShooter_Source_WraithShooter_Public_WraithProjectile_h_20_GENERATED_BODY \
+#define WraithShooter_Source_WraithShooter_Public_WraithProjectile_h_21_GENERATED_BODY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \
 public: \
-	WraithShooter_Source_WraithShooter_Public_WraithProjectile_h_20_PRIVATE_PROPERTY_OFFSET \
-	WraithShooter_Source_WraithShooter_Public_WraithProjectile_h_20_SPARSE_DATA \
-	WraithShooter_Source_WraithShooter_Public_WraithProjectile_h_20_RPC_WRAPPERS_NO_PURE_DECLS \
-	WraithShooter_Source_WraithShooter_Public_WraithProjectile_h_20_INCLASS_NO_PURE_DECLS \
-	WraithShooter_Source_WraithShooter_Public_WraithProjectile_h_20_ENHANCED_CONSTRUCTORS \
+	WraithShooter_Source_WraithShooter_Public_WraithProjectile_h_21_PRIVATE_PROPERTY_OFFSET \
+	WraithShooter_Source_WraithShooter_Public_WraithProjectile_h_21_SPARSE_DATA \
+	WraithShooter_Source_WraithShooter_Public_WraithProjectile_h_21_RPC_WRAPPERS_NO_PURE_DECLS \
+	WraithShooter_Source_WraithShooter_Public_WraithProjectile_h_21_CALLBACK_WRAPPERS \
+	WraithShooter_Source_WraithShooter_Public_WraithProjectile_h_21_INCLASS_NO_PURE_DECLS \
+	WraithShooter_Source_WraithShooter_Public_WraithProjectile_h_21_ENHANCED_CONSTRUCTORS \
 private: \
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
 

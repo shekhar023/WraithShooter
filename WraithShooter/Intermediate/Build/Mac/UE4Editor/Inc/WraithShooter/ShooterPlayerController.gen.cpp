@@ -19,6 +19,7 @@ void EmptyLinkFunctionForGeneratedCodeShooterPlayerController() {}
 	UPackage* Z_Construct_UPackage__Script_WraithShooter();
 	UMG_API UClass* Z_Construct_UClass_UUserWidget_NoRegister();
 	COREUOBJECT_API UClass* Z_Construct_UClass_UClass();
+	WRAITHSHOOTER_API UClass* Z_Construct_UClass_AWraithShooterHUD_NoRegister();
 // End Cross Module References
 	DEFINE_FUNCTION(AShooterPlayerController::execOnTriggerEvent)
 	{
@@ -92,6 +93,10 @@ void EmptyLinkFunctionForGeneratedCodeShooterPlayerController() {}
 		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_HUD_MetaData[];
 #endif
 		static const UE4CodeGen_Private::FObjectPropertyParams NewProp_HUD;
+#if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_WraithHUDRef_MetaData[];
+#endif
+		static const UE4CodeGen_Private::FObjectPropertyParams NewProp_WraithHUDRef;
 #if WITH_METADATA
 		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_WBPLearnedSkill_MetaData[];
 #endif
@@ -167,6 +172,13 @@ void EmptyLinkFunctionForGeneratedCodeShooterPlayerController() {}
 #endif
 	const UE4CodeGen_Private::FObjectPropertyParams Z_Construct_UClass_AShooterPlayerController_Statics::NewProp_HUD = { "HUD", nullptr, (EPropertyFlags)0x0040000000080008, UE4CodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AShooterPlayerController, HUD), Z_Construct_UClass_UUserWidget_NoRegister, METADATA_PARAMS(Z_Construct_UClass_AShooterPlayerController_Statics::NewProp_HUD_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AShooterPlayerController_Statics::NewProp_HUD_MetaData)) };
 #if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AShooterPlayerController_Statics::NewProp_WraithHUDRef_MetaData[] = {
+		{ "Category", "ShooterPlayerController" },
+		{ "ModuleRelativePath", "Public/ShooterPlayerController.h" },
+	};
+#endif
+	const UE4CodeGen_Private::FObjectPropertyParams Z_Construct_UClass_AShooterPlayerController_Statics::NewProp_WraithHUDRef = { "WraithHUDRef", nullptr, (EPropertyFlags)0x0010000000000005, UE4CodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AShooterPlayerController, WraithHUDRef), Z_Construct_UClass_AWraithShooterHUD_NoRegister, METADATA_PARAMS(Z_Construct_UClass_AShooterPlayerController_Statics::NewProp_WraithHUDRef_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AShooterPlayerController_Statics::NewProp_WraithHUDRef_MetaData)) };
+#if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AShooterPlayerController_Statics::NewProp_WBPLearnedSkill_MetaData[] = {
 		{ "Category", "ShooterPlayerController" },
 		{ "EditInline", "true" },
@@ -181,6 +193,7 @@ void EmptyLinkFunctionForGeneratedCodeShooterPlayerController() {}
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterPlayerController_Statics::NewProp_LoseScreenClass,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterPlayerController_Statics::NewProp_HUDClass,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterPlayerController_Statics::NewProp_HUD,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterPlayerController_Statics::NewProp_WraithHUDRef,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AShooterPlayerController_Statics::NewProp_WBPLearnedSkill,
 	};
 	const FCppClassTypeInfoStatic Z_Construct_UClass_AShooterPlayerController_Statics::StaticCppClassTypeInfo = {
@@ -210,7 +223,7 @@ void EmptyLinkFunctionForGeneratedCodeShooterPlayerController() {}
 		}
 		return OuterClass;
 	}
-	IMPLEMENT_CLASS(AShooterPlayerController, 3316424852);
+	IMPLEMENT_CLASS(AShooterPlayerController, 315444925);
 	template<> WRAITHSHOOTER_API UClass* StaticClass<AShooterPlayerController>()
 	{
 		return AShooterPlayerController::StaticClass();

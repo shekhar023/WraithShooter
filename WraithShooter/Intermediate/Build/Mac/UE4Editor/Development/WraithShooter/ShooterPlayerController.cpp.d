@@ -2790,4 +2790,11 @@
   /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Intermediate/Build/Mac/UE4Editor/Inc/UMG/DynamicPropertyPath.generated.h \
   /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Intermediate/Build/Mac/UE4Editor/Inc/UMG/WidgetBlueprintGeneratedClass.generated.h \
   /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Intermediate/Build/Mac/UE4Editor/Inc/UMG/UserWidget.generated.h \
-  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Engine/Public/EngineUtils.h
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Engine/Public/EngineUtils.h \
+  /Users/Shekhar/Documents/Unreal\ Projects/WraithShooter/WraithShooter/Source/WraithShooter/Public/HUD/WraithShooterHUD.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Engine/Classes/GameFramework/HUD.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Engine/Classes/GameFramework/HUDHitBox.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Engine/Classes/GameFramework/DebugTextInfo.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Intermediate/Build/Mac/UE4Editor/Inc/Engine/DebugTextInfo.generated.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Intermediate/Build/Mac/UE4Editor/Inc/Engine/HUD.generated.h \
+  /Users/Shekhar/Documents/Unreal\ Projects/WraithShooter/WraithShooter/Intermediate/Build/Mac/UE4Editor/Inc/WraithShooter/WraithShooterHUD.generated.h

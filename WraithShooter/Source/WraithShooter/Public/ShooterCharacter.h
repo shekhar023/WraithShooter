@@ -151,6 +151,9 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ShooterCharacter,  meta = (ClampMin= 0.0f))
     float Energy;
     
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ShooterCharacter,  meta = (ClampMin= 0.0f))
+    float MaxEnergy;
+    
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ShooterCharacter)
     float MaxHealth;
     
@@ -171,6 +174,9 @@ public:
     
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SkillsInfo)
     bool bIsOffensiveAbilityReady;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SkillsInfo)
+    bool bIsDefensiveAbilityReady;
     
     UPROPERTY(EditDefaultsOnly, Category = Projectile)
     TSubclassOf<UCameraShake> ProjectileCameraShake;
@@ -262,6 +268,7 @@ public:
     
     FTimerHandle FireballCooldown_TimerHandle;
     
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = TimerHandle)
     FTimerHandle DrawPath_TimerHandle;
     
     void SpawnFireball();
@@ -319,6 +326,39 @@ public:
     FTimerHandle ElectroSparkCoolDown_TimerHandle;
     
     FTimerHandle ElectroSpark_TimerHandle;
+    
+    //MARK: ArticBlast Variables
+       UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ArticBlast)
+       bool bHasArticBlast;
+       
+       UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ArticBlast)
+       bool bUsedArticBlast;
+       
+       UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ArticBlast)
+       bool bArticBlastReady;
+       
+       UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ArticBlast)
+       float ArticBlastCooldown;
+       
+       UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ArticBlast)
+       float SpawnArticBlastDelay;
+       
+       UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ArticBlast)
+       FSkillData ArticBlastData;
+       
+       UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ArticBlast)
+       FSkillsAttributes ArticBlastAttributes;
+       
+       FTimerHandle ArticBlastCooldown_TimerHandle;
+       
+       FTimerHandle ArticBlast_TimerHandle;
+       
+       void SpawnArticBlast();
+       
+       void CanUseArticBlast();
+       
+       UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Fireball)
+       TSubclassOf<AWraithProjectile> ArticBlastClass;
     
     //MARK: Bloodlust Variables
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Bloodlust)

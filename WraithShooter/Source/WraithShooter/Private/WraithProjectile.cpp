@@ -5,6 +5,7 @@
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Particles/ParticleSystemComponent.h"
+#include "Components/CapsuleComponent.h"
 #include "Components/SphereComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "TimerManager.h"
@@ -17,6 +18,7 @@
 #include "NiagaraComponent.h"
 #include "NiagaraFunctionLibrary.h"
 #include "TimerManager.h"
+#include "ShooterCharacter.h"
 
 
 // Sets default values
@@ -101,7 +103,7 @@ void AWraithProjectile::OnDetonate()
     
     if(bHitSuccess)
     {
-       
+        
         
         for(auto& Actors : HitActors)
         {
@@ -119,10 +121,9 @@ void AWraithProjectile::OnDetonate()
             }
             else if(MyCharacter)
             {
-                 
-                 UGameplayStatics::ApplyRadialDamage(GetWorld(), RadiusDamage, GetActorLocation(), DamageRadius, DamageType, TArray<AActor*>(), this);
-                 
-                UE_LOG(LogTemp, Warning, TEXT("Radius Damage and Damage radius: %f and %f"),RadiusDamage, DamageRadius);
+                //MyCharacter->GetCapsuleComponent()->AddRadialImpulse(GetActorLocation(), ImpulseRadius, ImpulseStrength, ERadialImpulseFalloff::RIF_Constant, false)s;
+                
+                UGameplayStatics::ApplyRadialDamage(GetWorld(), RadiusDamage, GetActorLocation(), DamageRadius, DamageType, TArray<AActor*>(), this);
                 
             }
         }

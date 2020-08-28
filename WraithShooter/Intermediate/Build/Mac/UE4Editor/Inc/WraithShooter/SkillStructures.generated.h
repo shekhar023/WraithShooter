@@ -58,7 +58,7 @@ template<> WRAITHSHOOTER_API UEnum* StaticEnum<EDefensiveAbility>();
 	op(EOffensiveAbility::Fireball) \
 	op(EOffensiveAbility::ElectroSpark) \
 	op(EOffensiveAbility::Bloodlust) \
-	op(EOffensiveAbility::Teleport) 
+	op(EOffensiveAbility::ArticBlast) 
 
 enum class EOffensiveAbility : uint8;
 template<> WRAITHSHOOTER_API UEnum* StaticEnum<EOffensiveAbility>();

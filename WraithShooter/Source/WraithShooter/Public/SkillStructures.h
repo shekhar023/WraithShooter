@@ -15,7 +15,7 @@ enum class EOffensiveAbility : uint8
     Fireball,
     ElectroSpark,
     Bloodlust,
-    Teleport,
+    ArticBlast,
 };
 //MARK:ENUM EDefensiveAbility
 UENUM(BlueprintType)

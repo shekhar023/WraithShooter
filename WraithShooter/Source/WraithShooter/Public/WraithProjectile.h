@@ -13,6 +13,7 @@ class UProjectileMovementComponent;
 class UParticleSystem;
 class USoundBase;
 class UNiagaraSystem;
+class AShooterCharacter;
 
 UCLASS()
 class WRAITHSHOOTER_API AWraithProjectile : public AActor
@@ -20,38 +21,39 @@ class WRAITHSHOOTER_API AWraithProjectile : public AActor
     GENERATED_BODY()
     
     
+public:
     
-    UPROPERTY(VisibleDefaultsOnly, Category = Projectile)
+    UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = Projectile)
     UProjectileMovementComponent* ProjectileMovement;
     
-    UPROPERTY(EditAnywhere, Category = Projectile)
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Projectile)
     float FXScale;
     
-    UPROPERTY(EditAnywhere, Category = Projectile)
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Projectile)
     float Radius = 1000.f;
     
-    UPROPERTY(EditAnywhere, Category = Projectile)
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Projectile)
     float ImpulseRadius = 500;
     
-    UPROPERTY(EditAnywhere, Category = Projectile)
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Projectile)
     float ImpulseStrength = 500;
     
-    UPROPERTY(EditAnywhere, Category = Projectile)
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Projectile)
     float RadiusDamage = 50.f;
     
-    UPROPERTY(EditAnywhere, Category = Projectile)
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Projectile)
     float DamageRadius = 500.f;
     
-    UPROPERTY(EditAnywhere, Category = Projectile)
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Projectile)
     TSubclassOf < class UDamageType > DamageType;
     
-    UPROPERTY(EditAnywhere, Category = Projectile)
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Projectile)
     UNiagaraSystem* ExplosionSystem;
     
-    UPROPERTY(EditAnywhere, Category = FX)
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = FX)
     UParticleSystem* ExplosionParticles;
     
-    UPROPERTY(EditAnywhere, Category = FX)
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = FX)
     USoundBase* ExplosionSound;
     
 public:	
@@ -63,6 +65,9 @@ public:
     
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Projectile)
     UStaticMeshComponent* MeshComp;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ShooterCharacter)
+    AShooterCharacter* PlayerRef;
     
     UFUNCTION()
     void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit);
@@ -87,5 +92,8 @@ protected:
     void OnDetonate();
     
     AController* GetOwnerController() const;
+    
+    UFUNCTION(BlueprintImplementableEvent, Category = Projectile)
+    void DamageToPlayer();
    
 };

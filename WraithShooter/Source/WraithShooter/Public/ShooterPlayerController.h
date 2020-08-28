@@ -8,6 +8,7 @@
 
 class UUserWidget;
 class AShooterCharacter;
+class AWraithShooterHUD;
 
 UCLASS()
 class WRAITHSHOOTER_API AShooterPlayerController : public APlayerController
@@ -22,7 +23,10 @@ public:
     void OnTriggerEvent();
     
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
-       UUserWidget* WBPLearnedSkill;
+    UUserWidget* WBPLearnedSkill;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    AWraithShooterHUD* WraithHUDRef;
     
 protected:
     
