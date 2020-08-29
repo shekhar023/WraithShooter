@@ -7,6 +7,7 @@
 #include "Particles/ParticleSystemComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/SphereComponent.h"
+#include "Components/BoxComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "TimerManager.h"
 #include "Particles/ParticleSystem.h"
@@ -44,37 +45,34 @@ AWraithProjectile::AWraithProjectile()
     ProjectileMovement->bRotationFollowsVelocity = true;
     ProjectileMovement->bShouldBounce = true;
     
-    InitialLifeSpan = 3.0f;
-    DestroyDelay = 0.0f;
+    ImpulseRadius = 500.0f;
+    ImpulseStrength = 200.f;
+    CollisionShapeRadius = 500.f;
+    
+    BaseDamage = 5.0f;
+    MinimumDamage = 1.0f;
+    DamageInnerRadius = 10.f;
+    DamageOuterRadius = 100.f;
+    DamageFallOff = 20.f;
+    
     FXScale = 2.f;
-    
-    
 }
 
 // Called when the game starts or when spawned
 void AWraithProjectile::BeginPlay()
 {
-	Super::BeginPlay();
-   
+    Super::BeginPlay();
 }
 
 void AWraithProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit)
 {
     if((OtherActor != NULL) && (OtherActor != this) && (OtherComponent != NULL))
     {
-       OnDetonate();
+        OnDetonate();
     }
 }
 
-AController* AWraithProjectile::GetOwnerController() const
-{
-    APawn* OwnerPawn = Cast<APawn>(GetOwner());
-    if (OwnerPawn == nullptr)
-        return nullptr;
-    return OwnerPawn->GetController();
-}
-
-void AWraithProjectile::OnDetonate()
+void AWraithProjectile::ProjectileEffects()
 {
     if (ExplosionSystem)
     {
@@ -88,6 +86,12 @@ void AWraithProjectile::OnDetonate()
     }
     
     UGameplayStatics::PlaySoundAtLocation(GetWorld(), ExplosionSound, GetActorLocation());
+}
+
+void AWraithProjectile::OnDetonate()
+{
+    
+    ProjectileEffects();
     
     TArray<FHitResult> HitActors;
     
@@ -97,8 +101,8 @@ void AWraithProjectile::OnDetonate()
     
     FCollisionShape CollisionShape;
     CollisionShape.ShapeType = ECollisionShape::Sphere;
-    CollisionShape.SetSphere(Radius);
-
+    CollisionShape.SetSphere(CollisionShapeRadius);
+    
     bool bHitSuccess = GetWorld()->SweepMultiByChannel(HitActors, StartTrace, EndTrace, FQuat::Identity, ECollisionChannel::ECC_GameTraceChannel3, CollisionShape);
     
     if(bHitSuccess)
@@ -107,27 +111,25 @@ void AWraithProjectile::OnDetonate()
         
         for(auto& Actors : HitActors)
         {
-            UStaticMeshComponent* SM = Cast<UStaticMeshComponent>((Actors.GetActor()));
-            ADestructibleActor* DA = Cast<ADestructibleActor>((Actors.GetActor()));
+            UStaticMeshComponent* StaticMesh = Cast<UStaticMeshComponent>((Actors.GetActor()));
+            ADestructibleActor* DestructibleMesh = Cast<ADestructibleActor>((Actors.GetActor()));
             AShooterCharacter* MyCharacter = Cast<AShooterCharacter>((Actors.GetActor()));
             
-            if(SM)
+            if(StaticMesh)
             {
-                SM->AddRadialImpulse(GetActorLocation(), ImpulseRadius, ImpulseStrength, ERadialImpulseFalloff::RIF_Constant, false);
+                StaticMesh->AddRadialImpulse(GetActorLocation(), ImpulseRadius, ImpulseStrength, ERadialImpulseFalloff::RIF_Constant, false);
             }
-            if(DA)
+            if(DestructibleMesh)
             {
-                DA->GetDestructibleComponent()->ApplyRadiusDamage(RadiusDamage, Actors.ImpactPoint, RadiusDamage, ImpulseStrength, false);
+                DestructibleMesh->GetDestructibleComponent()->ApplyRadiusDamage(BaseDamage, StartTrace, DamageOuterRadius, ImpulseStrength, false);
             }
-            else if(MyCharacter)
+            
+            if(MyCharacter)
             {
-                //MyCharacter->GetCapsuleComponent()->AddRadialImpulse(GetActorLocation(), ImpulseRadius, ImpulseStrength, ERadialImpulseFalloff::RIF_Constant, false)s;
                 
-                UGameplayStatics::ApplyRadialDamage(GetWorld(), RadiusDamage, GetActorLocation(), DamageRadius, DamageType, TArray<AActor*>(), this);
-                
+                UGameplayStatics::ApplyRadialDamageWithFalloff(GetWorld(), BaseDamage, MinimumDamage, GetActorLocation(), DamageInnerRadius, DamageOuterRadius, DamageFallOff, DamageType, TArray<AActor*>(), this);
             }
         }
     }
-    
-    Destroy();
+    AfterOnDetonate();
 }

@@ -157,7 +157,7 @@ void AShooterCharacter::BeginPlay()
     
     ShootFireball.AddUObject(this, &AShooterCharacter::UseFireball);
     ShootElectroSpark.AddUObject(this, &AShooterCharacter::UseElectroSpark);
-
+    
 }
 
 //MARK:EndPlay to free Delegates
@@ -275,7 +275,7 @@ void AShooterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
     PlayerInputComponent->BindAction("PickingUp", IE_Pressed, this, &AShooterCharacter::PickObjects);
     
     PlayerInputComponent->BindAction("OffensiveAbility", IE_Pressed, this, &AShooterCharacter::AimFirball);
-   PlayerInputComponent->BindAction("OffensiveAbility", IE_Released, this, &AShooterCharacter::CastOffensiveAblity);
+    PlayerInputComponent->BindAction("OffensiveAbility", IE_Released, this, &AShooterCharacter::CastOffensiveAblity);
     
 }
 
@@ -351,40 +351,40 @@ void AShooterCharacter::Landed(const FHitResult& Hit)
 
 //MARK: TODO Backdash and Timeline
 /*void AShooterCharacter::StartBackDash()
-{
-    if(bHasBackDash == false && bIsBackDashReady == false && GetCharacterMovement()->IsFalling() == true){return;}
-    
-    bIsBackDashReady = false;
-    
-    GetWorldTimerManager().SetTimer(BackDash_TimerHandle, this, &AShooterCharacter::BackDash, BackDashCooldown, false);
-}
-
-void AShooterCharacter::BackDash()
-{
-    bIsBackDashReady = true;
-    bIsBackDashing = true;
-    
-    if(GetActorRotation().Yaw >= 0)
-    {
-       UE_LOG(LogTemp, Warning, TEXT("World Roation: %f" ), GetActorRotation().Yaw);
-        if(CurveFloat)
-        {
-            FOnTimelineFloat TimelineProgress;
-            TimelineProgress.BindUFunction(this, FName("BackDashTimelineTrack"));
-            BackDashTimeline.AddInterpFloat(CurveFloat, TimelineProgress);
-            BackDashTimeline.SetLooping(false);
-            BackDashTimeline.PlayFromStart();
-        }
-    }
-}
-void AShooterCharacter::BackDashTimelineTrack(f)
-{
-    auto NewEndLocation =  GetActorLocation() + BackDashLeftAmount;
-    auto NewLocation = FMath::Lerp(GetActorLocation(), NewEndLocation, BackDashTimeline.GetTimelineLength());
-    GetCapsuleComponent()->SetRelativeLocation(NewLocation);
-    UE_LOG(LogTemp, Warning, TEXT("BackDashTimeline Time: %f" ), BackDashTimeline.GetTimelineLength());
-    
-}*/
+ {
+ if(bHasBackDash == false && bIsBackDashReady == false && GetCharacterMovement()->IsFalling() == true){return;}
+ 
+ bIsBackDashReady = false;
+ 
+ GetWorldTimerManager().SetTimer(BackDash_TimerHandle, this, &AShooterCharacter::BackDash, BackDashCooldown, false);
+ }
+ 
+ void AShooterCharacter::BackDash()
+ {
+ bIsBackDashReady = true;
+ bIsBackDashing = true;
+ 
+ if(GetActorRotation().Yaw >= 0)
+ {
+ UE_LOG(LogTemp, Warning, TEXT("World Roation: %f" ), GetActorRotation().Yaw);
+ if(CurveFloat)
+ {
+ FOnTimelineFloat TimelineProgress;
+ TimelineProgress.BindUFunction(this, FName("BackDashTimelineTrack"));
+ BackDashTimeline.AddInterpFloat(CurveFloat, TimelineProgress);
+ BackDashTimeline.SetLooping(false);
+ BackDashTimeline.PlayFromStart();
+ }
+ }
+ }
+ void AShooterCharacter::BackDashTimelineTrack(f)
+ {
+ auto NewEndLocation =  GetActorLocation() + BackDashLeftAmount;
+ auto NewLocation = FMath::Lerp(GetActorLocation(), NewEndLocation, BackDashTimeline.GetTimelineLength());
+ GetCapsuleComponent()->SetRelativeLocation(NewLocation);
+ UE_LOG(LogTemp, Warning, TEXT("BackDashTimeline Time: %f" ), BackDashTimeline.GetTimelineLength());
+ 
+ }*/
 
 void AShooterCharacter::LookUpRate(float AxisValue)
 {
@@ -429,7 +429,7 @@ void AShooterCharacter::StopShoot()
 {
     if(Gun)
     {
-       
+        
         Gun->StopAutomaticFire();
     }
 }
@@ -439,6 +439,10 @@ void AShooterCharacter::Aim()
 {
     bIsAiming = true;
     Zoom(bIsAiming);
+}
+void AShooterCharacter::AimAt(FVector HitLocation)
+{
+    
 }
 
 //Player StopAiming function
@@ -458,29 +462,29 @@ void AShooterCharacter::Reload()
 void AShooterCharacter::CastOffensiveAblity()
 {
     switch (OffensiveAbilitySlotted)
-       {
-           case EOffensiveAbility::Fireball:
-               ShootFireball.Broadcast();
-               break;
-           case EOffensiveAbility::ElectroSpark:
-               ShootElectroSpark.Broadcast();
-               break;
-           default:
-               // Not implemented.
-               break;
-       }
+    {
+        case EOffensiveAbility::Fireball:
+            ShootFireball.Broadcast();
+            break;
+        case EOffensiveAbility::ElectroSpark:
+            ShootElectroSpark.Broadcast();
+            break;
+        default:
+            // Not implemented.
+            break;
+    }
 }
 
 //MARK: Exlposive Grenade
 void AShooterCharacter::AimFirball()
 {
-     StopShoot();
+    StopShoot();
     
     if(bIsOffensiveAbilityReady)
     {
         bIsGrenadeAiming = true;
         
-         GetWorldTimerManager().SetTimer(DrawPath_TimerHandle, this, &AShooterCharacter::DrawThrowArc, TimeToDrawAndDestroyArc, true);
+        GetWorldTimerManager().SetTimer(DrawPath_TimerHandle, this, &AShooterCharacter::DrawThrowArc, TimeToDrawAndDestroyArc, true);
     }
     else
     {
@@ -656,7 +660,7 @@ void AShooterCharacter::PreviousWeapon()
 
 void AShooterCharacter::OnEquipPrimaryWeapon()
 {
- 
+    
     if (Inventory.Num() >= 1)
     {
         /* Find first weapon that uses primary slot. */
@@ -673,7 +677,7 @@ void AShooterCharacter::OnEquipPrimaryWeapon()
 
 void AShooterCharacter::OnEquipSecondaryWeapon()
 {
-
+    
     if (Inventory.Num() >= 2)
     {
         /* Find first weapon that uses secondary slot. */
@@ -690,7 +694,7 @@ void AShooterCharacter::OnEquipSecondaryWeapon()
 
 void AShooterCharacter::OnEquipSideWeapon()
 {
-
+    
     if (Inventory.Num() >= 3)
     {
         /* Find first weapon that uses secondary slot. */
@@ -728,7 +732,7 @@ void AShooterCharacter::SwapToNewWeaponMesh()
     {
         PreviousGun->AttachMeshToPawn(PreviousGun->GetStorageSlot());
     }
-
+    
     if (Gun)
     {
         Gun->AttachMeshToPawn(EInventorySlot::Hands);
@@ -751,6 +755,8 @@ void AShooterCharacter::PickObjects()
             if (HitActor->GetClass()->ImplementsInterface(UWraithUIInterface::StaticClass()))
             {
                 const auto &Interface = Cast<IWraithUIInterface>(HitActor);
+                
+                // if, Execute Interface on C++ Layer
                 if (Interface)
                 {
                     Interface->Execute_ObjectInteractedWith(HitActor);
@@ -855,7 +861,7 @@ bool AShooterCharacter::ObjectTrace(FHitResult& Hit, FVector& ShotDirection)
     FRotator Rotation;
     
     OwnerController->GetPlayerViewPoint(Location, Rotation);
-
+    
     FVector EndPoint = Location + Rotation.Vector() * InteractTraceLength;
     
     FCollisionQueryParams Params;
@@ -865,13 +871,12 @@ bool AShooterCharacter::ObjectTrace(FHitResult& Hit, FVector& ShotDirection)
     Params.bReturnPhysicalMaterial = true;
     
     if (DebugWeaponDrawing > 0)
-        {
-            DrawDebugLine(GetWorld(), Location, EndPoint, FColor::Red, false, 1.0f, 0, 1.0f);
-        }
+    {
+        DrawDebugLine(GetWorld(), Location, EndPoint, FColor::Red, false, 1.0f, 0, 1.0f);
+    }
     
     return GetWorld()->LineTraceSingleByChannel(Hit, Location, EndPoint, ECollisionChannel::ECC_GameTraceChannel1, Params);
 }
-
 
 //MARK: TakeDamage
 float AShooterCharacter::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser)
@@ -915,7 +920,7 @@ bool AShooterCharacter::HaveEnoughEnergyToUseAbility(FSkillsAttributes AbilityAt
         bIsGrenadeAiming = false;
         return false;
     }
-        
+    
 }
 //MARK: VFX functions
 
@@ -946,5 +951,4 @@ bool AShooterCharacter::ReactToPlayerEntered_Implementation()
     Health -= 100.f;
     HealthText->SetText(FText::FromString(FString::Printf(TEXT("HP: %0.f "), GetHealth())));
     return true;
-    
 }

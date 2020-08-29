@@ -28,6 +28,9 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     AWraithShooterHUD* WraithHUDRef;
     
+    AShooterCharacter* GetControlledPlayer();
+    
+    
 protected:
     
     virtual void BeginPlay() override;

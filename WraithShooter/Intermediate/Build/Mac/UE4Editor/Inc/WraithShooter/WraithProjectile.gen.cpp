@@ -21,7 +21,6 @@ void EmptyLinkFunctionForGeneratedCodeWraithProjectile() {}
 	COREUOBJECT_API UScriptStruct* Z_Construct_UScriptStruct_FVector();
 	ENGINE_API UClass* Z_Construct_UClass_UPrimitiveComponent_NoRegister();
 	ENGINE_API UClass* Z_Construct_UClass_AActor_NoRegister();
-	WRAITHSHOOTER_API UClass* Z_Construct_UClass_AShooterCharacter_NoRegister();
 	ENGINE_API UClass* Z_Construct_UClass_UStaticMeshComponent_NoRegister();
 	ENGINE_API UClass* Z_Construct_UClass_USphereComponent_NoRegister();
 	ENGINE_API UClass* Z_Construct_UClass_USoundBase_NoRegister();
@@ -50,10 +49,10 @@ void EmptyLinkFunctionForGeneratedCodeWraithProjectile() {}
 		P_THIS->OnHit(Z_Param_HitComponent,Z_Param_OtherActor,Z_Param_OtherComponent,Z_Param_NormalImpulse,Z_Param_Out_Hit);
 		P_NATIVE_END;
 	}
-	static FName NAME_AWraithProjectile_DamageToPlayer = FName(TEXT("DamageToPlayer"));
-	void AWraithProjectile::DamageToPlayer()
+	static FName NAME_AWraithProjectile_AfterOnDetonate = FName(TEXT("AfterOnDetonate"));
+	void AWraithProjectile::AfterOnDetonate()
 	{
-		ProcessEvent(FindFunctionChecked(NAME_AWraithProjectile_DamageToPlayer),NULL);
+		ProcessEvent(FindFunctionChecked(NAME_AWraithProjectile_AfterOnDetonate),NULL);
 	}
 	void AWraithProjectile::StaticRegisterNativesAWraithProjectile()
 	{
@@ -64,7 +63,7 @@ void EmptyLinkFunctionForGeneratedCodeWraithProjectile() {}
 		};
 		FNativeFunctionRegistrar::RegisterFunctions(Class, Funcs, UE_ARRAY_COUNT(Funcs));
 	}
-	struct Z_Construct_UFunction_AWraithProjectile_DamageToPlayer_Statics
+	struct Z_Construct_UFunction_AWraithProjectile_AfterOnDetonate_Statics
 	{
 #if WITH_METADATA
 		static const UE4CodeGen_Private::FMetaDataPairParam Function_MetaDataParams[];
@@ -72,18 +71,18 @@ void EmptyLinkFunctionForGeneratedCodeWraithProjectile() {}
 		static const UE4CodeGen_Private::FFunctionParams FuncParams;
 	};
 #if WITH_METADATA
-	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_AWraithProjectile_DamageToPlayer_Statics::Function_MetaDataParams[] = {
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_AWraithProjectile_AfterOnDetonate_Statics::Function_MetaDataParams[] = {
 		{ "Category", "Projectile" },
 		{ "ModuleRelativePath", "Public/WraithProjectile.h" },
 	};
 #endif
-	const UE4CodeGen_Private::FFunctionParams Z_Construct_UFunction_AWraithProjectile_DamageToPlayer_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_AWraithProjectile, nullptr, "DamageToPlayer", nullptr, nullptr, 0, nullptr, 0, RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x08080800, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_AWraithProjectile_DamageToPlayer_Statics::Function_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UFunction_AWraithProjectile_DamageToPlayer_Statics::Function_MetaDataParams)) };
-	UFunction* Z_Construct_UFunction_AWraithProjectile_DamageToPlayer()
+	const UE4CodeGen_Private::FFunctionParams Z_Construct_UFunction_AWraithProjectile_AfterOnDetonate_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_AWraithProjectile, nullptr, "AfterOnDetonate", nullptr, nullptr, 0, nullptr, 0, RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x08020800, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_AWraithProjectile_AfterOnDetonate_Statics::Function_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UFunction_AWraithProjectile_AfterOnDetonate_Statics::Function_MetaDataParams)) };
+	UFunction* Z_Construct_UFunction_AWraithProjectile_AfterOnDetonate()
 	{
 		static UFunction* ReturnFunction = nullptr;
 		if (!ReturnFunction)
 		{
-			UE4CodeGen_Private::ConstructUFunction(ReturnFunction, Z_Construct_UFunction_AWraithProjectile_DamageToPlayer_Statics::FuncParams);
+			UE4CodeGen_Private::ConstructUFunction(ReturnFunction, Z_Construct_UFunction_AWraithProjectile_AfterOnDetonate_Statics::FuncParams);
 		}
 		return ReturnFunction;
 	}
@@ -96,10 +95,11 @@ void EmptyLinkFunctionForGeneratedCodeWraithProjectile() {}
 	};
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_AWraithProjectile_OnDetonate_Statics::Function_MetaDataParams[] = {
+		{ "Category", "Projectile" },
 		{ "ModuleRelativePath", "Public/WraithProjectile.h" },
 	};
 #endif
-	const UE4CodeGen_Private::FFunctionParams Z_Construct_UFunction_AWraithProjectile_OnDetonate_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_AWraithProjectile, nullptr, "OnDetonate", nullptr, nullptr, 0, nullptr, 0, RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x00080401, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_AWraithProjectile_OnDetonate_Statics::Function_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UFunction_AWraithProjectile_OnDetonate_Statics::Function_MetaDataParams)) };
+	const UE4CodeGen_Private::FFunctionParams Z_Construct_UFunction_AWraithProjectile_OnDetonate_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_AWraithProjectile, nullptr, "OnDetonate", nullptr, nullptr, 0, nullptr, 0, RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x04020401, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_AWraithProjectile_OnDetonate_Statics::Function_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UFunction_AWraithProjectile_OnDetonate_Statics::Function_MetaDataParams)) };
 	UFunction* Z_Construct_UFunction_AWraithProjectile_OnDetonate()
 	{
 		static UFunction* ReturnFunction = nullptr;
@@ -168,10 +168,11 @@ void EmptyLinkFunctionForGeneratedCodeWraithProjectile() {}
 	};
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_AWraithProjectile_OnHit_Statics::Function_MetaDataParams[] = {
+		{ "Category", "Projectile" },
 		{ "ModuleRelativePath", "Public/WraithProjectile.h" },
 	};
 #endif
-	const UE4CodeGen_Private::FFunctionParams Z_Construct_UFunction_AWraithProjectile_OnHit_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_AWraithProjectile, nullptr, "OnHit", nullptr, nullptr, sizeof(WraithProjectile_eventOnHit_Parms), Z_Construct_UFunction_AWraithProjectile_OnHit_Statics::PropPointers, UE_ARRAY_COUNT(Z_Construct_UFunction_AWraithProjectile_OnHit_Statics::PropPointers), RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x00C20401, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_AWraithProjectile_OnHit_Statics::Function_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UFunction_AWraithProjectile_OnHit_Statics::Function_MetaDataParams)) };
+	const UE4CodeGen_Private::FFunctionParams Z_Construct_UFunction_AWraithProjectile_OnHit_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_AWraithProjectile, nullptr, "OnHit", nullptr, nullptr, sizeof(WraithProjectile_eventOnHit_Parms), Z_Construct_UFunction_AWraithProjectile_OnHit_Statics::PropPointers, UE_ARRAY_COUNT(Z_Construct_UFunction_AWraithProjectile_OnHit_Statics::PropPointers), RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x04C20401, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_AWraithProjectile_OnHit_Statics::Function_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UFunction_AWraithProjectile_OnHit_Statics::Function_MetaDataParams)) };
 	UFunction* Z_Construct_UFunction_AWraithProjectile_OnHit()
 	{
 		static UFunction* ReturnFunction = nullptr;
@@ -193,14 +194,6 @@ void EmptyLinkFunctionForGeneratedCodeWraithProjectile() {}
 		static const UE4CodeGen_Private::FMetaDataPairParam Class_MetaDataParams[];
 #endif
 #if WITH_METADATA
-		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_DestroyDelay_MetaData[];
-#endif
-		static const UE4CodeGen_Private::FFloatPropertyParams NewProp_DestroyDelay;
-#if WITH_METADATA
-		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_PlayerRef_MetaData[];
-#endif
-		static const UE4CodeGen_Private::FObjectPropertyParams NewProp_PlayerRef;
-#if WITH_METADATA
 		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_MeshComp_MetaData[];
 #endif
 		static const UE4CodeGen_Private::FObjectPropertyParams NewProp_MeshComp;
@@ -221,17 +214,37 @@ void EmptyLinkFunctionForGeneratedCodeWraithProjectile() {}
 #endif
 		static const UE4CodeGen_Private::FObjectPropertyParams NewProp_ExplosionSystem;
 #if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_FXScale_MetaData[];
+#endif
+		static const UE4CodeGen_Private::FFloatPropertyParams NewProp_FXScale;
+#if WITH_METADATA
 		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_DamageType_MetaData[];
 #endif
 		static const UE4CodeGen_Private::FClassPropertyParams NewProp_DamageType;
 #if WITH_METADATA
-		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_DamageRadius_MetaData[];
+		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_DamageFallOff_MetaData[];
 #endif
-		static const UE4CodeGen_Private::FFloatPropertyParams NewProp_DamageRadius;
+		static const UE4CodeGen_Private::FFloatPropertyParams NewProp_DamageFallOff;
 #if WITH_METADATA
-		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_RadiusDamage_MetaData[];
+		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_DamageOuterRadius_MetaData[];
 #endif
-		static const UE4CodeGen_Private::FFloatPropertyParams NewProp_RadiusDamage;
+		static const UE4CodeGen_Private::FFloatPropertyParams NewProp_DamageOuterRadius;
+#if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_DamageInnerRadius_MetaData[];
+#endif
+		static const UE4CodeGen_Private::FFloatPropertyParams NewProp_DamageInnerRadius;
+#if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_MinimumDamage_MetaData[];
+#endif
+		static const UE4CodeGen_Private::FFloatPropertyParams NewProp_MinimumDamage;
+#if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_BaseDamage_MetaData[];
+#endif
+		static const UE4CodeGen_Private::FFloatPropertyParams NewProp_BaseDamage;
+#if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_CollisionShapeRadius_MetaData[];
+#endif
+		static const UE4CodeGen_Private::FFloatPropertyParams NewProp_CollisionShapeRadius;
 #if WITH_METADATA
 		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_ImpulseStrength_MetaData[];
 #endif
@@ -240,14 +253,6 @@ void EmptyLinkFunctionForGeneratedCodeWraithProjectile() {}
 		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_ImpulseRadius_MetaData[];
 #endif
 		static const UE4CodeGen_Private::FFloatPropertyParams NewProp_ImpulseRadius;
-#if WITH_METADATA
-		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_Radius_MetaData[];
-#endif
-		static const UE4CodeGen_Private::FFloatPropertyParams NewProp_Radius;
-#if WITH_METADATA
-		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_FXScale_MetaData[];
-#endif
-		static const UE4CodeGen_Private::FFloatPropertyParams NewProp_FXScale;
 #if WITH_METADATA
 		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_ProjectileMovement_MetaData[];
 #endif
@@ -261,9 +266,9 @@ void EmptyLinkFunctionForGeneratedCodeWraithProjectile() {}
 		(UObject* (*)())Z_Construct_UPackage__Script_WraithShooter,
 	};
 	const FClassFunctionLinkInfo Z_Construct_UClass_AWraithProjectile_Statics::FuncInfo[] = {
-		{ &Z_Construct_UFunction_AWraithProjectile_DamageToPlayer, "DamageToPlayer" }, // 1406330166
-		{ &Z_Construct_UFunction_AWraithProjectile_OnDetonate, "OnDetonate" }, // 1263179145
-		{ &Z_Construct_UFunction_AWraithProjectile_OnHit, "OnHit" }, // 1715322671
+		{ &Z_Construct_UFunction_AWraithProjectile_AfterOnDetonate, "AfterOnDetonate" }, // 2644082426
+		{ &Z_Construct_UFunction_AWraithProjectile_OnDetonate, "OnDetonate" }, // 3420539461
+		{ &Z_Construct_UFunction_AWraithProjectile_OnHit, "OnHit" }, // 3523152065
 	};
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AWraithProjectile_Statics::Class_MetaDataParams[] = {
@@ -271,20 +276,6 @@ void EmptyLinkFunctionForGeneratedCodeWraithProjectile() {}
 		{ "ModuleRelativePath", "Public/WraithProjectile.h" },
 	};
 #endif
-#if WITH_METADATA
-	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AWraithProjectile_Statics::NewProp_DestroyDelay_MetaData[] = {
-		{ "Category", "Projectile" },
-		{ "ModuleRelativePath", "Public/WraithProjectile.h" },
-	};
-#endif
-	const UE4CodeGen_Private::FFloatPropertyParams Z_Construct_UClass_AWraithProjectile_Statics::NewProp_DestroyDelay = { "DestroyDelay", nullptr, (EPropertyFlags)0x0010000000000005, UE4CodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AWraithProjectile, DestroyDelay), METADATA_PARAMS(Z_Construct_UClass_AWraithProjectile_Statics::NewProp_DestroyDelay_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AWraithProjectile_Statics::NewProp_DestroyDelay_MetaData)) };
-#if WITH_METADATA
-	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AWraithProjectile_Statics::NewProp_PlayerRef_MetaData[] = {
-		{ "Category", "ShooterCharacter" },
-		{ "ModuleRelativePath", "Public/WraithProjectile.h" },
-	};
-#endif
-	const UE4CodeGen_Private::FObjectPropertyParams Z_Construct_UClass_AWraithProjectile_Statics::NewProp_PlayerRef = { "PlayerRef", nullptr, (EPropertyFlags)0x0010000000000005, UE4CodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AWraithProjectile, PlayerRef), Z_Construct_UClass_AShooterCharacter_NoRegister, METADATA_PARAMS(Z_Construct_UClass_AWraithProjectile_Statics::NewProp_PlayerRef_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AWraithProjectile_Statics::NewProp_PlayerRef_MetaData)) };
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AWraithProjectile_Statics::NewProp_MeshComp_MetaData[] = {
 		{ "Category", "Projectile" },
@@ -303,74 +294,95 @@ void EmptyLinkFunctionForGeneratedCodeWraithProjectile() {}
 	const UE4CodeGen_Private::FObjectPropertyParams Z_Construct_UClass_AWraithProjectile_Statics::NewProp_CollisionComp = { "CollisionComp", nullptr, (EPropertyFlags)0x001000000008000d, UE4CodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AWraithProjectile, CollisionComp), Z_Construct_UClass_USphereComponent_NoRegister, METADATA_PARAMS(Z_Construct_UClass_AWraithProjectile_Statics::NewProp_CollisionComp_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AWraithProjectile_Statics::NewProp_CollisionComp_MetaData)) };
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AWraithProjectile_Statics::NewProp_ExplosionSound_MetaData[] = {
-		{ "Category", "FX" },
+		{ "Category", "ProjectileFX" },
 		{ "ModuleRelativePath", "Public/WraithProjectile.h" },
 	};
 #endif
 	const UE4CodeGen_Private::FObjectPropertyParams Z_Construct_UClass_AWraithProjectile_Statics::NewProp_ExplosionSound = { "ExplosionSound", nullptr, (EPropertyFlags)0x0010000000000005, UE4CodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AWraithProjectile, ExplosionSound), Z_Construct_UClass_USoundBase_NoRegister, METADATA_PARAMS(Z_Construct_UClass_AWraithProjectile_Statics::NewProp_ExplosionSound_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AWraithProjectile_Statics::NewProp_ExplosionSound_MetaData)) };
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AWraithProjectile_Statics::NewProp_ExplosionParticles_MetaData[] = {
-		{ "Category", "FX" },
+		{ "Category", "ProjectileFX" },
 		{ "ModuleRelativePath", "Public/WraithProjectile.h" },
 	};
 #endif
 	const UE4CodeGen_Private::FObjectPropertyParams Z_Construct_UClass_AWraithProjectile_Statics::NewProp_ExplosionParticles = { "ExplosionParticles", nullptr, (EPropertyFlags)0x0010000000000005, UE4CodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AWraithProjectile, ExplosionParticles), Z_Construct_UClass_UParticleSystem_NoRegister, METADATA_PARAMS(Z_Construct_UClass_AWraithProjectile_Statics::NewProp_ExplosionParticles_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AWraithProjectile_Statics::NewProp_ExplosionParticles_MetaData)) };
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AWraithProjectile_Statics::NewProp_ExplosionSystem_MetaData[] = {
-		{ "Category", "Projectile" },
+		{ "Category", "ProjectileFX" },
 		{ "ModuleRelativePath", "Public/WraithProjectile.h" },
 	};
 #endif
 	const UE4CodeGen_Private::FObjectPropertyParams Z_Construct_UClass_AWraithProjectile_Statics::NewProp_ExplosionSystem = { "ExplosionSystem", nullptr, (EPropertyFlags)0x0010000000000005, UE4CodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AWraithProjectile, ExplosionSystem), Z_Construct_UClass_UNiagaraSystem_NoRegister, METADATA_PARAMS(Z_Construct_UClass_AWraithProjectile_Statics::NewProp_ExplosionSystem_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AWraithProjectile_Statics::NewProp_ExplosionSystem_MetaData)) };
 #if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AWraithProjectile_Statics::NewProp_FXScale_MetaData[] = {
+		{ "Category", "ProjectileFX" },
+		{ "ModuleRelativePath", "Public/WraithProjectile.h" },
+	};
+#endif
+	const UE4CodeGen_Private::FFloatPropertyParams Z_Construct_UClass_AWraithProjectile_Statics::NewProp_FXScale = { "FXScale", nullptr, (EPropertyFlags)0x0010000000000005, UE4CodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AWraithProjectile, FXScale), METADATA_PARAMS(Z_Construct_UClass_AWraithProjectile_Statics::NewProp_FXScale_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AWraithProjectile_Statics::NewProp_FXScale_MetaData)) };
+#if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AWraithProjectile_Statics::NewProp_DamageType_MetaData[] = {
-		{ "Category", "Projectile" },
+		{ "Category", "ProjectileRadialDamageAttributes" },
 		{ "ModuleRelativePath", "Public/WraithProjectile.h" },
 	};
 #endif
 	const UE4CodeGen_Private::FClassPropertyParams Z_Construct_UClass_AWraithProjectile_Statics::NewProp_DamageType = { "DamageType", nullptr, (EPropertyFlags)0x0014000000000005, UE4CodeGen_Private::EPropertyGenFlags::Class, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AWraithProjectile, DamageType), Z_Construct_UClass_UDamageType_NoRegister, Z_Construct_UClass_UClass, METADATA_PARAMS(Z_Construct_UClass_AWraithProjectile_Statics::NewProp_DamageType_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AWraithProjectile_Statics::NewProp_DamageType_MetaData)) };
 #if WITH_METADATA
-	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AWraithProjectile_Statics::NewProp_DamageRadius_MetaData[] = {
-		{ "Category", "Projectile" },
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AWraithProjectile_Statics::NewProp_DamageFallOff_MetaData[] = {
+		{ "Category", "ProjectileRadialDamageAttributes" },
 		{ "ModuleRelativePath", "Public/WraithProjectile.h" },
 	};
 #endif
-	const UE4CodeGen_Private::FFloatPropertyParams Z_Construct_UClass_AWraithProjectile_Statics::NewProp_DamageRadius = { "DamageRadius", nullptr, (EPropertyFlags)0x0010000000000005, UE4CodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AWraithProjectile, DamageRadius), METADATA_PARAMS(Z_Construct_UClass_AWraithProjectile_Statics::NewProp_DamageRadius_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AWraithProjectile_Statics::NewProp_DamageRadius_MetaData)) };
+	const UE4CodeGen_Private::FFloatPropertyParams Z_Construct_UClass_AWraithProjectile_Statics::NewProp_DamageFallOff = { "DamageFallOff", nullptr, (EPropertyFlags)0x0010000000000005, UE4CodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AWraithProjectile, DamageFallOff), METADATA_PARAMS(Z_Construct_UClass_AWraithProjectile_Statics::NewProp_DamageFallOff_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AWraithProjectile_Statics::NewProp_DamageFallOff_MetaData)) };
 #if WITH_METADATA
-	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AWraithProjectile_Statics::NewProp_RadiusDamage_MetaData[] = {
-		{ "Category", "Projectile" },
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AWraithProjectile_Statics::NewProp_DamageOuterRadius_MetaData[] = {
+		{ "Category", "ProjectileRadialDamageAttributes" },
 		{ "ModuleRelativePath", "Public/WraithProjectile.h" },
 	};
 #endif
-	const UE4CodeGen_Private::FFloatPropertyParams Z_Construct_UClass_AWraithProjectile_Statics::NewProp_RadiusDamage = { "RadiusDamage", nullptr, (EPropertyFlags)0x0010000000000005, UE4CodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AWraithProjectile, RadiusDamage), METADATA_PARAMS(Z_Construct_UClass_AWraithProjectile_Statics::NewProp_RadiusDamage_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AWraithProjectile_Statics::NewProp_RadiusDamage_MetaData)) };
+	const UE4CodeGen_Private::FFloatPropertyParams Z_Construct_UClass_AWraithProjectile_Statics::NewProp_DamageOuterRadius = { "DamageOuterRadius", nullptr, (EPropertyFlags)0x0010000000000005, UE4CodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AWraithProjectile, DamageOuterRadius), METADATA_PARAMS(Z_Construct_UClass_AWraithProjectile_Statics::NewProp_DamageOuterRadius_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AWraithProjectile_Statics::NewProp_DamageOuterRadius_MetaData)) };
+#if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AWraithProjectile_Statics::NewProp_DamageInnerRadius_MetaData[] = {
+		{ "Category", "ProjectileRadialDamageAttributes" },
+		{ "ModuleRelativePath", "Public/WraithProjectile.h" },
+	};
+#endif
+	const UE4CodeGen_Private::FFloatPropertyParams Z_Construct_UClass_AWraithProjectile_Statics::NewProp_DamageInnerRadius = { "DamageInnerRadius", nullptr, (EPropertyFlags)0x0010000000000005, UE4CodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AWraithProjectile, DamageInnerRadius), METADATA_PARAMS(Z_Construct_UClass_AWraithProjectile_Statics::NewProp_DamageInnerRadius_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AWraithProjectile_Statics::NewProp_DamageInnerRadius_MetaData)) };
+#if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AWraithProjectile_Statics::NewProp_MinimumDamage_MetaData[] = {
+		{ "Category", "ProjectileRadialDamageAttributes" },
+		{ "ModuleRelativePath", "Public/WraithProjectile.h" },
+	};
+#endif
+	const UE4CodeGen_Private::FFloatPropertyParams Z_Construct_UClass_AWraithProjectile_Statics::NewProp_MinimumDamage = { "MinimumDamage", nullptr, (EPropertyFlags)0x0010000000000005, UE4CodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AWraithProjectile, MinimumDamage), METADATA_PARAMS(Z_Construct_UClass_AWraithProjectile_Statics::NewProp_MinimumDamage_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AWraithProjectile_Statics::NewProp_MinimumDamage_MetaData)) };
+#if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AWraithProjectile_Statics::NewProp_BaseDamage_MetaData[] = {
+		{ "Category", "ProjectileRadialDamageAttributes" },
+		{ "ModuleRelativePath", "Public/WraithProjectile.h" },
+	};
+#endif
+	const UE4CodeGen_Private::FFloatPropertyParams Z_Construct_UClass_AWraithProjectile_Statics::NewProp_BaseDamage = { "BaseDamage", nullptr, (EPropertyFlags)0x0010000000000005, UE4CodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AWraithProjectile, BaseDamage), METADATA_PARAMS(Z_Construct_UClass_AWraithProjectile_Statics::NewProp_BaseDamage_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AWraithProjectile_Statics::NewProp_BaseDamage_MetaData)) };
+#if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AWraithProjectile_Statics::NewProp_CollisionShapeRadius_MetaData[] = {
+		{ "Category", "ProjectileRadialDamageAttributes" },
+		{ "ModuleRelativePath", "Public/WraithProjectile.h" },
+	};
+#endif
+	const UE4CodeGen_Private::FFloatPropertyParams Z_Construct_UClass_AWraithProjectile_Statics::NewProp_CollisionShapeRadius = { "CollisionShapeRadius", nullptr, (EPropertyFlags)0x0010000000000005, UE4CodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AWraithProjectile, CollisionShapeRadius), METADATA_PARAMS(Z_Construct_UClass_AWraithProjectile_Statics::NewProp_CollisionShapeRadius_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AWraithProjectile_Statics::NewProp_CollisionShapeRadius_MetaData)) };
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AWraithProjectile_Statics::NewProp_ImpulseStrength_MetaData[] = {
-		{ "Category", "Projectile" },
+		{ "Category", "ProjectileImpulse" },
 		{ "ModuleRelativePath", "Public/WraithProjectile.h" },
 	};
 #endif
 	const UE4CodeGen_Private::FFloatPropertyParams Z_Construct_UClass_AWraithProjectile_Statics::NewProp_ImpulseStrength = { "ImpulseStrength", nullptr, (EPropertyFlags)0x0010000000000005, UE4CodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AWraithProjectile, ImpulseStrength), METADATA_PARAMS(Z_Construct_UClass_AWraithProjectile_Statics::NewProp_ImpulseStrength_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AWraithProjectile_Statics::NewProp_ImpulseStrength_MetaData)) };
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AWraithProjectile_Statics::NewProp_ImpulseRadius_MetaData[] = {
-		{ "Category", "Projectile" },
+		{ "Category", "ProjectileImpulse" },
 		{ "ModuleRelativePath", "Public/WraithProjectile.h" },
 	};
 #endif
 	const UE4CodeGen_Private::FFloatPropertyParams Z_Construct_UClass_AWraithProjectile_Statics::NewProp_ImpulseRadius = { "ImpulseRadius", nullptr, (EPropertyFlags)0x0010000000000005, UE4CodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AWraithProjectile, ImpulseRadius), METADATA_PARAMS(Z_Construct_UClass_AWraithProjectile_Statics::NewProp_ImpulseRadius_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AWraithProjectile_Statics::NewProp_ImpulseRadius_MetaData)) };
-#if WITH_METADATA
-	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AWraithProjectile_Statics::NewProp_Radius_MetaData[] = {
-		{ "Category", "Projectile" },
-		{ "ModuleRelativePath", "Public/WraithProjectile.h" },
-	};
-#endif
-	const UE4CodeGen_Private::FFloatPropertyParams Z_Construct_UClass_AWraithProjectile_Statics::NewProp_Radius = { "Radius", nullptr, (EPropertyFlags)0x0010000000000005, UE4CodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AWraithProjectile, Radius), METADATA_PARAMS(Z_Construct_UClass_AWraithProjectile_Statics::NewProp_Radius_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AWraithProjectile_Statics::NewProp_Radius_MetaData)) };
-#if WITH_METADATA
-	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AWraithProjectile_Statics::NewProp_FXScale_MetaData[] = {
-		{ "Category", "Projectile" },
-		{ "ModuleRelativePath", "Public/WraithProjectile.h" },
-	};
-#endif
-	const UE4CodeGen_Private::FFloatPropertyParams Z_Construct_UClass_AWraithProjectile_Statics::NewProp_FXScale = { "FXScale", nullptr, (EPropertyFlags)0x0010000000000005, UE4CodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AWraithProjectile, FXScale), METADATA_PARAMS(Z_Construct_UClass_AWraithProjectile_Statics::NewProp_FXScale_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AWraithProjectile_Statics::NewProp_FXScale_MetaData)) };
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AWraithProjectile_Statics::NewProp_ProjectileMovement_MetaData[] = {
 		{ "Category", "Projectile" },
@@ -380,20 +392,21 @@ void EmptyLinkFunctionForGeneratedCodeWraithProjectile() {}
 #endif
 	const UE4CodeGen_Private::FObjectPropertyParams Z_Construct_UClass_AWraithProjectile_Statics::NewProp_ProjectileMovement = { "ProjectileMovement", nullptr, (EPropertyFlags)0x00100000000b000d, UE4CodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AWraithProjectile, ProjectileMovement), Z_Construct_UClass_UProjectileMovementComponent_NoRegister, METADATA_PARAMS(Z_Construct_UClass_AWraithProjectile_Statics::NewProp_ProjectileMovement_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AWraithProjectile_Statics::NewProp_ProjectileMovement_MetaData)) };
 	const UE4CodeGen_Private::FPropertyParamsBase* const Z_Construct_UClass_AWraithProjectile_Statics::PropPointers[] = {
-		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AWraithProjectile_Statics::NewProp_DestroyDelay,
-		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AWraithProjectile_Statics::NewProp_PlayerRef,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AWraithProjectile_Statics::NewProp_MeshComp,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AWraithProjectile_Statics::NewProp_CollisionComp,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AWraithProjectile_Statics::NewProp_ExplosionSound,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AWraithProjectile_Statics::NewProp_ExplosionParticles,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AWraithProjectile_Statics::NewProp_ExplosionSystem,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AWraithProjectile_Statics::NewProp_FXScale,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AWraithProjectile_Statics::NewProp_DamageType,
-		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AWraithProjectile_Statics::NewProp_DamageRadius,
-		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AWraithProjectile_Statics::NewProp_RadiusDamage,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AWraithProjectile_Statics::NewProp_DamageFallOff,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AWraithProjectile_Statics::NewProp_DamageOuterRadius,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AWraithProjectile_Statics::NewProp_DamageInnerRadius,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AWraithProjectile_Statics::NewProp_MinimumDamage,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AWraithProjectile_Statics::NewProp_BaseDamage,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AWraithProjectile_Statics::NewProp_CollisionShapeRadius,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AWraithProjectile_Statics::NewProp_ImpulseStrength,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AWraithProjectile_Statics::NewProp_ImpulseRadius,
-		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AWraithProjectile_Statics::NewProp_Radius,
-		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AWraithProjectile_Statics::NewProp_FXScale,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AWraithProjectile_Statics::NewProp_ProjectileMovement,
 	};
 	const FCppClassTypeInfoStatic Z_Construct_UClass_AWraithProjectile_Statics::StaticCppClassTypeInfo = {
@@ -423,7 +436,7 @@ void EmptyLinkFunctionForGeneratedCodeWraithProjectile() {}
 		}
 		return OuterClass;
 	}
-	IMPLEMENT_CLASS(AWraithProjectile, 2648221841);
+	IMPLEMENT_CLASS(AWraithProjectile, 3595695717);
 	template<> WRAITHSHOOTER_API UClass* StaticClass<AWraithProjectile>()
 	{
 		return AWraithProjectile::StaticClass();

@@ -16,6 +16,12 @@ void AShooterPlayerController::BeginPlay()
     
 }
 
+AShooterCharacter* AShooterPlayerController::GetControlledPlayer()
+{
+    return Cast<AShooterCharacter>(GetPawn());
+}
+
+
 void AShooterPlayerController::GameHasEnded(class AActor* EndGameFocus, bool bIsWinner)
 {
     Super::GameHasEnded(EndGameFocus, bIsWinner);
@@ -59,3 +65,5 @@ void AShooterPlayerController::OnTriggerEvent()
         WBPLearnedSkill->AddToViewport();
     }
 }
+
+

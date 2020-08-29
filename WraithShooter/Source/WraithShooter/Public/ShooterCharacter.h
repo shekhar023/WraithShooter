@@ -31,11 +31,11 @@ enum class EInventorySlot : uint8
 {
     /* For currently equipped items/weapons */
     Hands,
-
+    
     /* For Primary weapons on spine bone */
     Primary,
-
-   /* For Secondary weapons on spine bone */
+    
+    /* For Secondary weapons on spine bone */
     Secondary,
     
     /* For Side weapons on Pelvis bone */
@@ -82,6 +82,8 @@ public:
     void StopCrouch();
     
     void Aim();
+    
+    void AimAt(FVector HitLocation);
     
     void StopAim();
     
@@ -130,7 +132,7 @@ public:
     /* Attachpoint for active weapon/item in hands */
     UPROPERTY(EditDefaultsOnly, Category = "Sockets")
     FName WeaponAttachPoint;
-
+    
     /* Attachpoint for primary weapons */
     UPROPERTY(EditDefaultsOnly, Category = "Sockets")
     FName PrimaryWeaponAttachPoint;
@@ -184,15 +186,15 @@ public:
     void CameraEffects();
     
     //MARK: TimeLine
- /*   UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = TimeLine)
-    UCurveFloat* CurveFloat;
+    /*   UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = TimeLine)
+     UCurveFloat* CurveFloat;
+     
+     FTimeline BackDashTimeline;
+     
+     UFUNCTION()
+     void BackDashTimelineTrack(float DirectionToDash);
+     */
     
-    FTimeline BackDashTimeline;
-    
-    UFUNCTION()
-    void BackDashTimelineTrack(float DirectionToDash);
-  */
-
 public:
     //MARK: Offensive Skills Variables and Data
     
@@ -301,7 +303,7 @@ public:
     
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ElectroSpark)
     float SpawnElectroSparkDelay;
-
+    
     UFUNCTION(BlueprintCallable)
     void ElectroSparkOn();
     
@@ -309,17 +311,17 @@ public:
     void ElectroSparkOff();
     
     UFUNCTION()
-   void SpawnElectroSpark();
+    void SpawnElectroSpark();
     
     UFUNCTION(BlueprintCallable)
     void CanUseElectroSpark();
-
+    
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ElectroSpark)
     TSubclassOf<AWraithProjectile> ElectroSparkClass;
     
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ElectroSpark)
     FSkillData ElectroSparkData;
-       
+    
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ElectroSpark)
     FSkillsAttributes ElectroSparkAttributes;
     
@@ -328,37 +330,37 @@ public:
     FTimerHandle ElectroSpark_TimerHandle;
     
     //MARK: ArticBlast Variables
-       UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ArticBlast)
-       bool bHasArticBlast;
-       
-       UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ArticBlast)
-       bool bUsedArticBlast;
-       
-       UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ArticBlast)
-       bool bArticBlastReady;
-       
-       UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ArticBlast)
-       float ArticBlastCooldown;
-       
-       UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ArticBlast)
-       float SpawnArticBlastDelay;
-       
-       UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ArticBlast)
-       FSkillData ArticBlastData;
-       
-       UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ArticBlast)
-       FSkillsAttributes ArticBlastAttributes;
-       
-       FTimerHandle ArticBlastCooldown_TimerHandle;
-       
-       FTimerHandle ArticBlast_TimerHandle;
-       
-       void SpawnArticBlast();
-       
-       void CanUseArticBlast();
-       
-       UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Fireball)
-       TSubclassOf<AWraithProjectile> ArticBlastClass;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ArticBlast)
+    bool bHasArticBlast;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ArticBlast)
+    bool bUsedArticBlast;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ArticBlast)
+    bool bArticBlastReady;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ArticBlast)
+    float ArticBlastCooldown;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ArticBlast)
+    float SpawnArticBlastDelay;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ArticBlast)
+    FSkillData ArticBlastData;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ArticBlast)
+    FSkillsAttributes ArticBlastAttributes;
+    
+    FTimerHandle ArticBlastCooldown_TimerHandle;
+    
+    FTimerHandle ArticBlast_TimerHandle;
+    
+    void SpawnArticBlast();
+    
+    void CanUseArticBlast();
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ArticBlast)
+    TSubclassOf<AWraithProjectile> ArticBlastClass;
     
     //MARK: Bloodlust Variables
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Bloodlust)
@@ -467,7 +469,7 @@ protected:
     void NextWeapon();
     
     void PreviousWeapon();
-
+    
     void EquipWeapon(AGun* Weapon);
     
     void SetCurrentWeapon(AGun* NewWeapon, AGun* LastWeapon);
@@ -486,7 +488,7 @@ public:
     
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = AIBehavior)
     UBehaviorTree* ShooterBT;
-
+    
 public:
     //MARK: Return Functions
     
@@ -533,7 +535,7 @@ public:
     
     UFUNCTION(BlueprintCallable, Category = Animation)
     void SwapToNewWeaponMesh();
- 
+    
 public:
     
     //MARK: Function for Binding Delegates created in WraithShooterGameModeBase.h
@@ -551,7 +553,7 @@ public:
     
     UFUNCTION()
     void MakeVFXInvisible();
-
+    
 public:
     //MARK: Virtual function Take Damage, GetTestName, PostInitializeComponents, ReactToPlayerEntered, ReactToPlayerEntered_Implementation
     
@@ -561,7 +563,7 @@ public:
     
     //Declare override of interface
     virtual FString GetTestName() override;
-
+    
     //Declared function must be implmented in c++
     bool ReactToPlayerEntered();
     bool ReactToPlayerEntered_Implementation() override;
@@ -581,7 +583,7 @@ public:
     
     void UseFireball();
     
-  
+    
     void UseElectroSpark();
     
     void RadiusDamage();

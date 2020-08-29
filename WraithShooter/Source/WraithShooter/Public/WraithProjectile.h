@@ -14,6 +14,7 @@ class UParticleSystem;
 class USoundBase;
 class UNiagaraSystem;
 class AShooterCharacter;
+class UBoxComponent;
 
 UCLASS()
 class WRAITHSHOOTER_API AWraithProjectile : public AActor
@@ -26,34 +27,43 @@ public:
     UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = Projectile)
     UProjectileMovementComponent* ProjectileMovement;
     
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Projectile)
-    float FXScale;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ProjectileImpulse)
+    float ImpulseRadius;
     
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Projectile)
-    float Radius = 1000.f;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ProjectileImpulse)
+    float ImpulseStrength;
     
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Projectile)
-    float ImpulseRadius = 500;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ProjectileRadialDamageAttributes)
+    float CollisionShapeRadius;
     
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Projectile)
-    float ImpulseStrength = 500;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ProjectileRadialDamageAttributes)
+    float BaseDamage;
     
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Projectile)
-    float RadiusDamage = 50.f;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ProjectileRadialDamageAttributes)
+    float MinimumDamage;
     
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Projectile)
-    float DamageRadius = 500.f;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ProjectileRadialDamageAttributes)
+    float DamageInnerRadius;
     
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Projectile)
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ProjectileRadialDamageAttributes)
+    float DamageOuterRadius;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ProjectileRadialDamageAttributes)
+    float DamageFallOff;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ProjectileRadialDamageAttributes)
     TSubclassOf < class UDamageType > DamageType;
     
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Projectile)
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ProjectileFX)
+    float FXScale;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ProjectileFX)
     UNiagaraSystem* ExplosionSystem;
     
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = FX)
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ProjectileFX)
     UParticleSystem* ExplosionParticles;
     
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = FX)
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ProjectileFX)
     USoundBase* ExplosionSound;
     
 public:	
@@ -66,34 +76,24 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Projectile)
     UStaticMeshComponent* MeshComp;
     
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ShooterCharacter)
-    AShooterCharacter* PlayerRef;
     
-    UFUNCTION()
+    UFUNCTION(BlueprintCallable, Category = Projectile)
     void OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit);
     
     FORCEINLINE USphereComponent* GetCollisionComp() const { return CollisionComp; }
     
     FORCEINLINE UProjectileMovementComponent* GetProjectileMovement() const { return ProjectileMovement; }
     
-    FTimerHandle Destroy_Handle;
+    UFUNCTION(BlueprintCallable, Category = Projectile)
+    void OnDetonate();
     
-    void DestroyProjectile();
+    UFUNCTION(BlueprintImplementableEvent, Category = Projectile)
+    void AfterOnDetonate();
     
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Projectile)
-    float DestroyDelay;
-
+    void ProjectileEffects();
     
 protected:
     // Called when the game starts or when spawned
     virtual void BeginPlay() override;
     
-    UFUNCTION()
-    void OnDetonate();
-    
-    AController* GetOwnerController() const;
-    
-    UFUNCTION(BlueprintImplementableEvent, Category = Projectile)
-    void DamageToPlayer();
-   
 };
