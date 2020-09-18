@@ -16,6 +16,10 @@
 #include "NiagaraSystem.h"
 #include "NiagaraComponent.h"
 #include "NiagaraFunctionLibrary.h"
+#include "Net/UnrealNetwork.h"
+
+static int32 DebugWeaponDrawing = 0;
+FAutoConsoleVariableRef CVARDebugWeaponDrawing(TEXT("COOP.DebugWeapons"), DebugWeaponDrawing, TEXT("Draw Debug Lines for Weapons"),ECVF_Cheat);
 
 // Sets default values
 AGun::AGun()
@@ -26,24 +30,23 @@ AGun::AGun()
     Mesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Mesh"));
     Mesh->SetupAttachment(RootComponent);
     
-    MuzzleFlashSocketName = TEXT("MuzzleFlashSocket");
-    GunShellSocket = TEXT("AmmoSocket");
-    TracerTargetName = "Target";
+    WeaponAttributes.MuzzleFlashSocketName = TEXT("MuzzleFlashSocket");
+    WeaponAttributes.GunShellSocket = TEXT("AmmoSocket");
     
     StorageSlot = EInventorySlot::Primary;
     
-    MaxRange = 10000.f;
-    RateOfFire = 600;
-    BulletSpread = 2.0f;
-    Damage = 10.f;
-    MaxAmmo = 300;
-    MaxAmmoInClip = 30;
+    WeaponAttributes.MaxRange = 10000.f;
+    WeaponAttributes.RateOfFire = 600;
+    WeaponAttributes.BulletSpread = 2.0f;
+    WeaponAttributes.Damage = 10.f;
+    WeaponAttributes.MaxAmmo = 300;
+    WeaponAttributes.MaxAmmoInClip = 30;
     
     bIsFiring = false;
     bIsReloading = false;
-    
-    CurrentState = EWeaponState::Idle;
-    
+
+    SetReplicates(true);
+    SetReplicateMovement(true);
 }
 
 //MARK: PostInitializeComponents
@@ -52,8 +55,8 @@ void AGun::PostInitializeComponents()
     Super::PostInitializeComponents();
 
     /* Setup configuration */
-    TimeBetweenShots = 60 / RateOfFire;
-    CurrentAmmoInClip = FMath::Min(MaxAmmo, MaxAmmoInClip);
+    TimeBetweenShots = 60 / WeaponAttributes.RateOfFire;
+    WeaponAttributes.CurrentAmmoInClip = FMath::Min(WeaponAttributes.MaxAmmo, WeaponAttributes.MaxAmmoInClip);
 }
 //MARK: EndPlay
 void AGun::EndPlay(const EEndPlayReason::Type EndPlayReason)
@@ -62,7 +65,6 @@ void AGun::EndPlay(const EEndPlayReason::Type EndPlayReason)
 
     DetachMeshFromPawn();
     StopAutomaticFire();
-    
 }
 
 //MARK: Return Functions
@@ -78,12 +80,12 @@ bool AGun::GetbCanFire() const
 
 int AGun::GetCurrentAmmoInClip() const
 {
-    return CurrentAmmoInClip;
+    return WeaponAttributes.CurrentAmmoInClip;
 }
 
 int AGun::GetMaxAmmo() const
 {
-    return MaxAmmo;
+    return WeaponAttributes.MaxAmmo;
 }
 
 float AGun::GetEquipStartedTime() const
@@ -91,11 +93,11 @@ float AGun::GetEquipStartedTime() const
     return EquipStartedTime;
 }
 
-
 float AGun::GetEquipDuration() const
 {
     return EquipDuration;
 }
+
 bool AGun::IsPlayerAiming()
 {
     AShooterCharacter* MyCharacter = Cast<AShooterCharacter>(GetOwner());
@@ -121,7 +123,6 @@ void AGun::SetOwningPawn(AShooterCharacter* MyPawn)
     }
 }
 
-
 AController* AGun::GetOwnerController() const
 {
     APawn* OwnerPawn = Cast<APawn>(GetOwner());
@@ -130,81 +131,119 @@ AController* AGun::GetOwnerController() const
     return OwnerPawn->GetController();
 }
 
-//MARK: Weapon Fire
+//MqARK: Weapon Fire
 void AGun::StartAutomaticFire()
 {
+    if(bIsShotgun == false)
+    {
     float FirstDelay = FMath::Max(LastFireTime + TimeBetweenShots - GetWorld()->TimeSeconds, 0.0f);
     GetWorldTimerManager().SetTimer(TimerHandle_TimeBetweenShots, this, &AGun::PullTrigger, TimeBetweenShots, true, FirstDelay);
+    }
+    
+    if(bIsShotgun == true)
+    {
+        GetWorldTimerManager().SetTimer(Shotgun_TimerHandle, this, &AGun::PullTrigger, WeaponAttributes.ShotgunFireDelay, false, 0.0f);
+    }
 }
 
 void AGun::StopAutomaticFire()
 {
     GetWorldTimerManager().ClearTimer(TimerHandle_TimeBetweenShots);
+    GetWorldTimerManager().ClearTimer(Shotgun_TimerHandle);
 }
 
 //MARK: Gun Trace
-bool AGun::GunTrace(FHitResult& Hit, FVector& ShotDirection, FVector& EndPoint)
+FHitResult AGun::GetHitResult()
 {
-    AController* OwnerController = GetOwnerController();
-    if(!OwnerController){return false;}
-    
-    FVector Location;
-    FRotator Rotation;
-    
-    OwnerController->GetPlayerViewPoint(Location, Rotation);
-    
-    ShotDirection = -Rotation.Vector();
-    
-    float HalfRad = FMath::DegreesToRadians(BulletSpread);
-    ShotDirection = FMath::VRandCone(ShotDirection, HalfRad, HalfRad);
-    
-    EndPoint = Location + Rotation.Vector() * MaxRange;
+    FHitResult Hit;
     
     FCollisionQueryParams Params;
     Params.AddIgnoredActor(GetOwner());
     Params.AddIgnoredActor(this);
     Params.bTraceComplex = true;
     Params.bReturnPhysicalMaterial = true;
+
+    GetWorld()->LineTraceSingleByChannel(OUT Hit, GetPlayerWorldPosition(), GetGunRangeEndPoint(), ECollisionChannel::ECC_GameTraceChannel1, Params);
     
-    return GetWorld()->LineTraceSingleByChannel(Hit, Location, EndPoint, ECollisionChannel::ECC_GameTraceChannel1, Params);
+    return Hit;
 }
+
+FVector AGun::GetPlayerWorldPosition()
+{
+    FVector PlayerViewPointLocation;
+    FRotator PlayerViewPointRotation;
+    
+    GetOwnerController()->GetPlayerViewPoint(OUT PlayerViewPointLocation, OUT PlayerViewPointRotation);
+    
+    return PlayerViewPointLocation;
+    
+}
+
+FVector AGun::GetGunRangeEndPoint()
+{
+    FVector PlayerViewPointLocation;
+    FRotator PlayerViewPointRotation;
+    
+    GetOwnerController()->GetPlayerViewPoint(OUT PlayerViewPointLocation, OUT PlayerViewPointRotation);
+    
+    FVector EndPoint = PlayerViewPointLocation + PlayerViewPointRotation.Vector() * WeaponAttributes.MaxRange;
+    
+    if(bIsShotgun == true)
+    {
+        EndPoint.Y += FMath::RandRange(-500, 500);
+        EndPoint.Z += FMath::RandRange(-500, 500);
+    }
+    return EndPoint;
+    
+}
+
+FVector AGun::GetShotDirection()
+{
+     FVector PlayerViewPointLocation;
+     FRotator PlayerViewPointRotation;
+     
+     GetOwnerController()->GetPlayerViewPoint(OUT PlayerViewPointLocation, OUT PlayerViewPointRotation);
+     
+     FVector ShotDirection = -PlayerViewPointRotation.Vector();
+     
+     float HalfRad = FMath::DegreesToRadians(WeaponAttributes.BulletSpread);
+     ShotDirection = FMath::VRandCone(GetGunRangeEndPoint(), HalfRad, HalfRad);
+     
+     return ShotDirection;
+}
+
 //MARK: PullTrigger
 void AGun::PullTrigger()
 {
-   CalculateAmmo();
+    
+    CalculateAmmo();
     
     if(GetbCanFire() == true && bIsReloading == false)
     {
-        FHitResult Hit;
-        FVector ShotDirection;
-        FVector EndPoint;
-        bool bSuccess = GunTrace(Hit, ShotDirection, EndPoint);
+        FHitResult Hit = GetHitResult();
         SurfaceType = SurfaceType_Default;
         
-        if(bSuccess)
+        PlayFireEffects(GetGunRangeEndPoint(), Hit.ImpactPoint);
+        SurfaceType = UPhysicalMaterial::DetermineSurfaceType(Hit.PhysMaterial.Get());
+        PlayImpactEffects(SurfaceType, Hit.ImpactPoint);
+        AActor* HitActor = Hit.GetActor();
+        
+        if(HitActor != nullptr)
         {
-            PlayFireEffects(EndPoint, Hit.ImpactPoint);
-            SurfaceType = UPhysicalMaterial::DetermineSurfaceType(Hit.PhysMaterial.Get());
-            PlayImpactEffects(SurfaceType, Hit.ImpactPoint);
-            AActor* HitActor = Hit.GetActor();
-            
-            if(HitActor != nullptr)
-            {
-                
-                FPointDamageEvent DamageEvent(Damage, Hit, ShotDirection, nullptr);
-                AController* OwnerController = GetOwnerController();
-                HitActor->TakeDamage(Damage, DamageEvent, OwnerController, this);
-            }
+            FPointDamageEvent DamageEvent(WeaponAttributes.Damage, Hit, GetShotDirection(), nullptr);
+            AController* OwnerController = GetOwnerController();
+            HitActor->TakeDamage(WeaponAttributes.Damage, DamageEvent, OwnerController, this);
         }
     }
 }
+
 //MARK: Calculate Ammo
 void AGun::CalculateAmmo()
 {
     if(GetCurrentAmmoInClip() > 0 && IsPlayerAiming() == true && bIsReloading == false)
     {
         bCanFire = true;
-        CurrentAmmoInClip--;
+        WeaponAttributes.CurrentAmmoInClip--;
     }
     
     else
@@ -216,7 +255,7 @@ void AGun::CalculateAmmo()
  //MARK: Reloading Functions
 bool AGun::CanReload() const
 {
-    if((GetCurrentAmmoInClip() == MaxAmmoInClip) || (GetCurrentAmmoInClip() == MaxAmmoInClip)|| (GetMaxAmmo() == 0))
+    if((GetCurrentAmmoInClip() == WeaponAttributes.MaxAmmoInClip) || (GetCurrentAmmoInClip() == WeaponAttributes.MaxAmmoInClip)|| (GetMaxAmmo() == 0))
     {
         return false;
     }
@@ -232,13 +271,13 @@ void AGun::StartReload()
     if(IsPlayerAiming())
     {
         
-        float AnimDuration = PlayCharacterAnimations(PlayerReloadMontage);
+        float AnimDuration = PlayCharacterAnimations(PlayerAnimations.PlayerReloadMontage);
         if (AnimDuration <= 0.0f)
         {
             AnimDuration = 1.0f;
         }
         
-        PlayGunAnimations(ReloadIronSightAnim);
+        PlayGunAnimations(WeaponAnimations.ReloadIronSightAnim);
         
         GetWorldTimerManager().SetTimer(TimerHandle_StopReload, this, &AGun::StopReload, AnimDuration, false);
         
@@ -246,13 +285,13 @@ void AGun::StartReload()
     }
     else
     {
-        float AnimDuration = PlayCharacterAnimations(PlayerHipReloadMontage);
+        float AnimDuration = PlayCharacterAnimations(PlayerAnimations.PlayerHipReloadMontage);
         if (AnimDuration <= 0.0f)
         {
             AnimDuration = 1.0f;
         }
         
-        PlayGunAnimations(ReloadHipAnim);
+        PlayGunAnimations(WeaponAnimations.ReloadHipAnim);
         
         GetWorldTimerManager().SetTimer(TimerHandle_StopReload, this, &AGun::StopReload, AnimDuration, false);
         
@@ -267,30 +306,24 @@ void AGun::StopReload()
     
     if(IsPlayerAiming())
     {
-        StopWeaponAnimation(PlayerReloadMontage);
+        StopWeaponAnimation(PlayerAnimations.PlayerReloadMontage);
     }
     
     else
     {
-        StopWeaponAnimation(PlayerHipReloadMontage);
+        StopWeaponAnimation(PlayerAnimations.PlayerHipReloadMontage);
     }
     
 }
 
 void AGun::Reload()
 {
-    if(GetCurrentAmmoInClip() < MaxAmmoInClip)
-    {
-        
-        
-    }
-    
-    int32 AmmoDifference = FMath::Min(MaxAmmoInClip - CurrentAmmoInClip, MaxAmmo - CurrentAmmoInClip);
+    int32 AmmoDifference = FMath::Min(WeaponAttributes.MaxAmmoInClip - WeaponAttributes.CurrentAmmoInClip, WeaponAttributes.MaxAmmo - WeaponAttributes.CurrentAmmoInClip);
 
     if (AmmoDifference > 0)
     {
-        CurrentAmmoInClip += AmmoDifference;
-        MaxAmmo -= FMath::Clamp(MaxAmmo, 0, AmmoDifference);
+        WeaponAttributes.CurrentAmmoInClip += AmmoDifference;
+        WeaponAttributes.MaxAmmo -= FMath::Clamp(WeaponAttributes.MaxAmmo, 0, AmmoDifference);
     }
     
     bIsReloading = false;
@@ -300,34 +333,34 @@ void AGun::Reload()
 //MARK: Weapon Effects
 void AGun::PlayFireEffects(FVector TraceEndPoint, FVector TraceEnd)
 {
-    if(MuzzleSound)
+    if(WeaponEffects.MuzzleSound)
     {
-        UGameplayStatics::SpawnSoundAttached(MuzzleSound, Mesh, MuzzleFlashSocketName);
+        UGameplayStatics::SpawnSoundAttached(WeaponEffects.MuzzleSound, Mesh, WeaponAttributes.MuzzleFlashSocketName);
     }
     
-    if(ImpactSound)
+    if(WeaponEffects.ImpactSound)
     {
-        UGameplayStatics::PlaySoundAtLocation(GetWorld(), ImpactSound, TraceEnd);
+        UGameplayStatics::PlaySoundAtLocation(GetWorld(), WeaponEffects.ImpactSound, TraceEnd);
     }
-    if(MuzzleFlash)
+    if(WeaponEffects.MuzzleFlash)
     {
-        UGameplayStatics::SpawnEmitterAttached(MuzzleFlash, Mesh, MuzzleFlashSocketName);
+        UGameplayStatics::SpawnEmitterAttached(WeaponEffects.MuzzleFlash, Mesh, WeaponAttributes.MuzzleFlashSocketName);
     }
     
-    if (TracerEffect)
+    if (WeaponEffects.TracerEffect)
     {
-        FVector MuzzleLocation = Mesh->GetSocketLocation(MuzzleFlashSocketName);
-        UNiagaraComponent* TracerComp = UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), TracerEffect, MuzzleLocation);
+        FVector MuzzleLocation = Mesh->GetSocketLocation(WeaponAttributes.MuzzleFlashSocketName);
+        UNiagaraComponent* TracerComp = UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), WeaponEffects.TracerEffect, MuzzleLocation);
         if (TracerComp)
         {
             TracerComp->SetVectorParameter(TEXT("BeamEnd"), TraceEndPoint);
         }
     }
     
-    if(GunShellFX)
+    if(WeaponEffects.GunShellFX)
     {
-        auto ShellEjectTransform = Mesh->GetSocketTransform(GunShellSocket);
-        UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), GunShellFX, ShellEjectTransform);
+        auto ShellEjectTransform = Mesh->GetSocketTransform(WeaponAttributes.GunShellSocket);
+        UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), WeaponEffects.GunShellFX, ShellEjectTransform);
     }
     
     APawn* MyOwner = Cast<APawn>(GetOwner());
@@ -336,12 +369,12 @@ void AGun::PlayFireEffects(FVector TraceEndPoint, FVector TraceEnd)
         APlayerController* PlayerController = Cast<APlayerController>(MyOwner->GetController());
         if (PlayerController)
         {
-            PlayerController->ClientPlayCameraShake(FireCamShake);
+            PlayerController->ClientPlayCameraShake(WeaponEffects.FireCamShake);
         }
     }
     
-    PlayGunAnimations(GunFireAnim);
-    PlayCharacterAnimations(PlayerGunFireMontage);
+    PlayGunAnimations(WeaponAnimations.GunFireAnim);
+    PlayCharacterAnimations(PlayerAnimations.PlayerGunFireMontage);
 }
 //MARK: Weapon Impact Effects
 void AGun::PlayImpactEffects(EPhysicalSurface MySurfaceType, FVector ImpactPoint)
@@ -350,19 +383,19 @@ void AGun::PlayImpactEffects(EPhysicalSurface MySurfaceType, FVector ImpactPoint
     switch (MySurfaceType)
     {
         case SurfaceType1: "BodyImpact";
-            SelectedEffect = BodyImpactEffect;
+            SelectedEffect = WeaponEffects.BodyImpactEffect;
             break;
         case SurfaceType2: "Metal";
-            SelectedEffect = MetalImpactEffect;
+            SelectedEffect = WeaponEffects.MetalImpactEffect;
             break;
         default:
-            SelectedEffect = ImpactEffect;
+            SelectedEffect = WeaponEffects.ImpactEffect;
             break;
     }
     
     if (SelectedEffect)
     {
-        FVector MuzzleLocation = Mesh->GetSocketLocation(MuzzleFlashSocketName);
+        FVector MuzzleLocation = Mesh->GetSocketLocation(WeaponAttributes.MuzzleFlashSocketName);
         
         FVector ShotDirection = ImpactPoint - MuzzleLocation;
         ShotDirection.Normalize();
@@ -385,7 +418,7 @@ void AGun::OnEquip(bool bPlayAnimation)
    // AttachMeshToPawn(StorageSlot);
     if (bPlayAnimation)
     {
-        float Duration = PlayCharacterAnimations(EquipAnim);
+        float Duration = PlayCharacterAnimations(PlayerAnimations.EquipAnim);
         if (Duration <= 0.0f)
         {
             // Failsafe in case animation is missing
@@ -411,7 +444,7 @@ void AGun::OnUnEquip()
     
     if (bPendingEquip)
     {
-        StopWeaponAnimation(EquipAnim);
+        StopWeaponAnimation(PlayerAnimations.EquipAnim);
         bPendingEquip = false;
 
         GetWorldTimerManager().ClearTimer(EquipFinishedTimerHandle);
@@ -420,11 +453,11 @@ void AGun::OnUnEquip()
     {
         if(IsPlayerAiming() == true)
         {
-            StopWeaponAnimation(PlayerReloadMontage);
+            StopWeaponAnimation(PlayerAnimations.PlayerReloadMontage);
         }
         else
         {
-             StopWeaponAnimation(PlayerHipReloadMontage);
+            StopWeaponAnimation(PlayerAnimations.PlayerHipReloadMontage);
         }
         bIsReloading = false;
 
@@ -441,7 +474,7 @@ void AGun::OnEquipFinished()
     bPendingEquip = false;
 
         // Try to reload empty clip
-    if (CurrentAmmoInClip <= 0 && CanReload())
+    if (WeaponAttributes.CurrentAmmoInClip <= 0 && CanReload())
     {
         StartReload();
     }
@@ -463,7 +496,7 @@ void AGun::AttachMeshToPawn(EInventorySlot Slot)
 void AGun::DetachMeshFromPawn()
 {
     Mesh->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
-    Mesh->SetHiddenInGame(true);
+    Mesh->SetHiddenInGame(false);
 }
 
 //MARK: Animations Functions

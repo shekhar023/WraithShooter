@@ -18,7 +18,6 @@ void EmptyLinkFunctionForGeneratedCodeMagicPill() {}
 	ENGINE_API UClass* Z_Construct_UClass_AActor();
 	UPackage* Z_Construct_UPackage__Script_WraithShooter();
 	ENGINE_API UClass* Z_Construct_UClass_AActor_NoRegister();
-	ENGINE_API UClass* Z_Construct_UClass_UStaticMeshComponent_NoRegister();
 	WRAITHSHOOTER_API UClass* Z_Construct_UClass_UWraithUIInterface_NoRegister();
 // End Cross Module References
 	DEFINE_FUNCTION(AMagicPill::execOnRep_PowerupActive)
@@ -33,13 +32,6 @@ void EmptyLinkFunctionForGeneratedCodeMagicPill() {}
 		P_FINISH;
 		P_NATIVE_BEGIN;
 		P_THIS->OnTickPowerup();
-		P_NATIVE_END;
-	}
-	DEFINE_FUNCTION(AMagicPill::execOnTriggerEvent)
-	{
-		P_FINISH;
-		P_NATIVE_BEGIN;
-		P_THIS->OnTriggerEvent();
 		P_NATIVE_END;
 	}
 	static FName NAME_AMagicPill_OnActivated = FName(TEXT("OnActivated"));
@@ -72,7 +64,6 @@ void EmptyLinkFunctionForGeneratedCodeMagicPill() {}
 		static const FNameNativePtrPair Funcs[] = {
 			{ "OnRep_PowerupActive", &AMagicPill::execOnRep_PowerupActive },
 			{ "OnTickPowerup", &AMagicPill::execOnTickPowerup },
-			{ "OnTriggerEvent", &AMagicPill::execOnTriggerEvent },
 		};
 		FNativeFunctionRegistrar::RegisterFunctions(Class, Funcs, UE_ARRAY_COUNT(Funcs));
 	}
@@ -229,30 +220,6 @@ void EmptyLinkFunctionForGeneratedCodeMagicPill() {}
 		}
 		return ReturnFunction;
 	}
-	struct Z_Construct_UFunction_AMagicPill_OnTriggerEvent_Statics
-	{
-#if WITH_METADATA
-		static const UE4CodeGen_Private::FMetaDataPairParam Function_MetaDataParams[];
-#endif
-		static const UE4CodeGen_Private::FFunctionParams FuncParams;
-	};
-#if WITH_METADATA
-	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_AMagicPill_OnTriggerEvent_Statics::Function_MetaDataParams[] = {
-		{ "Comment", "//MARK: OnPlayerenterd signature  custom event Implementation\n" },
-		{ "ModuleRelativePath", "Public/MagicPill.h" },
-		{ "ToolTip", "MARK: OnPlayerenterd signature  custom event Implementation" },
-	};
-#endif
-	const UE4CodeGen_Private::FFunctionParams Z_Construct_UFunction_AMagicPill_OnTriggerEvent_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_AMagicPill, nullptr, "OnTriggerEvent", nullptr, nullptr, 0, nullptr, 0, RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x00080401, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_AMagicPill_OnTriggerEvent_Statics::Function_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UFunction_AMagicPill_OnTriggerEvent_Statics::Function_MetaDataParams)) };
-	UFunction* Z_Construct_UFunction_AMagicPill_OnTriggerEvent()
-	{
-		static UFunction* ReturnFunction = nullptr;
-		if (!ReturnFunction)
-		{
-			UE4CodeGen_Private::ConstructUFunction(ReturnFunction, Z_Construct_UFunction_AMagicPill_OnTriggerEvent_Statics::FuncParams);
-		}
-		return ReturnFunction;
-	}
 	UClass* Z_Construct_UClass_AMagicPill_NoRegister()
 	{
 		return AMagicPill::StaticClass();
@@ -281,10 +248,6 @@ void EmptyLinkFunctionForGeneratedCodeMagicPill() {}
 		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_InteractMessage_MetaData[];
 #endif
 		static const UE4CodeGen_Private::FTextPropertyParams NewProp_InteractMessage;
-#if WITH_METADATA
-		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_PillMesh_MetaData[];
-#endif
-		static const UE4CodeGen_Private::FObjectPropertyParams NewProp_PillMesh;
 		static const UE4CodeGen_Private::FPropertyParamsBase* const PropPointers[];
 		static const UE4CodeGen_Private::FImplementedInterfaceParams InterfaceParams[];
 		static const FCppClassTypeInfoStatic StaticCppClassTypeInfo;
@@ -301,7 +264,6 @@ void EmptyLinkFunctionForGeneratedCodeMagicPill() {}
 		{ &Z_Construct_UFunction_AMagicPill_OnPowerupTicked, "OnPowerupTicked" }, // 460756015
 		{ &Z_Construct_UFunction_AMagicPill_OnRep_PowerupActive, "OnRep_PowerupActive" }, // 4173498666
 		{ &Z_Construct_UFunction_AMagicPill_OnTickPowerup, "OnTickPowerup" }, // 3193667429
-		{ &Z_Construct_UFunction_AMagicPill_OnTriggerEvent, "OnTriggerEvent" }, // 2538336157
 	};
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AMagicPill_Statics::Class_MetaDataParams[] = {
@@ -346,20 +308,11 @@ void EmptyLinkFunctionForGeneratedCodeMagicPill() {}
 	};
 #endif
 	const UE4CodeGen_Private::FTextPropertyParams Z_Construct_UClass_AMagicPill_Statics::NewProp_InteractMessage = { "InteractMessage", nullptr, (EPropertyFlags)0x0020080000000005, UE4CodeGen_Private::EPropertyGenFlags::Text, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AMagicPill, InteractMessage), METADATA_PARAMS(Z_Construct_UClass_AMagicPill_Statics::NewProp_InteractMessage_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AMagicPill_Statics::NewProp_InteractMessage_MetaData)) };
-#if WITH_METADATA
-	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AMagicPill_Statics::NewProp_PillMesh_MetaData[] = {
-		{ "Category", "Components" },
-		{ "EditInline", "true" },
-		{ "ModuleRelativePath", "Public/MagicPill.h" },
-	};
-#endif
-	const UE4CodeGen_Private::FObjectPropertyParams Z_Construct_UClass_AMagicPill_Statics::NewProp_PillMesh = { "PillMesh", nullptr, (EPropertyFlags)0x002008000008000d, UE4CodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AMagicPill, PillMesh), Z_Construct_UClass_UStaticMeshComponent_NoRegister, METADATA_PARAMS(Z_Construct_UClass_AMagicPill_Statics::NewProp_PillMesh_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AMagicPill_Statics::NewProp_PillMesh_MetaData)) };
 	const UE4CodeGen_Private::FPropertyParamsBase* const Z_Construct_UClass_AMagicPill_Statics::PropPointers[] = {
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AMagicPill_Statics::NewProp_bIsPowerupActive,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AMagicPill_Statics::NewProp_TotalNoOfTicks,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AMagicPill_Statics::NewProp_PowerupInterval,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AMagicPill_Statics::NewProp_InteractMessage,
-		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AMagicPill_Statics::NewProp_PillMesh,
 	};
 		const UE4CodeGen_Private::FImplementedInterfaceParams Z_Construct_UClass_AMagicPill_Statics::InterfaceParams[] = {
 			{ Z_Construct_UClass_UWraithUIInterface_NoRegister, (int32)VTABLE_OFFSET(AMagicPill, IWraithUIInterface), false },
@@ -391,7 +344,7 @@ void EmptyLinkFunctionForGeneratedCodeMagicPill() {}
 		}
 		return OuterClass;
 	}
-	IMPLEMENT_CLASS(AMagicPill, 819338886);
+	IMPLEMENT_CLASS(AMagicPill, 874911194);
 	template<> WRAITHSHOOTER_API UClass* StaticClass<AMagicPill>()
 	{
 		return AMagicPill::StaticClass();

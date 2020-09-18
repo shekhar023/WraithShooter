@@ -495,12 +495,6 @@ struct FParamMap0_SolveForcesAndVelocity
 	bool WritetoIntrinsicProperties;
 };
 
-struct FParamMap0_ScaleVectorByCurve
-{
-	float CurveIndex;
-	float3 InitialValue;
-};
-
 struct FParamMap0_ScaleColor
 {
 	float4 ColorValueToScale;
@@ -581,20 +575,19 @@ struct FParamMap0_NormalizedAngleToDegrees001
 	float NormalizedAngle;
 };
 
-struct FParamMap0_N_Shock_EM_SpawnBurst_Instantaneous
+struct FParamMap0_N_Mist_SpawnBurst_Instantaneous
 {
 	NiagaraSpawnInfo SpawnBurst;
 };
 
-struct FParamMap0_N_Shock_EM_Scalability
+struct FParamMap0_N_Mist_Scalability
 {
 	float DistanceFraction;
 };
 
-struct FParamMap0_N_Shock_EM
+struct FParamMap0_N_Mist
 {
 	float Age;
-	float AlphaScale;
 	float CurrentLoopDuration;
 	int ExecutionState;
 	int ExecutionStateSource;
@@ -602,8 +595,8 @@ struct FParamMap0_N_Shock_EM
 	int LoopCount;
 	float LoopedAge;
 	float NormalizedLoopAge;
-	FParamMap0_N_Shock_EM_Scalability Scalability;
-	FParamMap0_N_Shock_EM_SpawnBurst_Instantaneous SpawnBurst_Instantaneous;
+	FParamMap0_N_Mist_Scalability Scalability;
+	FParamMap0_N_Mist_SpawnBurst_Instantaneous SpawnBurst_Instantaneous;
 };
 
 struct FParamMap0_Local_SphereLocation
@@ -689,7 +682,7 @@ struct FParamMap0_Engine_Owner
 	float4x4 SystemWorldToLocalNoScale;
 };
 
-struct FParamMap0_Engine_N_Shock_EM
+struct FParamMap0_Engine_N_Mist
 {
 	int NumParticles;
 	float SpawnCountScale;
@@ -705,7 +698,7 @@ struct FParamMap0_Engine
 	float DeltaTime;
 	FParamMap0_Engine_Emitter Emitter;
 	float InverseDeltaTime;
-	FParamMap0_Engine_N_Shock_EM N_Shock_EM;
+	FParamMap0_Engine_N_Mist N_Mist;
 	FParamMap0_Engine_Owner Owner;
 	float RealTime;
 	float Time;
@@ -731,23 +724,6 @@ struct FParamMap0_Drag
 struct FParamMap0_DataInstance
 {
 	bool Alive;
-};
-
-struct FParamMap0_ColorFromCurve001
-{
-	float CurveIndex;
-};
-
-struct FParamMap0_ColorFromCurve
-{
-	float CurveIndex;
-};
-
-struct FParamMap0_Color
-{
-	float4 Color;
-	float ScaleAlpha;
-	float3 ScaleColor;
 };
 
 struct FParamMap0_CalculateSizeAndRotationalInertiaByMass
@@ -781,9 +757,6 @@ struct FParamMap0
 {
 	FParamMap0_AddVelocityFromPoint AddVelocityFromPoint;
 	FParamMap0_CalculateSizeAndRotationalInertiaByMass CalculateSizeAndRotationalInertiaByMass;
-	FParamMap0_Color Color;
-	FParamMap0_ColorFromCurve ColorFromCurve;
-	FParamMap0_ColorFromCurve001 ColorFromCurve001;
 	FParamMap0_DataInstance DataInstance;
 	FParamMap0_Drag Drag;
 	FParamMap0_Emitter Emitter;
@@ -794,13 +767,12 @@ struct FParamMap0
 	FParamMap0_GravityForce GravityForce;
 	FParamMap0_InitializeParticle InitializeParticle;
 	FParamMap0_Local Local;
-	FParamMap0_N_Shock_EM N_Shock_EM;
+	FParamMap0_N_Mist N_Mist;
 	FParamMap0_NormalizedAngleToDegrees001 NormalizedAngleToDegrees001;
 	FParamMap0_OUTPUT_VAR OUTPUT_VAR;
 	FParamMap0_Particles Particles;
 	FParamMap0_ParticleState ParticleState;
 	FParamMap0_ScaleColor ScaleColor;
-	FParamMap0_ScaleVectorByCurve ScaleVectorByCurve;
 	FParamMap0_SolveForcesAndVelocity SolveForcesAndVelocity;
 	FParamMap0_SpawnBurst_Instantaneous SpawnBurst_Instantaneous;
 	FParamMap0_SphereLocation SphereLocation;
@@ -820,9 +792,9 @@ struct FSimulationContext
 };
 
 static float HackSpawnInterp = 1.0;
-void N_Shock_EM_Func_(inout FSimulationContext Context);
+void N_Mist_Func_(inout FSimulationContext Context);
 float GetSpawnInterpolation();
-void N_Shock_EM_Func_(inout FSimulationContext Context)
+void N_Mist_Func_(inout FSimulationContext Context)
 {
 
 }
@@ -845,46 +817,44 @@ void Simulate(inout FSimulationContext Context)
 	EnterStatScope(0 );
 
 	int Constant = 0;
-	Context.Map.N_Shock_EM.ExecutionState = Constant;
+	Context.Map.N_Mist.ExecutionState = Constant;
 	float Constant1 = 0;
-	Context.Map.N_Shock_EM.Age = Constant1;
+	Context.Map.N_Mist.Age = Constant1;
 	float Constant2 = 0;
-	Context.Map.N_Shock_EM.CurrentLoopDuration = Constant2;
+	Context.Map.N_Mist.CurrentLoopDuration = Constant2;
 	float Constant3 = 0;
-	Context.Map.N_Shock_EM.LoopedAge = Constant3;
+	Context.Map.N_Mist.LoopedAge = Constant3;
 	int Constant4 = 0;
-	Context.Map.N_Shock_EM.LoopCount = Constant4;
+	Context.Map.N_Mist.LoopCount = Constant4;
 	float Constant5 = (0.0);
-	Context.Map.N_Shock_EM.NormalizedLoopAge = Constant5;
+	Context.Map.N_Mist.NormalizedLoopAge = Constant5;
 	float Constant6 = (0.0);
-	Context.Map.N_Shock_EM.Scalability.DistanceFraction = Constant6;
+	Context.Map.N_Mist.Scalability.DistanceFraction = Constant6;
 	int Constant7 = 0;
 	Context.Map.System.ExecutionState = Constant7;
 	int Constant8 = 0;
 	Context.Map.System.ExecutionStateSource = Constant8;
 	int Constant9 = 0;
-	Context.Map.N_Shock_EM.ExecutionStateSource = Constant9;
+	Context.Map.N_Mist.ExecutionStateSource = Constant9;
 	NiagaraSpawnInfo Constant10 = (NiagaraSpawnInfo)0;
-	Context.Map.N_Shock_EM.SpawnBurst_Instantaneous.SpawnBurst = Constant10;
+	Context.Map.N_Mist.SpawnBurst_Instantaneous.SpawnBurst = Constant10;
 	bool Constant11 = false;
-	Context.Map.N_Shock_EM.LocalSpace = Constant11;
-	float Constant12 = 1;
-	Context.Map.N_Shock_EM.AlphaScale = Constant12;
+	Context.Map.N_Mist.LocalSpace = Constant11;
+	float Constant12 = 0;
+	Context.Map.System.Age = Constant12;
 	float Constant13 = 0;
-	Context.Map.System.Age = Constant13;
+	Context.Map.System.CurrentLoopDuration = Constant13;
 	float Constant14 = 0;
-	Context.Map.System.CurrentLoopDuration = Constant14;
-	float Constant15 = 0;
-	Context.Map.System.LoopedAge = Constant15;
-	int Constant16 = 0;
-	Context.Map.System.LoopCount = Constant16;
-	float Constant17 = (0.0);
-	Context.Map.System.NormalizedLoopAge = Constant17;
-	bool Constant18 = false;
-	Context.Map.System.bCompleteOnInactive = Constant18;
+	Context.Map.System.LoopedAge = Constant14;
+	int Constant15 = 0;
+	Context.Map.System.LoopCount = Constant15;
+	float Constant16 = (0.0);
+	Context.Map.System.NormalizedLoopAge = Constant16;
+	bool Constant17 = false;
+	Context.Map.System.bCompleteOnInactive = Constant17;
 
 	EnterStatScope(1 );
-	N_Shock_EM_Func_(Context);
+	N_Mist_Func_(Context);
 	ExitStatScope( );
 
 
@@ -898,20 +868,19 @@ EnterStatScope(2 );
 
 	FSimulationContext Context = (FSimulationContext)0;
 	Context.Map.Emitter.RandomSeed = 0;
-	Context.Map.N_Shock_EM.Age = 0.0f;
-	Context.Map.N_Shock_EM.AlphaScale = 0.0f;
-	Context.Map.N_Shock_EM.CurrentLoopDuration = 0.0f;
-	Context.Map.N_Shock_EM.ExecutionState = 0;
-	Context.Map.N_Shock_EM.ExecutionStateSource = 0;
-	Context.Map.N_Shock_EM.LocalSpace = false;
-	Context.Map.N_Shock_EM.LoopCount = 0;
-	Context.Map.N_Shock_EM.LoopedAge = 0.0f;
-	Context.Map.N_Shock_EM.NormalizedLoopAge = 0.0f;
-	Context.Map.N_Shock_EM.Scalability.DistanceFraction = 0.0f;
-	Context.Map.N_Shock_EM.SpawnBurst_Instantaneous.SpawnBurst.Count = 0;
-	Context.Map.N_Shock_EM.SpawnBurst_Instantaneous.SpawnBurst.InterpStartDt = 0.0f;
-	Context.Map.N_Shock_EM.SpawnBurst_Instantaneous.SpawnBurst.IntervalDt = 0.0f;
-	Context.Map.N_Shock_EM.SpawnBurst_Instantaneous.SpawnBurst.SpawnGroup = 0;
+	Context.Map.N_Mist.Age = 0.0f;
+	Context.Map.N_Mist.CurrentLoopDuration = 0.0f;
+	Context.Map.N_Mist.ExecutionState = 0;
+	Context.Map.N_Mist.ExecutionStateSource = 0;
+	Context.Map.N_Mist.LocalSpace = false;
+	Context.Map.N_Mist.LoopCount = 0;
+	Context.Map.N_Mist.LoopedAge = 0.0f;
+	Context.Map.N_Mist.NormalizedLoopAge = 0.0f;
+	Context.Map.N_Mist.Scalability.DistanceFraction = 0.0f;
+	Context.Map.N_Mist.SpawnBurst_Instantaneous.SpawnBurst.Count = 0;
+	Context.Map.N_Mist.SpawnBurst_Instantaneous.SpawnBurst.InterpStartDt = 0.0f;
+	Context.Map.N_Mist.SpawnBurst_Instantaneous.SpawnBurst.IntervalDt = 0.0f;
+	Context.Map.N_Mist.SpawnBurst_Instantaneous.SpawnBurst.SpawnGroup = 0;
 	Context.Map.System.Age = 0.0f;
 	Context.Map.System.bCompleteOnInactive = false;
 	Context.Map.System.CurrentLoopDuration = 0.0f;
@@ -928,28 +897,27 @@ EnterStatScope(2 );
 	{
 	int TmpWriteIndex = OutputIndex(0, false, true);
 	OutputDataInt(0, 0, TmpWriteIndex, Context.Map.Emitter.RandomSeed);
-	OutputDataFloat(0, 1, TmpWriteIndex, Context.Map.N_Shock_EM.Age);
-	OutputDataFloat(0, 2, TmpWriteIndex, Context.Map.N_Shock_EM.AlphaScale);
-	OutputDataFloat(0, 3, TmpWriteIndex, Context.Map.N_Shock_EM.CurrentLoopDuration);
-	OutputDataInt(0, 4, TmpWriteIndex, Context.Map.N_Shock_EM.ExecutionState);
-	OutputDataInt(0, 5, TmpWriteIndex, Context.Map.N_Shock_EM.ExecutionStateSource);
-	OutputDataBool(0, 6, TmpWriteIndex, Context.Map.N_Shock_EM.LocalSpace);
-	OutputDataInt(0, 7, TmpWriteIndex, Context.Map.N_Shock_EM.LoopCount);
-	OutputDataFloat(0, 8, TmpWriteIndex, Context.Map.N_Shock_EM.LoopedAge);
-	OutputDataFloat(0, 9, TmpWriteIndex, Context.Map.N_Shock_EM.NormalizedLoopAge);
-	OutputDataFloat(0, 10, TmpWriteIndex, Context.Map.N_Shock_EM.Scalability.DistanceFraction);
-	OutputDataInt(0, 11, TmpWriteIndex, Context.Map.N_Shock_EM.SpawnBurst_Instantaneous.SpawnBurst.Count);
-	OutputDataFloat(0, 12, TmpWriteIndex, Context.Map.N_Shock_EM.SpawnBurst_Instantaneous.SpawnBurst.InterpStartDt);
-	OutputDataFloat(0, 13, TmpWriteIndex, Context.Map.N_Shock_EM.SpawnBurst_Instantaneous.SpawnBurst.IntervalDt);
-	OutputDataInt(0, 14, TmpWriteIndex, Context.Map.N_Shock_EM.SpawnBurst_Instantaneous.SpawnBurst.SpawnGroup);
-	OutputDataFloat(0, 15, TmpWriteIndex, Context.Map.System.Age);
-	OutputDataBool(0, 16, TmpWriteIndex, Context.Map.System.bCompleteOnInactive);
-	OutputDataFloat(0, 17, TmpWriteIndex, Context.Map.System.CurrentLoopDuration);
-	OutputDataInt(0, 18, TmpWriteIndex, Context.Map.System.ExecutionState);
-	OutputDataInt(0, 19, TmpWriteIndex, Context.Map.System.ExecutionStateSource);
-	OutputDataInt(0, 20, TmpWriteIndex, Context.Map.System.LoopCount);
-	OutputDataFloat(0, 21, TmpWriteIndex, Context.Map.System.LoopedAge);
-	OutputDataFloat(0, 22, TmpWriteIndex, Context.Map.System.NormalizedLoopAge);
+	OutputDataFloat(0, 1, TmpWriteIndex, Context.Map.N_Mist.Age);
+	OutputDataFloat(0, 2, TmpWriteIndex, Context.Map.N_Mist.CurrentLoopDuration);
+	OutputDataInt(0, 3, TmpWriteIndex, Context.Map.N_Mist.ExecutionState);
+	OutputDataInt(0, 4, TmpWriteIndex, Context.Map.N_Mist.ExecutionStateSource);
+	OutputDataBool(0, 5, TmpWriteIndex, Context.Map.N_Mist.LocalSpace);
+	OutputDataInt(0, 6, TmpWriteIndex, Context.Map.N_Mist.LoopCount);
+	OutputDataFloat(0, 7, TmpWriteIndex, Context.Map.N_Mist.LoopedAge);
+	OutputDataFloat(0, 8, TmpWriteIndex, Context.Map.N_Mist.NormalizedLoopAge);
+	OutputDataFloat(0, 9, TmpWriteIndex, Context.Map.N_Mist.Scalability.DistanceFraction);
+	OutputDataInt(0, 10, TmpWriteIndex, Context.Map.N_Mist.SpawnBurst_Instantaneous.SpawnBurst.Count);
+	OutputDataFloat(0, 11, TmpWriteIndex, Context.Map.N_Mist.SpawnBurst_Instantaneous.SpawnBurst.InterpStartDt);
+	OutputDataFloat(0, 12, TmpWriteIndex, Context.Map.N_Mist.SpawnBurst_Instantaneous.SpawnBurst.IntervalDt);
+	OutputDataInt(0, 13, TmpWriteIndex, Context.Map.N_Mist.SpawnBurst_Instantaneous.SpawnBurst.SpawnGroup);
+	OutputDataFloat(0, 14, TmpWriteIndex, Context.Map.System.Age);
+	OutputDataBool(0, 15, TmpWriteIndex, Context.Map.System.bCompleteOnInactive);
+	OutputDataFloat(0, 16, TmpWriteIndex, Context.Map.System.CurrentLoopDuration);
+	OutputDataInt(0, 17, TmpWriteIndex, Context.Map.System.ExecutionState);
+	OutputDataInt(0, 18, TmpWriteIndex, Context.Map.System.ExecutionStateSource);
+	OutputDataInt(0, 19, TmpWriteIndex, Context.Map.System.LoopCount);
+	OutputDataFloat(0, 20, TmpWriteIndex, Context.Map.System.LoopedAge);
+	OutputDataFloat(0, 21, TmpWriteIndex, Context.Map.System.NormalizedLoopAge);
 	}
 ExitStatScope( );
 }

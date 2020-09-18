@@ -39,7 +39,7 @@ void EmptyLinkFunctionForGeneratedCodeSkillStructures() {}
 		return ESkills_StaticEnum();
 	}
 	static FCompiledInDeferEnum Z_CompiledInDeferEnum_UEnum_ESkills(ESkills_StaticEnum, TEXT("/Script/WraithShooter"), TEXT("ESkills"), false, nullptr, nullptr);
-	uint32 Get_Z_Construct_UEnum_WraithShooter_ESkills_Hash() { return 1388318601U; }
+	uint32 Get_Z_Construct_UEnum_WraithShooter_ESkills_Hash() { return 2858019359U; }
 	UEnum* Z_Construct_UEnum_WraithShooter_ESkills()
 	{
 #if WITH_HOT_RELOAD
@@ -56,12 +56,18 @@ void EmptyLinkFunctionForGeneratedCodeSkillStructures() {}
 				{ "ESkills::BackDash", (int64)ESkills::BackDash },
 				{ "ESkills::Fireball", (int64)ESkills::Fireball },
 				{ "ESkills::ElectroSpark", (int64)ESkills::ElectroSpark },
+				{ "ESkills::ArticBlast", (int64)ESkills::ArticBlast },
+				{ "ESkills::Bloodlust", (int64)ESkills::Bloodlust },
 				{ "ESkills::LensOfTruth", (int64)ESkills::LensOfTruth },
 				{ "ESkills::Mist", (int64)ESkills::Mist },
+				{ "ESkills::Shield", (int64)ESkills::Shield },
+				{ "ESkills::TimeSlow", (int64)ESkills::TimeSlow },
 			};
 #if WITH_METADATA
 			const UE4CodeGen_Private::FMetaDataPairParam Enum_MetaDataParams[] = {
+				{ "ArticBlast.Name", "ESkills::ArticBlast" },
 				{ "BackDash.Name", "ESkills::BackDash" },
+				{ "Bloodlust.Name", "ESkills::Bloodlust" },
 				{ "BlueprintType", "true" },
 				{ "Comment", "//MARK:ENUM ESkills\n" },
 				{ "DoubleJump.Name", "ESkills::DoubleJump" },
@@ -71,6 +77,8 @@ void EmptyLinkFunctionForGeneratedCodeSkillStructures() {}
 				{ "Mist.Name", "ESkills::Mist" },
 				{ "ModuleRelativePath", "Public/SkillStructures.h" },
 				{ "None.Name", "ESkills::None" },
+				{ "Shield.Name", "ESkills::Shield" },
+				{ "TimeSlow.Name", "ESkills::TimeSlow" },
 				{ "ToolTip", "MARK:ENUM ESkills" },
 			};
 #endif

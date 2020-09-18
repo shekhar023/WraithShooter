@@ -24,13 +24,21 @@ void UBTService_PlayerLocation::TickNode(UBehaviorTreeComponent& OwnerComp, uint
     
     if(AIPlayer == nullptr) {return;}
     
-   // FVector PlayerPosition = OwnerComp.GetBlackboardComponent()->GetValue<UBlackboardKeyType_Vector(AIPlayer->NPCKeyId);
+   /*FVector PlayerPosition = OwnerComp.GetBlackboardComponent()->GetValue<UBlackboardKeyType_Vector(AIPlayer->NPCKeyId);
     
-    /*if(AIPlayer)
+    if(AIPlayer)
     {
-        AIPlayer->MoveToLocation(PlayerPosition, 100.f, true, true, false, true, 0, true);
-    }*/
+        AIPlayer->MoveToLocation(PlayerPosition, 200.f, true, true, false, true, 0, true);
+        return EBTNodeResult::Succeeded;
+    }
     
+    else
+    {
+        return EBTNodeResult::Failed;
+    }
+    
+    return EBTNodeResult::Failed;
+    */
     OwnerComp.GetBlackboardComponent()->SetValueAsVector(GetSelectedBlackboardKey(), PlayerPawn->GetActorLocation());
 }
 

@@ -24,6 +24,9 @@ class WRAITHSHOOTER_API AWraithProjectile : public AActor
     
 public:
     
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ProjectileRadialDamageAttributes)
+    bool bApplyDamageOff;
+    
     UPROPERTY(VisibleDefaultsOnly, BlueprintReadWrite, Category = Projectile)
     UProjectileMovementComponent* ProjectileMovement;
     
@@ -90,6 +93,7 @@ public:
     UFUNCTION(BlueprintImplementableEvent, Category = Projectile)
     void AfterOnDetonate();
     
+    UFUNCTION(BlueprintCallable, Category = Projectile)
     void ProjectileEffects();
     
 protected:

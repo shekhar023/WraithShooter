@@ -1,1 +1,89 @@
 
+
+
+FHitResult AGun::GetHitResult()
+{
+    FHitResult Hit;
+    
+    FCollisionQueryParams Params;
+    Params.AddIgnoredActor(GetOwner());
+    Params.AddIgnoredActor(this);
+    Params.bTraceComplex = true;
+    Params.bReturnPhysicalMaterial = true;
+    
+    GetWorld()->LineTraceSingleByChannel(OUT Hit, GetPlayerWorldPosition(), GetGunReach(), ECollisionChannel::ECC_GameTraceChannel1, Params);
+    
+    return Hit;
+}
+
+
+FVector AGun::GetPlayerWorldPosition()
+{
+    FVector PlayerViewPointLocation;
+    FRotator PlayerViewPointRotation;
+    
+    GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(OUT PlayerViewPointLocation, OUT PlayerViewPointRotation);
+    
+    return PlayerViewPointLocation;
+    
+}
+
+FVector AGun::GetGunReach()
+{
+    FVector PlayerViewPointLocation;
+    FRotator PlayerViewPointRotation;
+    
+    GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(OUT PlayerViewPointLocation, OUT PlayerViewPointRotation);
+    
+    FVector EndPoint = PlayerViewPointLocation + PlayerViewPointRotation.Vector() * WeaponAttributes.MaxRange;
+    
+    return EndPoint;
+    
+}
+
+FVector AGun::GetShotDirection()
+{
+
+     FVector PlayerViewPointLocation;
+     FRotator PlayerViewPointRotation;
+     
+     GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(OUT PlayerViewPointLocation, OUT PlayerViewPointRotation);
+     
+     FVector ShotDirection = -PlayerViewPointRotation.Vector();
+     
+     float HalfRad = FMath::DegreesToRadians(WeaponAttributes.BulletSpread);
+     ShotDirection = FMath::VRandCone(EndPoint, HalfRad, HalfRad);
+     
+     return ShotDirection;
+}
+
+
+  ShotDirection = -Rotation.Vector();
+
+bool AGun::GunTrace(FHitResult& Hit, FVector& ShotDirection, FVector& EndPoint)
+{
+    AController* OwnerController = GetOwnerController();
+    if(!OwnerController){return false;}
+    
+    FVector Location;
+    FRotator Rotation;
+    
+    OwnerController->GetPlayerViewPoint(Location, Rotation);
+    
+    ShotDirection = -Rotation.Vector();
+    
+    EndPoint = Location + Rotation.Vector() * WeaponAttributes.MaxRange;
+
+    float HalfRad = FMath::DegreesToRadians(WeaponAttributes.BulletSpread);
+    ShotDirection = FMath::VRandCone(ShotDirection, HalfRad, HalfRad);
+  
+    FCollisionQueryParams Params;
+    Params.AddIgnoredActor(GetOwner());
+    Params.AddIgnoredActor(this);
+    Params.bTraceComplex = true;
+    Params.bReturnPhysicalMaterial = true;
+    
+    return GetWorld()->LineTraceSingleByChannel(Hit, Location, EndPoint, ECollisionChannel::ECC_GameTraceChannel1, Params);
+    
+}
+*/

@@ -8,9 +8,6 @@
 #include "WraithUIInterface.h"
 #include "MagicPill.generated.h"
 
-class UStaticMeshComponent;
-class APillSpawner;
-
 UCLASS()
 class WRAITHSHOOTER_API AMagicPill : public AActor, public IWraithUIInterface
 {
@@ -24,19 +21,9 @@ protected:
     // Called when the game starts or when spawned
     virtual void BeginPlay() override;
     
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Components)
-    UStaticMeshComponent* PillMesh;
-    
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = InteractMessage)
     FText InteractMessage;
-    
-    //MARK: Recieve call from OnPlayerenterd custom event to trigger functionality here
-    APillSpawner* TriggerEventSource;
-    
-    //MARK: OnPlayerenterd signature  custom event Implementation
-    UFUNCTION()
-    void OnTriggerEvent();
-    
+
     /* Time between powerup ticks */
     UPROPERTY(EditDefaultsOnly, Category = "Powerups")
     float PowerupInterval;

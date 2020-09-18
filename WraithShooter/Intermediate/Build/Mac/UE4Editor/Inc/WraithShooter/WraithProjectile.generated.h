@@ -20,12 +20,14 @@ struct FHitResult;
 #define WraithShooter_Source_WraithShooter_Public_WraithProjectile_h_22_SPARSE_DATA
 #define WraithShooter_Source_WraithShooter_Public_WraithProjectile_h_22_RPC_WRAPPERS \
  \
+	DECLARE_FUNCTION(execProjectileEffects); \
 	DECLARE_FUNCTION(execOnDetonate); \
 	DECLARE_FUNCTION(execOnHit);
 
 
 #define WraithShooter_Source_WraithShooter_Public_WraithProjectile_h_22_RPC_WRAPPERS_NO_PURE_DECLS \
  \
+	DECLARE_FUNCTION(execProjectileEffects); \
 	DECLARE_FUNCTION(execOnDetonate); \
 	DECLARE_FUNCTION(execOnHit);
 

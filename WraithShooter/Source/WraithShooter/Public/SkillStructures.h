@@ -37,8 +37,12 @@ enum class ESkills : uint8
     BackDash,
     Fireball,
     ElectroSpark,
+    ArticBlast,
+    Bloodlust,
     LensOfTruth,
     Mist,
+    Shield,
+    TimeSlow,
 };
 
 //MARK: Structure for Skills Data

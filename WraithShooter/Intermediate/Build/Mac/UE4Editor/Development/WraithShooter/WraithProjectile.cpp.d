@@ -2828,4 +2828,12 @@
   /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Plugins/FX/Niagara/Intermediate/Build/Mac/UE4Editor/Inc/Niagara/NiagaraVariant.generated.h \
   /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Plugins/FX/Niagara/Intermediate/Build/Mac/UE4Editor/Inc/Niagara/NiagaraComponent.generated.h \
   /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Plugins/FX/Niagara/Source/Niagara/Public/NiagaraFunctionLibrary.h \
-  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Plugins/FX/Niagara/Intermediate/Build/Mac/UE4Editor/Inc/Niagara/NiagaraFunctionLibrary.generated.h
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Plugins/FX/Niagara/Intermediate/Build/Mac/UE4Editor/Inc/Niagara/NiagaraFunctionLibrary.generated.h \
+  /Users/Shekhar/Documents/Unreal\ Projects/WraithShooter/WraithShooter/Source/WraithShooter/Public/BattleRoyalGameMode.h \
+  /Users/Shekhar/Documents/Unreal\ Projects/WraithShooter/WraithShooter/Source/WraithShooter/WraithShooterGameModeBase.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Engine/Classes/GameFramework/GameModeBase.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Source/Runtime/Engine/Classes/Engine/ServerStatReplicator.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Intermediate/Build/Mac/UE4Editor/Inc/Engine/ServerStatReplicator.generated.h \
+  /Users/Shekhar/Documents/Unreal\ Engine/UE_4.25/Engine/Intermediate/Build/Mac/UE4Editor/Inc/Engine/GameModeBase.generated.h \
+  /Users/Shekhar/Documents/Unreal\ Projects/WraithShooter/WraithShooter/Intermediate/Build/Mac/UE4Editor/Inc/WraithShooter/WraithShooterGameModeBase.generated.h \
+  /Users/Shekhar/Documents/Unreal\ Projects/WraithShooter/WraithShooter/Intermediate/Build/Mac/UE4Editor/Inc/WraithShooter/BattleRoyalGameMode.generated.h

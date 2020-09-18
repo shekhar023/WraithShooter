@@ -20,6 +20,7 @@
 #include "NiagaraFunctionLibrary.h"
 #include "TimerManager.h"
 #include "ShooterCharacter.h"
+#include "BattleRoyalGameMode.h"
 
 
 // Sets default values
@@ -56,6 +57,10 @@ AWraithProjectile::AWraithProjectile()
     DamageFallOff = 20.f;
     
     FXScale = 2.f;
+    
+    bApplyDamageOff = false;
+    SetReplicates(true);
+    SetReplicateMovement(true);
 }
 
 // Called when the game starts or when spawned
@@ -66,8 +71,27 @@ void AWraithProjectile::BeginPlay()
 
 void AWraithProjectile::OnHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, FVector NormalImpulse, const FHitResult& Hit)
 {
+     if(bApplyDamageOff == true)
+     {
+         return;
+     }
+    
     if((OtherActor != NULL) && (OtherActor != this) && (OtherComponent != NULL))
     {
+        if(HasAuthority())
+        {
+            if(AShooterCharacter* HitPlayer = Cast<AShooterCharacter>(OtherActor))
+            {
+                if(ABattleRoyalGameMode* BRGameMode = Cast<ABattleRoyalGameMode>(GetWorld()->GetAuthGameMode()))
+                {
+                    AShooterCharacter* Killer = Cast<AShooterCharacter>(GetOwner());
+                    BRGameMode->PlayerDied(HitPlayer, Killer);
+                    
+                    HitPlayer->Killer = Killer;
+                    HitPlayer->OnRep_Killer();
+                }
+            }
+        }
         OnDetonate();
     }
 }
@@ -107,8 +131,6 @@ void AWraithProjectile::OnDetonate()
     
     if(bHitSuccess)
     {
-        
-        
         for(auto& Actors : HitActors)
         {
             UStaticMeshComponent* StaticMesh = Cast<UStaticMeshComponent>((Actors.GetActor()));

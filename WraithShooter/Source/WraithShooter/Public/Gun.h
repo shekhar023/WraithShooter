@@ -14,29 +14,16 @@ class UAnimMontage;
 class UAnimationAsset;
 class UNiagaraSystem;
 
-namespace EWeaponState
+//MARK: Weapon Attributes
+USTRUCT(BlueprintType, Blueprintable)
+struct FWeaponAttributes
 {
-    enum Type
-    {
-        Idle,
-        Firing,
-        Reloading,
-        Equipping,
-    };
-}
+    GENERATED_USTRUCT_BODY()
 
-UCLASS()
-class WRAITHSHOOTER_API AGun : public AActor
-{
-    GENERATED_BODY()
-    
-private:
+public:
     
     UPROPERTY(VisibleAnywhere)
     FName MuzzleFlashSocketName;
-    
-    UPROPERTY(VisibleDefaultsOnly, Category = "Weapon")
-    FName TracerTargetName;
     
     UPROPERTY(VisibleDefaultsOnly, Category = "Weapon")
     FName GunShellSocket;
@@ -68,6 +55,119 @@ private:
     UPROPERTY(EditAnywhere,Category = "Weapon", meta = (ClampMin=0.0f))
     int32 CurrentAmmo;
     
+    UPROPERTY(EditAnywhere, Category = "Weapon", meta = (ClampMin=0.0f))
+    float ShotgunFireDelay = 2.0f;
+    
+};
+
+//MARK: Weapon Effects
+USTRUCT(BlueprintType, Blueprintable)
+struct FWeaponEffects
+{
+    GENERATED_USTRUCT_BODY()
+    
+public:
+    UPROPERTY(EditDefaultsOnly, Category = "Weapon")
+    TSubclassOf<UCameraShake> FireCamShake;
+    
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
+    UNiagaraSystem* TracerEffect;
+    
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
+    UParticleSystem* ImpactEffect;
+    
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
+    UParticleSystem* BodyImpactEffect;
+    
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
+    UParticleSystem* MetalImpactEffect;
+    
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
+    UParticleSystem* GunShellFX;
+    
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
+    UParticleSystem* MuzzleFlash;
+    
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
+    USoundBase* MuzzleSound;
+    
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
+    USoundBase* ImpactSound;
+};
+
+//MARK:WeaponAnimations
+USTRUCT(BlueprintType, Blueprintable)
+struct FWeaponAnimations
+{
+    GENERATED_USTRUCT_BODY()
+    
+public:
+    
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
+    UAnimationAsset* GunFireAnim;
+    
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
+    UAnimationAsset* ReloadIronSightAnim;
+    
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
+    UAnimationAsset* ReloadHipAnim;
+    
+};
+
+//MARK:Player Animations
+USTRUCT(BlueprintType, Blueprintable)
+struct FPlayerAnimations
+{
+    GENERATED_USTRUCT_BODY()
+    
+public:
+    
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
+    UAnimMontage* EquipAnim;
+    
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
+    UAnimMontage* PlayerGunFireMontage;
+    
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
+    UAnimMontage* PlayerReloadMontage;
+    
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
+    UAnimMontage* PlayerHipReloadMontage;
+};
+
+
+UCLASS()
+class WRAITHSHOOTER_API AGun : public AActor
+{
+    GENERATED_BODY()
+private:
+    
+    FVector GetPlayerWorldPosition();
+    
+    FVector GetGunRangeEndPoint();
+    
+    FVector GetShotDirection();
+    
+    FHitResult GetHitResult();
+    
+    FHitResult GetHitResultofShotgun();
+public:
+    
+    //MARK:Structures access Variables
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = WeaponStructure)
+    FWeaponAttributes WeaponAttributes;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = WeaponStructure)
+    FWeaponEffects WeaponEffects;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = WeaponStructure)
+    FWeaponAnimations WeaponAnimations;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = WeaponStructure)
+    FPlayerAnimations PlayerAnimations;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = WeaponStructure)
+    bool bIsShotgun = false;
     
 protected:
     
@@ -103,17 +203,6 @@ protected:
     UPROPERTY()
     TEnumAsByte<EPhysicalSurface> SurfaceType;
     
-    EWeaponState::Type GetCurrentState() const;
-    
-    /** update weapon state */
-    void SetWeaponState(EWeaponState::Type NewState);
-
-    /** determine current weapon state */
-    void DetermineWeaponState();
-    
-    /** current weapon state */
-    EWeaponState::Type CurrentState;
-    
     virtual void PostInitializeComponents() override;
     
     virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
@@ -126,6 +215,10 @@ public:
     bool GunTrace(FHitResult& Hit, FVector& ShotDirection, FVector& EndPoint);
     
     void PullTrigger();
+    
+    void PullShotgunTrigger();
+    
+    void Fire();
     
     void StartAutomaticFire();
     
@@ -162,54 +255,6 @@ public:
     UFUNCTION(BlueprintPure)
     bool GetbCanFire() const;
     
-    UPROPERTY(EditDefaultsOnly, Category = "Weapon")
-    TSubclassOf<UCameraShake> FireCamShake;
-    
-    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
-    UNiagaraSystem* TracerEffect;
-    
-    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
-    UParticleSystem* ImpactEffect;
-    
-    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
-    UParticleSystem* BodyImpactEffect;
-    
-    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
-    UParticleSystem* MetalImpactEffect;
-    
-    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
-    UParticleSystem* GunShellFX;
-    
-    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
-    UParticleSystem* MuzzleFlash;
-    
-    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
-    USoundBase* MuzzleSound;
-    
-    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
-    USoundBase* ImpactSound;
-    
-    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
-    UAnimationAsset* GunFireAnim;
-    
-    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
-    UAnimationAsset* ReloadIronSightAnim;
-    
-    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
-    UAnimationAsset* ReloadHipAnim;
-    
-    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
-    UAnimMontage* EquipAnim;
-    
-    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
-    UAnimMontage* PlayerGunFireMontage;
-    
-    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
-    UAnimMontage* PlayerReloadMontage;
-    
-    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
-    UAnimMontage* PlayerHipReloadMontage;
-    
     UFUNCTION()
     float PlayCharacterAnimations(UAnimMontage* CharacterAnims);
     
@@ -230,17 +275,17 @@ public:
     FTimerHandle TimerHandle_ReloadWeapon;
     
     float GetEquipStartedTime() const;
-
+    
     float GetEquipDuration() const;
-
+    
     /** last time when this weapon was switched to */
     float EquipStartedTime;
-
+    
     /** how much time weapon needs to be equipped */
     float EquipDuration;
-
+    
     bool bIsEquipped;
-
+    
     bool bPendingEquip;
     
     void OnEnterInventory(AShooterCharacter* NewOwner);
@@ -250,11 +295,12 @@ public:
     /* The character socket to store this item at. */
     UPROPERTY(EditDefaultsOnly, Category = "Weapon")
     EInventorySlot StorageSlot;
-
+    
     FTimerHandle TimerHandle_HandleFiring;
-
+    
     FTimerHandle EquipFinishedTimerHandle;
     
+    FTimerHandle Shotgun_TimerHandle;
     
-
+    
 };

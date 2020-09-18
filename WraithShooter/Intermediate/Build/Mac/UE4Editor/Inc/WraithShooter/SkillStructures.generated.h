@@ -13,14 +13,14 @@ PRAGMA_DISABLE_DEPRECATION_WARNINGS
 #endif
 #define WRAITHSHOOTER_SkillStructures_generated_h
 
-#define WraithShooter_Source_WraithShooter_Public_SkillStructures_h_84_GENERATED_BODY \
+#define WraithShooter_Source_WraithShooter_Public_SkillStructures_h_88_GENERATED_BODY \
 	friend struct Z_Construct_UScriptStruct_FSkillsAttributes_Statics; \
 	WRAITHSHOOTER_API static class UScriptStruct* StaticStruct();
 
 
 template<> WRAITHSHOOTER_API UScriptStruct* StaticStruct<struct FSkillsAttributes>();
 
-#define WraithShooter_Source_WraithShooter_Public_SkillStructures_h_48_GENERATED_BODY \
+#define WraithShooter_Source_WraithShooter_Public_SkillStructures_h_52_GENERATED_BODY \
 	friend struct Z_Construct_UScriptStruct_FSkillData_Statics; \
 	WRAITHSHOOTER_API static class UScriptStruct* StaticStruct();
 
@@ -37,8 +37,12 @@ template<> WRAITHSHOOTER_API UScriptStruct* StaticStruct<struct FSkillData>();
 	op(ESkills::BackDash) \
 	op(ESkills::Fireball) \
 	op(ESkills::ElectroSpark) \
+	op(ESkills::ArticBlast) \
+	op(ESkills::Bloodlust) \
 	op(ESkills::LensOfTruth) \
-	op(ESkills::Mist) 
+	op(ESkills::Mist) \
+	op(ESkills::Shield) \
+	op(ESkills::TimeSlow) 
 
 enum class ESkills : uint8;
 template<> WRAITHSHOOTER_API UEnum* StaticEnum<ESkills>();

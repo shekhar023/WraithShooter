@@ -10,6 +10,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "WraithShooter/WraithShooterGameModeBase.h"
 #include "Components/SkeletalMeshComponent.h"
+#include "Components/WidgetComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/Actor.h"
 #include "Particles/ParticleSystem.h"
@@ -23,10 +24,11 @@
 #include "Components/TimelineComponent.h"
 #include "DrawDebugHelpers.h"
 #include "EngineUtils.h"
+#include "Net/UnrealNetwork.h"
 
 
-static int32 DebugWeaponDrawing = 0;
-FAutoConsoleVariableRef CVARDebugWeaponDrawing(TEXT("COOP.DebugWeapons"), DebugWeaponDrawing, TEXT("Draw Debug Lines for Weapons"),ECVF_Cheat);
+//static int32 DebugWeaponDrawing = 0;
+//FAutoConsoleVariableRef CVARDebugWeaponDrawing(TEXT("COOP.DebugWeapons"), DebugWeaponDrawing, TEXT("Draw Debug Lines for Weapons"),ECVF_Cheat);
 
 //MARK: Constructor -> Sets default values
 AShooterCharacter::AShooterCharacter()
@@ -157,6 +159,7 @@ void AShooterCharacter::BeginPlay()
     
     ShootFireball.AddUObject(this, &AShooterCharacter::UseFireball);
     ShootElectroSpark.AddUObject(this, &AShooterCharacter::UseElectroSpark);
+    ShootArticeBlast.AddUObject(this, &AShooterCharacter::UseArticBlast);
     
 }
 
@@ -178,6 +181,7 @@ void AShooterCharacter::SpawnInventory()
         if(GunClass[i])
         {
             FActorSpawnParameters SpawnInfo;
+            SpawnInfo.Owner = this;
             SpawnInfo.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
             AGun* NewWeapon = GetWorld()->SpawnActor<AGun>(GunClass[i], SpawnInfo);
             NewWeapon->OnEnterInventory(this);
@@ -305,7 +309,7 @@ void AShooterCharacter::StartCrouch()
 
 void AShooterCharacter::CanJump()
 {
-    if(GetbIsAiming() == false)
+    if(GetbIsAiming() == false && bIsUsingMist == false)
     {
         if(GetCharacterMovement()->IsFalling() == false && bHasDoubleJump == false)
         {
@@ -398,6 +402,10 @@ void AShooterCharacter::TurnRate(float AxisValue)
 
 //MARK:Action Mappings Input functions
 
+void AShooterCharacter::ServerOnFire_Implementation()
+{
+    StartShoot();
+}
 //AIShooting function
 void AShooterCharacter::Shoot()
 {
@@ -418,10 +426,11 @@ void AShooterCharacter::StartShoot()
 {
     if(Gun)
     {
-        if(bIsGrenadeAiming == false)
+        if(bIsGrenadeAiming == false && bIsUsingMist == false)
         {
             Gun->StartAutomaticFire();
         }
+        
     }
 }
 //StopShooting function
@@ -439,10 +448,6 @@ void AShooterCharacter::Aim()
 {
     bIsAiming = true;
     Zoom(bIsAiming);
-}
-void AShooterCharacter::AimAt(FVector HitLocation)
-{
-    
 }
 
 //Player StopAiming function
@@ -468,6 +473,9 @@ void AShooterCharacter::CastOffensiveAblity()
             break;
         case EOffensiveAbility::ElectroSpark:
             ShootElectroSpark.Broadcast();
+            break;
+        case EOffensiveAbility::ArticBlast:
+            ShootArticeBlast.Broadcast();
             break;
         default:
             // Not implemented.
@@ -644,6 +652,57 @@ void AShooterCharacter::NextWeapon()
     }
 }
 
+//MARK: ArticBlast
+
+void AShooterCharacter::UseArticBlast()
+{
+    if(HaveEnoughEnergyToUseAbility(ArticBlastAttributes)  &&  bElectroSparkReady == true && !bIsUsingMist)
+    {
+        UpdateEnergy(ArticBlastAttributes);
+        CameraEffects();
+        
+        UE_LOG(LogTemp, Warning, TEXT("ElectroSpark"));
+        
+        if(bIsGrenadeAiming)
+        {
+            bUsedArticBlast = true;
+            bArticBlastReady = false;
+            bIsGrenadeAiming = false;
+            
+            GetWorldTimerManager().SetTimer(ArticBlast_TimerHandle, this, &AShooterCharacter::SpawnArticBlast, SpawnArticBlastDelay, false);
+            
+            GetWorldTimerManager().SetTimer(ArticBlastCooldown_TimerHandle, this, &AShooterCharacter::CanUseArticBlast, ArticBlastCooldown, false);
+        }
+    }
+}
+
+void AShooterCharacter::SpawnArticBlast()
+{
+    if(ArticBlastClass)
+    {
+        
+        UE_LOG(LogTemp, Warning, TEXT("Articblast spawn"));
+        //Params for Spawning Actors from GrenadeSpawnLocation
+        auto GunOffset = FVector(100.0f, 0.0f, 10.0f);
+        const FRotator SpawnRotation = GetControlRotation();
+        const FVector SpawnLocation = ((GrenadeSpawnLocation != nullptr) ? GrenadeSpawnLocation->GetComponentLocation() : GetActorLocation()) + SpawnRotation.RotateVector(GunOffset);
+        FActorSpawnParameters SpawnInfo;
+        SpawnInfo.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;
+        
+        GetWorld()->SpawnActor<AWraithProjectile>(ArticBlastClass,SpawnLocation, SpawnRotation, SpawnInfo);
+        GetWorldTimerManager().ClearTimer(DrawPath_TimerHandle);
+    }
+    //bFireballReady == false;
+    bIsOffensiveAbilityReady = false;
+}
+
+void AShooterCharacter::CanUseArticBlast()
+{
+    bArticBlastReady = true;
+    bIsOffensiveAbilityReady = true;
+    GetWorldTimerManager().ClearTimer(ArticBlast_TimerHandle);
+    GetWorldTimerManager().ClearTimer(ArticBlastCooldown_TimerHandle);
+}
 void AShooterCharacter::PreviousWeapon()
 {
     AShooterPlayerController* MyPC = Cast<AShooterPlayerController>(Controller);
@@ -870,10 +929,10 @@ bool AShooterCharacter::ObjectTrace(FHitResult& Hit, FVector& ShotDirection)
     Params.bTraceComplex = true;
     Params.bReturnPhysicalMaterial = true;
     
-    if (DebugWeaponDrawing > 0)
+    /*if (DebugWeaponDrawing > 0)
     {
         DrawDebugLine(GetWorld(), Location, EndPoint, FColor::Red, false, 1.0f, 0, 1.0f);
-    }
+    }*/
     
     return GetWorld()->LineTraceSingleByChannel(Hit, Location, EndPoint, ECollisionChannel::ECC_GameTraceChannel1, Params);
 }
@@ -928,7 +987,6 @@ bool AShooterCharacter::HaveEnoughEnergyToUseAbility(FSkillsAttributes AbilityAt
 void AShooterCharacter::MakeVFXVisible()
 {
     VisualFX->ActivateSystem(true);
-    
 }
 
 //MakeVFXVisible Binded to CharacterVisualEffectsDelegateStop Delegate
@@ -951,4 +1009,36 @@ bool AShooterCharacter::ReactToPlayerEntered_Implementation()
     Health -= 100.f;
     HealthText->SetText(FText::FromString(FString::Printf(TEXT("HP: %0.f "), GetHealth())));
     return true;
+}
+//MARK:Networking
+void AShooterCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty> & OutLifetimeProps) const
+{
+    Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+    
+    DOREPLIFETIME(AShooterCharacter, Killer);
+    DOREPLIFETIME(AShooterCharacter, Gun);
+    DOREPLIFETIME(AShooterCharacter, PreviousGun);
+    DOREPLIFETIME(AShooterCharacter, Health);
+    DOREPLIFETIME(AShooterCharacter, Energy);
+}
+
+void AShooterCharacter::OnRep_Killer()
+{
+    if(IsLocallyControlled())
+    {
+        ShowDeathOnScreen();
+    }
+    
+    GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+    
+    GetMesh()->SetSimulatePhysics(true);
+    GetMesh()->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
+    GetMesh()->SetCollisionResponseToAllChannels(ECR_Block);
+    
+    SetLifeSpan(10.f);
+}
+
+void AShooterCharacter::GetTimerWidgetRef(UWidgetComponent* TimerWidget)
+{
+    TimerWidgetRef = TimerWidget;
 }

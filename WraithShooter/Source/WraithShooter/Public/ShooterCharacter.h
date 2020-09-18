@@ -24,6 +24,7 @@ class AMagicPill;
 class AWraithProjectile;
 class USceneComponent;
 class UFloatingPawnMovement;
+class UWidgetComponent;
 
 //MARK:ENUM for sockets
 UENUM()
@@ -58,6 +59,9 @@ protected:
     
     virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
     
+    //Networking
+    virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty> & OutLifetimeProps) const override;
+    
     void SetTextComponents();
     
 protected:
@@ -73,6 +77,10 @@ protected:
     
     virtual void Landed(const FHitResult& Hit);
     
+    //Networking
+    UFUNCTION(Server, Reliable)
+    void ServerOnFire();
+    
 public:
     //MARK:Action Bindind Decleration
     void CanJump();
@@ -82,8 +90,6 @@ public:
     void StopCrouch();
     
     void Aim();
-    
-    void AimAt(FVector HitLocation);
     
     void StopAim();
     
@@ -120,6 +126,16 @@ public:
     
     void CastOffensiveAblity();
     
+    //MARK: Networking
+    UPROPERTY(ReplicatedUsing = OnRep_Killer, BlueprintReadOnly, Category = Gameplay)
+    AShooterCharacter* Killer;
+    
+    UFUNCTION()
+    void OnRep_Killer();
+    
+    UFUNCTION(BlueprintImplementableEvent)
+    void ShowDeathOnScreen();
+    
 public:
     //MARK:Variables
     
@@ -150,7 +166,7 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Mesh)
     USceneComponent* GrenadeSpawnLocation;
     
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ShooterCharacter,  meta = (ClampMin= 0.0f))
+    UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category = ShooterCharacter,  meta = (ClampMin= 0.0f))
     float Energy;
     
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ShooterCharacter,  meta = (ClampMin= 0.0f))
@@ -159,7 +175,7 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ShooterCharacter)
     float MaxHealth;
     
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ShooterCharacter, meta = (ClampMin= 0.0f))
+    UPROPERTY(Replicated,EditAnywhere, BlueprintReadWrite, Category = ShooterCharacter, meta = (ClampMin= 0.0f))
     float Health;
     
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ShooterCharacter)
@@ -341,6 +357,7 @@ public:
     
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ArticBlast)
     float ArticBlastCooldown;
+
     
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ArticBlast)
     float SpawnArticBlastDelay;
@@ -374,6 +391,8 @@ public:
     
     //MARK: Passive Skills Variables and Data
     
+    
+    //MARK: LensOfTruth
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = LensOfTruth)
     bool bHasLensOfTruth = false;
     
@@ -391,7 +410,11 @@ public:
     
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = LensOfTruth)
     FSkillsAttributes LensOfTruthAttributes;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = LensOfTruth)
+    USoundBase* LensFXONSound;
     
+    //MARK:Mist
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Mist)
     bool bHasMist = false;
     
@@ -410,6 +433,7 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Mist)
     FSkillsAttributes MistAttributes;
     
+    //MARK: Shield
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Shield)
     bool bHasShield = false;
     
@@ -427,6 +451,26 @@ public:
     
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Shield)
     FSkillsAttributes ShieldAttributes;
+
+    
+    //MARK: TimeSlow
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = TimeSlow)
+    bool bHasTimeSlow = false;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = TimeSlow)
+    bool bIsUsingTimeSlow = false;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = TimeSlow)
+    float  TimeSlowPercentage = 1.0f;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = TimeSlow)
+    float  TimeSlowTimePercentage = 0.0f;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = TimeSlow)
+    FSkillData TimeSlowData;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = TimeSlow)
+    FSkillsAttributes TimeSlowAttributes;
     
     //MARK: ENUMS variables
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = SkillsInfo)
@@ -445,14 +489,13 @@ public:
     
     void UpdateAttributes(FSkillsAttributes SkillsAttributes);
     
-    
-    
 protected:
     
     //MARK: Gun Variables and Data Structures
-    UPROPERTY(BlueprintReadOnly)
+    UPROPERTY(Replicated, BlueprintReadOnly)
     AGun* Gun;
     
+    UPROPERTY(Replicated, BlueprintReadOnly)
     AGun* PreviousGun;
     
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gun)
@@ -488,6 +531,11 @@ public:
     
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = AIBehavior)
     UBehaviorTree* ShooterBT;
+    
+    UWidgetComponent* TimerWidgetRef = nullptr;
+    
+    UFUNCTION(BlueprintCallable, Category = Components)
+    void GetTimerWidgetRef(UWidgetComponent* TimerWidget);
     
 public:
     //MARK: Return Functions
@@ -580,6 +628,10 @@ public:
     FUseOffensiveAbility ShootFireball;
     
     FUseOffensiveAbility ShootElectroSpark;
+    
+    FUseOffensiveAbility ShootArticeBlast;
+    
+    void UseArticBlast();
     
     void UseFireball();
     

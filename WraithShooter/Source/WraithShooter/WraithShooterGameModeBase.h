@@ -25,12 +25,13 @@ public:
     // Virtual function to get pawn kill created manually
    virtual void PawnKilled(APawn* PawnKilled);
     
+    UPROPERTY(BlueprintAssignable, Category = "GameMode")
+    FOnActorKilled OnActorKilled;
+    
     //MARK:Multiple object of same delegate
     FStandardDelegateSignature CharacterVisualEffectsDelegateStart;
     
     FStandardDelegateSignature CharacterVisualEffectsDelegateStop;
     
-    UPROPERTY(BlueprintAssignable, Category = "GameMode")
-    FOnActorKilled OnActorKilled;
 
 };
