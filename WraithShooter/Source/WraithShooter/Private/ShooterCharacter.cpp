@@ -1,10 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "ShooterCharacter.h"
 #include "Gun.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/TextRenderComponent.h"
+#include "Components/HealthComponent.h"
 #include "GameFramework/FloatingPawnMovement.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -25,10 +25,10 @@
 #include "DrawDebugHelpers.h"
 #include "EngineUtils.h"
 #include "Net/UnrealNetwork.h"
+#include "Actors/WeaponPickup.h"
+#include "WraithUIInterface.h"
 
-
-//static int32 DebugWeaponDrawing = 0;
-//FAutoConsoleVariableRef CVARDebugWeaponDrawing(TEXT("COOP.DebugWeapons"), DebugWeaponDrawing, TEXT("Draw Debug Lines for Weapons"),ECVF_Cheat);
+#define OUT
 
 //MARK: Constructor -> Sets default values
 AShooterCharacter::AShooterCharacter()
@@ -36,24 +36,16 @@ AShooterCharacter::AShooterCharacter()
     BasePitchValue = 45.f;
     BaseYawValue = 45.f;
     InteractTraceLength = 100;
-    MaxHealth = 100.f;
+   // MaxHealth = 100.f;
     MaxEnergy = 100.f;
     CharacterScore = 100.f;
     
     JumpCount = 0;
     TimeToDrawAndDestroyArc = .01f;
-    BackDashCooldown = 0.35f;
-    BackDashLeftAmount.X = -20.f;
-    BackDashRightAmount.X = 20.f;
-    BackDashForwardAmount.Y = 20.f;
-    BackDashAmount.Y = -20.f;
-    
+
     bIsAiming = false;
     bCanInteract = false;
-    bIsBackDashing = false;
-    bHasBackDash = false;
-    bIsBackDashReady = true;
-    
+
     bIsOffensiveAbilityReady =true;
     bIsDefensiveAbilityReady = false;
     
@@ -82,6 +74,8 @@ AShooterCharacter::AShooterCharacter()
     PrimaryWeaponAttachPoint = TEXT("PrimaryWeaponAttachPoint");
     SideWeaponAttachPoint = TEXT("SideWeaponWeaponAttachPoint");
     FireballSocket = TEXT("FireballAttachPoint");
+    
+    HealthComp = CreateDefaultSubobject<UHealthComponent>(TEXT("HealthComp"));
     
     FloatingComp = CreateDefaultSubobject<UFloatingPawnMovement>(TEXT("FloatingComp"));
     //Sets up particle system of the character.
@@ -135,7 +129,7 @@ void AShooterCharacter::SetTextComponents()
     HealthText->SetXScale(1.f);
     HealthText->SetYScale(1.f);
     HealthText->SetWorldSize(15);
-    HealthText->SetText(FText::FromString(FString::Printf(TEXT("HP:%0.f "), GetHealth())));
+    HealthText->SetText(FText::FromString(FString::Printf(TEXT("HP:%0.f "), HealthComp->GetHealth())));
 }
 
 
@@ -144,7 +138,7 @@ void AShooterCharacter::BeginPlay()
 {
     Super::BeginPlay();
     //Set Health Default Value
-    Health = MaxHealth;
+    //Health = MaxHealth;
     Energy = MaxEnergy;
     
     SetTextComponents();
@@ -259,7 +253,7 @@ void AShooterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
     
     PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &AShooterCharacter::CanJump);
     PlayerInputComponent->BindAction("Crouch", IE_Pressed, this, &AShooterCharacter::StartCrouch);
-    //PlayerInputComponent->BindAction("BackDash", IE_Pressed, this, &AShooterCharacter::StartBackDash);
+
     
     PlayerInputComponent->BindAction("Shoot", IE_Pressed, this, &AShooterCharacter::StartShoot);
     PlayerInputComponent->BindAction("Shoot", IE_Released, this, &AShooterCharacter::StopShoot);
@@ -277,6 +271,7 @@ void AShooterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
     PlayerInputComponent->BindAction("EquipSideWeapon", IE_Pressed, this, &AShooterCharacter::OnEquipSecondaryWeapon);
     
     PlayerInputComponent->BindAction("PickingUp", IE_Pressed, this, &AShooterCharacter::PickObjects);
+    PlayerInputComponent->BindAction("DropWeapon", IE_Pressed, this, &AShooterCharacter::DropWeapon);
     
     PlayerInputComponent->BindAction("OffensiveAbility", IE_Pressed, this, &AShooterCharacter::AimFirball);
     PlayerInputComponent->BindAction("OffensiveAbility", IE_Released, this, &AShooterCharacter::CastOffensiveAblity);
@@ -353,42 +348,6 @@ void AShooterCharacter::Landed(const FHitResult& Hit)
     JumpCount = 0;
 }
 
-//MARK: TODO Backdash and Timeline
-/*void AShooterCharacter::StartBackDash()
- {
- if(bHasBackDash == false && bIsBackDashReady == false && GetCharacterMovement()->IsFalling() == true){return;}
- 
- bIsBackDashReady = false;
- 
- GetWorldTimerManager().SetTimer(BackDash_TimerHandle, this, &AShooterCharacter::BackDash, BackDashCooldown, false);
- }
- 
- void AShooterCharacter::BackDash()
- {
- bIsBackDashReady = true;
- bIsBackDashing = true;
- 
- if(GetActorRotation().Yaw >= 0)
- {
- UE_LOG(LogTemp, Warning, TEXT("World Roation: %f" ), GetActorRotation().Yaw);
- if(CurveFloat)
- {
- FOnTimelineFloat TimelineProgress;
- TimelineProgress.BindUFunction(this, FName("BackDashTimelineTrack"));
- BackDashTimeline.AddInterpFloat(CurveFloat, TimelineProgress);
- BackDashTimeline.SetLooping(false);
- BackDashTimeline.PlayFromStart();
- }
- }
- }
- void AShooterCharacter::BackDashTimelineTrack(f)
- {
- auto NewEndLocation =  GetActorLocation() + BackDashLeftAmount;
- auto NewLocation = FMath::Lerp(GetActorLocation(), NewEndLocation, BackDashTimeline.GetTimelineLength());
- GetCapsuleComponent()->SetRelativeLocation(NewLocation);
- UE_LOG(LogTemp, Warning, TEXT("BackDashTimeline Time: %f" ), BackDashTimeline.GetTimelineLength());
- 
- }*/
 
 void AShooterCharacter::LookUpRate(float AxisValue)
 {
@@ -652,8 +611,146 @@ void AShooterCharacter::NextWeapon()
     }
 }
 
-//MARK: ArticBlast
+void AShooterCharacter::AddWeapon(AGun* Weapon)
+{
+    if (Weapon)
+    {
+        Weapon->OnEnterInventory(this);
+        Inventory.AddUnique(Weapon);
+        
+        // Equip first weapon in inventory
+        if (Inventory.Num() > 0 && Gun == nullptr)
+        {
+            EquipWeapon(Inventory[0]);
+        }
+    }
+}
 
+
+void AShooterCharacter::RemoveWeapon(AGun* Weapon, bool bDestroy)
+{
+    if (Weapon)
+    {
+        bool bIsCurrent = Gun == Weapon;
+        
+        if (Inventory.Contains(Weapon))
+        {
+            Weapon->OnLeaveInventory();
+        }
+        Inventory.RemoveSingle(Weapon);
+        
+        /* Replace weapon if we removed our current weapon */
+        if (bIsCurrent && Inventory.Num() > 0)
+        {
+            SetCurrentWeapon(Inventory[0], nullptr);
+        }
+        
+        /* Clear reference to weapon if we have no items left in inventory */
+        if (Inventory.Num() == 0)
+        {
+            SetCurrentWeapon(nullptr, nullptr);
+        }
+        
+        if (bDestroy)
+        {
+            Weapon->Destroy();
+        }
+    }
+}
+
+//MARK: HitResult
+FHitResult AShooterCharacter::GetHitResult()
+{
+    FHitResult Hit;
+    
+    FCollisionQueryParams Params;
+    Params.AddIgnoredActor(GetOwner());
+    Params.AddIgnoredActor(this);
+    
+    GetWorld()->LineTraceSingleByChannel(OUT Hit, GetPlayerWorldPosition(), GetEndPoint(), ECollisionChannel::ECC_Visibility, Params);
+    
+    return Hit;
+}
+
+FVector AShooterCharacter::GetPlayerWorldPosition()
+{
+    FVector PlayerViewPointLocation;
+    FRotator PlayerViewPointRotation;
+    
+    GetController()->GetPlayerViewPoint(OUT PlayerViewPointLocation, OUT PlayerViewPointRotation);
+    
+    return PlayerViewPointLocation;
+    
+}
+
+FVector AShooterCharacter::GetEndPoint()
+{
+    FVector PlayerViewPointLocation;
+    FRotator PlayerViewPointRotation;
+    
+    GetController()->GetPlayerViewPoint(OUT PlayerViewPointLocation, OUT PlayerViewPointRotation);
+    
+    FVector EndPoint = GetPlayerWorldPosition() + (GetDirection() * InteractTraceLength);
+ 
+    return EndPoint;
+    
+}
+
+FVector AShooterCharacter::GetDirection()
+{
+    FVector PlayerViewPointLocation;
+    FRotator PlayerViewPointRotation;
+    
+    GetController()->GetPlayerViewPoint(OUT PlayerViewPointLocation, OUT PlayerViewPointRotation);
+    
+    FVector Direction = PlayerViewPointRotation.Vector();
+    
+    return Direction;
+}
+
+//MARK:DropWeapon
+void AShooterCharacter::DropWeapon()
+{
+    if (Gun)
+    {
+        if (Controller == nullptr)
+        {
+            return;
+        }
+        
+        FHitResult Hit = GetHitResult();
+        FVector SpawnLocation;
+        // Find farthest valid spawn location
+        if (Hit.bBlockingHit)
+        {
+            //Slightly move away from impacted object
+            SpawnLocation = Hit.ImpactPoint + (Hit.ImpactNormal * 20);
+        }
+        else
+        {
+            SpawnLocation = GetEndPoint();
+        }
+        
+        // Spawn the "dropped" weapon
+        FActorSpawnParameters SpawnInfo;
+        SpawnInfo.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+        AWeaponPickup* NewWeaponPickup = GetWorld()->SpawnActor<AWeaponPickup>(Gun->WeaponPickupClass, SpawnLocation, FRotator::ZeroRotator, SpawnInfo);
+
+        if (NewWeaponPickup)
+        {
+            // Apply torque to make it spin when dropped.
+            UStaticMeshComponent* MeshComp = NewWeaponPickup->GetMeshComponent();
+            if (MeshComp)
+            {
+                MeshComp->SetSimulatePhysics(true);
+                MeshComp->AddTorqueInRadians(FVector(1, 1, 1) * 4000000);
+            }
+        }
+        RemoveWeapon(Gun, true);
+    }
+}
+
+//MARK: ArticBlast
 void AShooterCharacter::UseArticBlast()
 {
     if(HaveEnoughEnergyToUseAbility(ArticBlastAttributes)  &&  bElectroSparkReady == true && !bIsUsingMist)
@@ -798,48 +895,75 @@ void AShooterCharacter::SwapToNewWeaponMesh()
     }
 }
 
-
+//MARK:Pick Objects
 void AShooterCharacter::PickObjects()
 {
-    FHitResult Hit;
-    FVector ShotDirection;
-    bool bSuccess = ObjectTrace(Hit, ShotDirection);
+    FHitResult Hit = GetHitResult();
     
     AActor* HitActor = Hit.GetActor();
     
+    if(Hit.bBlockingHit)
+    {
+        DrawDebugBox(GetWorld(), Hit.ImpactPoint, FVector(5,5,5), FColor::Emerald, false, 2.0f);
+    }
+    
     if(bCanInteract)
     {
-        if(HitActor != nullptr)
+        if(HitActor)
         {
-            if (HitActor->GetClass()->ImplementsInterface(UWraithUIInterface::StaticClass()))
+            SetFocusedActor(HitActor);
+        }
+        
+        if(FocusedActor)
+        {
+            IWraithUIInterface* Interface = Cast<IWraithUIInterface>(FocusedActor);
+            if(Interface)
             {
-                const auto &Interface = Cast<IWraithUIInterface>(HitActor);
+                Interface->Execute_OnInteract(FocusedActor, this);
+                UE_LOG(LogTemp, Warning, TEXT("OnInteract C++"));
                 
-                // if, Execute Interface on C++ Layer
-                if (Interface)
-                {
-                    Interface->Execute_ObjectInteractedWith(HitActor);
-                }
-                // Else, Execute Interface on Blueprint layer instead:
-                else if (HitActor->GetClass()->ImplementsInterface(UWraithUIInterface::StaticClass()))
-                {
-                    IWraithUIInterface::Execute_ObjectInteractedWith(HitActor);
-                    
-                }
             }
         }
     }
 }
 
-//MARK: Return Functions
-
-// Name of Class
-FString AShooterCharacter::GetTestName()
+void AShooterCharacter::SetFocusedActor(AActor* HitActor)
 {
-    FString MyName = this->GetName();
-    return MyName;
+    if(HitActor != FocusedActor)
+    {
+    UE_LOG(LogTemp, Warning, TEXT("Hitactor null"));
+    if(FocusedActor)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("focus actor found"));
+        IWraithUIInterface* Interface = Cast<IWraithUIInterface>(FocusedActor);
+        if(Interface)
+        {
+            Interface->Execute_EndFocus(FocusedActor);
+        }
+    }
+    
+    IWraithUIInterface* Interface = Cast<IWraithUIInterface>(HitActor);
+    if(Interface)
+    {
+        Interface->Execute_StartFocus(HitActor);
+    }
+    FocusedActor = HitActor;
 }
-
+    
+    else
+    {
+        if(FocusedActor)
+        {
+            IWraithUIInterface* Interface = Cast<IWraithUIInterface>(FocusedActor);
+            if(Interface)
+            {
+                Interface->Execute_EndFocus(FocusedActor);
+            }
+        }
+        FocusedActor = nullptr;
+    }
+}
+//MARK: Return Functions
 FName AShooterCharacter::GetInventoryAttachPoint(EInventorySlot Slot) const
 {
     /* Return the socket name for the specified storage slot */
@@ -888,16 +1012,10 @@ float AShooterCharacter::GetEnergy() const
     return Energy;
 }
 
-//Returns Health of player
-float AShooterCharacter::GetHealth() const
-{
-    return Health;
-}
-
 //returns if dead or not
 bool AShooterCharacter::IsDead() const
 {
-    return Health <= 0;
+    return HealthComp->GetHealth() <= 0;
     
 }
 // returns if Aiming or  not
@@ -911,54 +1029,20 @@ float AShooterCharacter::GetScoreValue() const
     return CharacterScore;
 }
 
-bool AShooterCharacter::ObjectTrace(FHitResult& Hit, FVector& ShotDirection)
-{
-    AController* OwnerController = GetController();
-    if(!OwnerController){return false;}
-    
-    FVector Location;
-    FRotator Rotation;
-    
-    OwnerController->GetPlayerViewPoint(Location, Rotation);
-    
-    FVector EndPoint = Location + Rotation.Vector() * InteractTraceLength;
-    
-    FCollisionQueryParams Params;
-    Params.AddIgnoredActor(GetOwner());
-    Params.AddIgnoredActor(this);
-    Params.bTraceComplex = true;
-    Params.bReturnPhysicalMaterial = true;
-    
-    /*if (DebugWeaponDrawing > 0)
-    {
-        DrawDebugLine(GetWorld(), Location, EndPoint, FColor::Red, false, 1.0f, 0, 1.0f);
-    }*/
-    
-    return GetWorld()->LineTraceSingleByChannel(Hit, Location, EndPoint, ECollisionChannel::ECC_GameTraceChannel1, Params);
-}
 
 //MARK: TakeDamage
-float AShooterCharacter::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser)
+void AShooterCharacter::OnHealthChanged(UHealthComponent* OwningHealthComp, float Health, float HealthDelta, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser)
 {
-    float DamageToApply = Super::TakeDamage(DamageAmount,DamageEvent, EventInstigator, DamageCauser);
+    HealthText->SetText(FText::FromString(FString::Printf(TEXT("HP: %0.f "), HealthComp->Health)));
     
-    DamageToApply = FMath::Min(Health, DamageToApply);
-    Health -= DamageToApply;
-    HealthText->SetText(FText::FromString(FString::Printf(TEXT("HP: %0.f "), GetHealth())));
-    
-    if(IsDead())
+    if (IsDead())
     {
-        AWraithShooterGameModeBase* GameMode = GetWorld()->GetAuthGameMode<AWraithShooterGameModeBase>();
-        
-        if(GameMode != nullptr)
-        {
-            GameMode->PawnKilled(this);
-        }
-        DetachFromControllerPendingDestroy();
+        GetMovementComponent()->StopMovementImmediately();
         GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+        DetachFromControllerPendingDestroy();
         
+        SetLifeSpan(10.0f);
     }
-    return DamageToApply;
 }
 
 //MARK:Update Energy
@@ -1003,13 +1087,6 @@ void AShooterCharacter::CameraEffects()
         PlayerController->ClientPlayCameraShake(ProjectileCameraShake);
     }
 }
-//MARK: Interface Function
-bool AShooterCharacter::ReactToPlayerEntered_Implementation()
-{
-    Health -= 100.f;
-    HealthText->SetText(FText::FromString(FString::Printf(TEXT("HP: %0.f "), GetHealth())));
-    return true;
-}
 //MARK:Networking
 void AShooterCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty> & OutLifetimeProps) const
 {
@@ -1018,7 +1095,6 @@ void AShooterCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty> & O
     DOREPLIFETIME(AShooterCharacter, Killer);
     DOREPLIFETIME(AShooterCharacter, Gun);
     DOREPLIFETIME(AShooterCharacter, PreviousGun);
-    DOREPLIFETIME(AShooterCharacter, Health);
     DOREPLIFETIME(AShooterCharacter, Energy);
 }
 

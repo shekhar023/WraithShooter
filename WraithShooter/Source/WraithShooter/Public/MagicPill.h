@@ -3,13 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
-
 #include "GameFramework/Actor.h"
-#include "WraithUIInterface.h"
 #include "MagicPill.generated.h"
 
 UCLASS()
-class WRAITHSHOOTER_API AMagicPill : public AActor, public IWraithUIInterface
+class WRAITHSHOOTER_API AMagicPill : public AActor
 {
     GENERATED_BODY()
     
@@ -21,9 +19,6 @@ protected:
     // Called when the game starts or when spawned
     virtual void BeginPlay() override;
     
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = InteractMessage)
-    FText InteractMessage;
-
     /* Time between powerup ticks */
     UPROPERTY(EditDefaultsOnly, Category = "Powerups")
     float PowerupInterval;
@@ -51,6 +46,9 @@ protected:
     void OnPowerupStateChanged(bool bNewIsActive);
     
 public:
+    
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Mesh")
+    UStaticMeshComponent* MeshComp;
     
     bool GetIsPowerupActive() const;
     

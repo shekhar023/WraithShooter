@@ -18,7 +18,7 @@ void EmptyLinkFunctionForGeneratedCodeMagicPill() {}
 	ENGINE_API UClass* Z_Construct_UClass_AActor();
 	UPackage* Z_Construct_UPackage__Script_WraithShooter();
 	ENGINE_API UClass* Z_Construct_UClass_AActor_NoRegister();
-	WRAITHSHOOTER_API UClass* Z_Construct_UClass_UWraithUIInterface_NoRegister();
+	ENGINE_API UClass* Z_Construct_UClass_UStaticMeshComponent_NoRegister();
 // End Cross Module References
 	DEFINE_FUNCTION(AMagicPill::execOnRep_PowerupActive)
 	{
@@ -232,6 +232,10 @@ void EmptyLinkFunctionForGeneratedCodeMagicPill() {}
 		static const UE4CodeGen_Private::FMetaDataPairParam Class_MetaDataParams[];
 #endif
 #if WITH_METADATA
+		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_MeshComp_MetaData[];
+#endif
+		static const UE4CodeGen_Private::FObjectPropertyParams NewProp_MeshComp;
+#if WITH_METADATA
 		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_bIsPowerupActive_MetaData[];
 #endif
 		static void NewProp_bIsPowerupActive_SetBit(void* Obj);
@@ -244,12 +248,7 @@ void EmptyLinkFunctionForGeneratedCodeMagicPill() {}
 		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_PowerupInterval_MetaData[];
 #endif
 		static const UE4CodeGen_Private::FFloatPropertyParams NewProp_PowerupInterval;
-#if WITH_METADATA
-		static const UE4CodeGen_Private::FMetaDataPairParam NewProp_InteractMessage_MetaData[];
-#endif
-		static const UE4CodeGen_Private::FTextPropertyParams NewProp_InteractMessage;
 		static const UE4CodeGen_Private::FPropertyParamsBase* const PropPointers[];
-		static const UE4CodeGen_Private::FImplementedInterfaceParams InterfaceParams[];
 		static const FCppClassTypeInfoStatic StaticCppClassTypeInfo;
 		static const UE4CodeGen_Private::FClassParams ClassParams;
 	};
@@ -271,6 +270,14 @@ void EmptyLinkFunctionForGeneratedCodeMagicPill() {}
 		{ "ModuleRelativePath", "Public/MagicPill.h" },
 	};
 #endif
+#if WITH_METADATA
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AMagicPill_Statics::NewProp_MeshComp_MetaData[] = {
+		{ "Category", "Mesh" },
+		{ "EditInline", "true" },
+		{ "ModuleRelativePath", "Public/MagicPill.h" },
+	};
+#endif
+	const UE4CodeGen_Private::FObjectPropertyParams Z_Construct_UClass_AMagicPill_Statics::NewProp_MeshComp = { "MeshComp", nullptr, (EPropertyFlags)0x00100000000a000d, UE4CodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AMagicPill, MeshComp), Z_Construct_UClass_UStaticMeshComponent_NoRegister, METADATA_PARAMS(Z_Construct_UClass_AMagicPill_Statics::NewProp_MeshComp_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AMagicPill_Statics::NewProp_MeshComp_MetaData)) };
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AMagicPill_Statics::NewProp_bIsPowerupActive_MetaData[] = {
 		{ "Comment", "// Keeps state of the power-up\n" },
@@ -301,22 +308,12 @@ void EmptyLinkFunctionForGeneratedCodeMagicPill() {}
 	};
 #endif
 	const UE4CodeGen_Private::FFloatPropertyParams Z_Construct_UClass_AMagicPill_Statics::NewProp_PowerupInterval = { "PowerupInterval", nullptr, (EPropertyFlags)0x0020080000010001, UE4CodeGen_Private::EPropertyGenFlags::Float, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AMagicPill, PowerupInterval), METADATA_PARAMS(Z_Construct_UClass_AMagicPill_Statics::NewProp_PowerupInterval_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AMagicPill_Statics::NewProp_PowerupInterval_MetaData)) };
-#if WITH_METADATA
-	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_AMagicPill_Statics::NewProp_InteractMessage_MetaData[] = {
-		{ "Category", "InteractMessage" },
-		{ "ModuleRelativePath", "Public/MagicPill.h" },
-	};
-#endif
-	const UE4CodeGen_Private::FTextPropertyParams Z_Construct_UClass_AMagicPill_Statics::NewProp_InteractMessage = { "InteractMessage", nullptr, (EPropertyFlags)0x0020080000000005, UE4CodeGen_Private::EPropertyGenFlags::Text, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(AMagicPill, InteractMessage), METADATA_PARAMS(Z_Construct_UClass_AMagicPill_Statics::NewProp_InteractMessage_MetaData, UE_ARRAY_COUNT(Z_Construct_UClass_AMagicPill_Statics::NewProp_InteractMessage_MetaData)) };
 	const UE4CodeGen_Private::FPropertyParamsBase* const Z_Construct_UClass_AMagicPill_Statics::PropPointers[] = {
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AMagicPill_Statics::NewProp_MeshComp,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AMagicPill_Statics::NewProp_bIsPowerupActive,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AMagicPill_Statics::NewProp_TotalNoOfTicks,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AMagicPill_Statics::NewProp_PowerupInterval,
-		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_AMagicPill_Statics::NewProp_InteractMessage,
 	};
-		const UE4CodeGen_Private::FImplementedInterfaceParams Z_Construct_UClass_AMagicPill_Statics::InterfaceParams[] = {
-			{ Z_Construct_UClass_UWraithUIInterface_NoRegister, (int32)VTABLE_OFFSET(AMagicPill, IWraithUIInterface), false },
-		};
 	const FCppClassTypeInfoStatic Z_Construct_UClass_AMagicPill_Statics::StaticCppClassTypeInfo = {
 		TCppClassTypeTraits<AMagicPill>::IsAbstract,
 	};
@@ -327,11 +324,11 @@ void EmptyLinkFunctionForGeneratedCodeMagicPill() {}
 		DependentSingletons,
 		FuncInfo,
 		Z_Construct_UClass_AMagicPill_Statics::PropPointers,
-		InterfaceParams,
+		nullptr,
 		UE_ARRAY_COUNT(DependentSingletons),
 		UE_ARRAY_COUNT(FuncInfo),
 		UE_ARRAY_COUNT(Z_Construct_UClass_AMagicPill_Statics::PropPointers),
-		UE_ARRAY_COUNT(InterfaceParams),
+		0,
 		0x009000A4u,
 		METADATA_PARAMS(Z_Construct_UClass_AMagicPill_Statics::Class_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UClass_AMagicPill_Statics::Class_MetaDataParams))
 	};
@@ -344,7 +341,7 @@ void EmptyLinkFunctionForGeneratedCodeMagicPill() {}
 		}
 		return OuterClass;
 	}
-	IMPLEMENT_CLASS(AMagicPill, 874911194);
+	IMPLEMENT_CLASS(AMagicPill, 1335640394);
 	template<> WRAITHSHOOTER_API UClass* StaticClass<AMagicPill>()
 	{
 		return AMagicPill::StaticClass();

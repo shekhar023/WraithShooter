@@ -1,89 +1,69 @@
 
-
-
-FHitResult AGun::GetHitResult()
+*/
+class AGun;
+class USkeletalMeshComponent;
+UCLASS(Abstract)
+class WRAITHSHOOTER_API AWeaponPickup : public PickupActor
 {
-    FHitResult Hit;
+	GENERATED_BODY()
     
-    FCollisionQueryParams Params;
-    Params.AddIgnoredActor(GetOwner());
-    Params.AddIgnoredActor(this);
-    Params.bTraceComplex = true;
-    Params.bReturnPhysicalMaterial = true;
+    AWeaponPickup();
+
+public:
+    /* Class to add to inventory when picked up */
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "WeaponClass")
+    TSubclassOf<AGun> WeaponClass;
     
-    GetWorld()->LineTraceSingleByChannel(OUT Hit, GetPlayerWorldPosition(), GetGunReach(), ECollisionChannel::ECC_GameTraceChannel1, Params);
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = WeaponClass)
+    AGun* GunRef;
     
-    return Hit;
-}
+    //UFUNCTION(BlueprintCallable, Category = WeaponPickupEffects)
+    //void OnUsed(APawn* InstigatorPawn);
+    
+    UFUNCTION(BlueprintCallable, BlueprintImplementableEvent,Category = WeaponPickupEffects)
+    void DrawVFX();
+
+};
 
 
-FVector AGun::GetPlayerWorldPosition()
+// Fill out your copyright notice in the Description page of Project Settings.
+
+
+#include "WeaponPickup.h"
+#include "Gun.h"
+#include "ShooterCharacter.h"
+#include "ShooterPlayerController.h"
+#include "Components/SkeletalMeshComponent.h"
+AWeaponPickup::AWeaponPickup()
 {
-    FVector PlayerViewPointLocation;
-    FRotator PlayerViewPointRotation;
-    
-    GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(OUT PlayerViewPointLocation, OUT PlayerViewPointRotation);
-    
-    return PlayerViewPointLocation;
-    
-}
-
-FVector AGun::GetGunReach()
-{
-    FVector PlayerViewPointLocation;
-    FRotator PlayerViewPointRotation;
-    
-    GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(OUT PlayerViewPointLocation, OUT PlayerViewPointRotation);
-    
-    FVector EndPoint = PlayerViewPointLocation + PlayerViewPointRotation.Vector() * WeaponAttributes.MaxRange;
-    
-    return EndPoint;
     
 }
-
-FVector AGun::GetShotDirection()
+/*(void AWeaponPickup::OnUsed(APawn* InstigatorPawn)
 {
-
-     FVector PlayerViewPointLocation;
-     FRotator PlayerViewPointRotation;
-     
-     GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(OUT PlayerViewPointLocation, OUT PlayerViewPointRotation);
-     
-     FVector ShotDirection = -PlayerViewPointRotation.Vector();
-     
-     float HalfRad = FMath::DegreesToRadians(WeaponAttributes.BulletSpread);
-     ShotDirection = FMath::VRandCone(EndPoint, HalfRad, HalfRad);
-     
-     return ShotDirection;
-}
-
-
-  ShotDirection = -Rotation.Vector();
-
-bool AGun::GunTrace(FHitResult& Hit, FVector& ShotDirection, FVector& EndPoint)
-{
-    AController* OwnerController = GetOwnerController();
-    if(!OwnerController){return false;}
-    
-    FVector Location;
-    FRotator Rotation;
-    
-    OwnerController->GetPlayerViewPoint(Location, Rotation);
-    
-    ShotDirection = -Rotation.Vector();
-    
-    EndPoint = Location + Rotation.Vector() * WeaponAttributes.MaxRange;
-
-    float HalfRad = FMath::DegreesToRadians(WeaponAttributes.BulletSpread);
-    ShotDirection = FMath::VRandCone(ShotDirection, HalfRad, HalfRad);
-  
-    FCollisionQueryParams Params;
-    Params.AddIgnoredActor(GetOwner());
-    Params.AddIgnoredActor(this);
-    Params.bTraceComplex = true;
-    Params.bReturnPhysicalMaterial = true;
-    
-    return GetWorld()->LineTraceSingleByChannel(Hit, Location, EndPoint, ECollisionChannel::ECC_GameTraceChannel1, Params);
-    
+    AShooterCharacter* MyPawn = Cast<AShooterCharacter>(InstigatorPawn);
+    if (MyPawn)
+    {
+       
+        if (MyPawn->WeaponSlotAvailable(WeaponClass->GetDefaultObject<AGun>()->GetStorageSlot()))
+        {
+            FActorSpawnParameters SpawnInfo;
+            SpawnInfo.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+            AGun* NewWeapon = GetWorld()->SpawnActor<AGun>(WeaponClass, SpawnInfo);
+            
+            MyPawn->AddWeapon(NewWeapon);
+            
+            Super::OnUsed(InstigatorPawn);
+        }
+        else
+        {
+            AShooterPlayerController* PC = Cast<AShooterPlayerController>(MyPawn->GetController());
+            if (PC)
+            {
+                ////TODO: ADD UI
+            }
+        }
+    }
 }
 */
+
+

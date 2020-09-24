@@ -17,6 +17,7 @@
 #include "NiagaraComponent.h"
 #include "NiagaraFunctionLibrary.h"
 #include "Net/UnrealNetwork.h"
+#include "Actors/WeaponPickup.h"
 
 static int32 DebugWeaponDrawing = 0;
 FAutoConsoleVariableRef CVARDebugWeaponDrawing(TEXT("COOP.DebugWeapons"), DebugWeaponDrawing, TEXT("Draw Debug Lines for Weapons"),ECVF_Cheat);
@@ -215,6 +216,10 @@ FVector AGun::GetShotDirection()
 //MARK: PullTrigger
 void AGun::PullTrigger()
 {
+    if(GetCurrentAmmoInClip() == 0 && CanReload())
+    {
+        StartReload();
+    }
     
     CalculateAmmo();
     
@@ -228,11 +233,23 @@ void AGun::PullTrigger()
         PlayImpactEffects(SurfaceType, Hit.ImpactPoint);
         AActor* HitActor = Hit.GetActor();
         
+        float AppliedDamage = WeaponAttributes.Damage;
+        if(SurfaceType == SurfaceType3)
+        {
+            AppliedDamage *= WeaponAttributes.HeadShotDamage;
+        }
+        if(HitActor == GetOwner())
+        {
+            float AnimDuration = PlayCharacterAnimations(PlayerAnimations.PlayerHitReloadMontage);
+            if (AnimDuration <= 0.0f)
+            {
+                AnimDuration = 1.0f;
+            }
+        }
+        
         if(HitActor != nullptr)
         {
-            FPointDamageEvent DamageEvent(WeaponAttributes.Damage, Hit, GetShotDirection(), nullptr);
-            AController* OwnerController = GetOwnerController();
-            HitActor->TakeDamage(WeaponAttributes.Damage, DamageEvent, OwnerController, this);
+            UGameplayStatics::ApplyPointDamage(HitActor, AppliedDamage, GetShotDirection(), Hit, GetOwner()->GetInstigatorController(), GetOwner(),WeaponAttributes.DamageType);
         }
     }
 }
@@ -267,7 +284,7 @@ void AGun::StartReload()
     if(CanReload() == false) {return;}
     bIsReloading = true;
     bCanFire = false;
-    //DetermineWeaponState();
+    
     if(IsPlayerAiming())
     {
         
@@ -388,6 +405,9 @@ void AGun::PlayImpactEffects(EPhysicalSurface MySurfaceType, FVector ImpactPoint
         case SurfaceType2: "Metal";
             SelectedEffect = WeaponEffects.MetalImpactEffect;
             break;
+        case SurfaceType3: "HeadImpact";
+            SelectedEffect = WeaponEffects.HeadImpactEffect;
+            break;
         default:
             SelectedEffect = WeaponEffects.ImpactEffect;
             break;
@@ -411,11 +431,35 @@ void AGun::OnEnterInventory(AShooterCharacter* NewOwner)
     AttachMeshToPawn(StorageSlot);
 }
 
+void AGun::OnLeaveInventory()
+{
+    SetOwningPawn(nullptr);
+    
+    if (IsAttachedToPawn())
+    {
+        OnUnEquip();
+    }
+    
+    DetachMeshFromPawn();
+}
+
+
+bool AGun::IsEquipped() const
+{
+    return bIsEquipped;
+}
+
+bool AGun::IsAttachedToPawn() const
+{
+    return bIsEquipped || bPendingEquip;
+}
+
+
 void AGun::OnEquip(bool bPlayAnimation)
 {
     bPendingEquip = true;
     
-   // AttachMeshToPawn(StorageSlot);
+   AttachMeshToPawn(StorageSlot);
     if (bPlayAnimation)
     {
         float Duration = PlayCharacterAnimations(PlayerAnimations.EquipAnim);

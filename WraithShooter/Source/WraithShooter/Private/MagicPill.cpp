@@ -14,6 +14,10 @@ AMagicPill::AMagicPill()
     TotalNoOfTicks = 2;
 
     bIsPowerupActive = false;
+    
+    MeshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
+    MeshComp->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Ignore);
+
 
 }
 

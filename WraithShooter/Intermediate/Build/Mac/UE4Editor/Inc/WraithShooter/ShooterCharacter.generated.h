@@ -8,12 +8,11 @@
 #include "UObject/ScriptMacros.h"
 
 PRAGMA_DISABLE_DEPRECATION_WARNINGS
-struct FDamageEvent;
+class UHealthComponent;
+class UDamageType;
 class AController;
 class AActor;
 enum class EInventorySlot : uint8;
-struct FHitResult;
-struct FVector;
 class USkeletalMeshComponent;
 class AGun;
 class UWidgetComponent;
@@ -27,24 +26,24 @@ struct FSkillsAttributes;
 #define WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_50_RPC_WRAPPERS \
 	virtual void ServerOnFire_Implementation(); \
  \
-	DECLARE_FUNCTION(execTakeDamage); \
+	DECLARE_FUNCTION(execOnHealthChanged); \
 	DECLARE_FUNCTION(execMakeVFXInvisible); \
 	DECLARE_FUNCTION(execMakeVFXVisible); \
 	DECLARE_FUNCTION(execUnBindDelegates); \
 	DECLARE_FUNCTION(execBindDelegates); \
 	DECLARE_FUNCTION(execSwapToNewWeaponMesh); \
+	DECLARE_FUNCTION(execWeaponSlotAvailable); \
 	DECLARE_FUNCTION(execGetInventoryAttachPoint); \
-	DECLARE_FUNCTION(execObjectTrace); \
 	DECLARE_FUNCTION(execGetScoreValue); \
 	DECLARE_FUNCTION(execGetPawnMesh); \
 	DECLARE_FUNCTION(execGetGunHostlerPoint); \
 	DECLARE_FUNCTION(execGetWeaponAttachPoint); \
 	DECLARE_FUNCTION(execGetEnergy); \
-	DECLARE_FUNCTION(execGetHealth); \
 	DECLARE_FUNCTION(execGetbIsAiming); \
 	DECLARE_FUNCTION(execIsDead); \
 	DECLARE_FUNCTION(execGetCurrentWeapon); \
 	DECLARE_FUNCTION(execGetTimerWidgetRef); \
+	DECLARE_FUNCTION(execAddWeapon); \
 	DECLARE_FUNCTION(execCanUseElectroSpark); \
 	DECLARE_FUNCTION(execSpawnElectroSpark); \
 	DECLARE_FUNCTION(execElectroSparkOff); \
@@ -58,24 +57,24 @@ struct FSkillsAttributes;
 #define WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_50_RPC_WRAPPERS_NO_PURE_DECLS \
 	virtual void ServerOnFire_Implementation(); \
  \
-	DECLARE_FUNCTION(execTakeDamage); \
+	DECLARE_FUNCTION(execOnHealthChanged); \
 	DECLARE_FUNCTION(execMakeVFXInvisible); \
 	DECLARE_FUNCTION(execMakeVFXVisible); \
 	DECLARE_FUNCTION(execUnBindDelegates); \
 	DECLARE_FUNCTION(execBindDelegates); \
 	DECLARE_FUNCTION(execSwapToNewWeaponMesh); \
+	DECLARE_FUNCTION(execWeaponSlotAvailable); \
 	DECLARE_FUNCTION(execGetInventoryAttachPoint); \
-	DECLARE_FUNCTION(execObjectTrace); \
 	DECLARE_FUNCTION(execGetScoreValue); \
 	DECLARE_FUNCTION(execGetPawnMesh); \
 	DECLARE_FUNCTION(execGetGunHostlerPoint); \
 	DECLARE_FUNCTION(execGetWeaponAttachPoint); \
 	DECLARE_FUNCTION(execGetEnergy); \
-	DECLARE_FUNCTION(execGetHealth); \
 	DECLARE_FUNCTION(execGetbIsAiming); \
 	DECLARE_FUNCTION(execIsDead); \
 	DECLARE_FUNCTION(execGetCurrentWeapon); \
 	DECLARE_FUNCTION(execGetTimerWidgetRef); \
+	DECLARE_FUNCTION(execAddWeapon); \
 	DECLARE_FUNCTION(execCanUseElectroSpark); \
 	DECLARE_FUNCTION(execSpawnElectroSpark); \
 	DECLARE_FUNCTION(execElectroSparkOff); \
@@ -101,13 +100,11 @@ private: \
 public: \
 	DECLARE_CLASS(AShooterCharacter, ACharacter, COMPILED_IN_FLAGS(0 | CLASS_Config), CASTCLASS_None, TEXT("/Script/WraithShooter"), NO_API) \
 	DECLARE_SERIALIZER(AShooterCharacter) \
-	virtual UObject* _getUObject() const override { return const_cast<AShooterCharacter*>(this); } \
 	enum class ENetFields_Private : uint16 \
 	{ \
 		NETFIELD_REP_START=(uint16)((int32)Super::ENetFields_Private::NETFIELD_REP_END + (int32)1), \
 		Killer=NETFIELD_REP_START, \
 		Energy, \
-		Health, \
 		Gun, \
 		PreviousGun, \
 		NETFIELD_REP_END=PreviousGun	}; \
@@ -121,13 +118,11 @@ private: \
 public: \
 	DECLARE_CLASS(AShooterCharacter, ACharacter, COMPILED_IN_FLAGS(0 | CLASS_Config), CASTCLASS_None, TEXT("/Script/WraithShooter"), NO_API) \
 	DECLARE_SERIALIZER(AShooterCharacter) \
-	virtual UObject* _getUObject() const override { return const_cast<AShooterCharacter*>(this); } \
 	enum class ENetFields_Private : uint16 \
 	{ \
 		NETFIELD_REP_START=(uint16)((int32)Super::ENetFields_Private::NETFIELD_REP_END + (int32)1), \
 		Killer=NETFIELD_REP_START, \
 		Energy, \
-		Health, \
 		Gun, \
 		PreviousGun, \
 		NETFIELD_REP_END=PreviousGun	}; \
@@ -161,6 +156,7 @@ DEFINE_VTABLE_PTR_HELPER_CTOR_CALLER(AShooterCharacter); \
 #define WraithShooter_Source_WraithShooter_Public_ShooterCharacter_h_50_PRIVATE_PROPERTY_OFFSET \
 	FORCEINLINE static uint32 __PPO__Gun() { return STRUCT_OFFSET(AShooterCharacter, Gun); } \
 	FORCEINLINE static uint32 __PPO__PreviousGun() { return STRUCT_OFFSET(AShooterCharacter, PreviousGun); } \
+	FORCEINLINE static uint32 __PPO__DropWeaponMaxDistance() { return STRUCT_OFFSET(AShooterCharacter, DropWeaponMaxDistance); } \
 	FORCEINLINE static uint32 __PPO__GunClass() { return STRUCT_OFFSET(AShooterCharacter, GunClass); } \
 	FORCEINLINE static uint32 __PPO__Inventory() { return STRUCT_OFFSET(AShooterCharacter, Inventory); }
 

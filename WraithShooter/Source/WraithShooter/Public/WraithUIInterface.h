@@ -21,18 +21,14 @@ class WRAITHSHOOTER_API IWraithUIInterface
 	GENERATED_BODY()
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
+
+    UFUNCTION(BlueprintCallable, BlueprintImplementableEvent,Category = Interaction)
+    void OnInteract(AActor* Caller);
     
-    //setup interface functionality
-    virtual FString GetTestName();
+    UFUNCTION(BlueprintNativeEvent, BlueprintCallable,Category = Interaction)
+    void StartFocus();
     
-    UFUNCTION(BlueprintCallable, BlueprintImplementableEvent,Category = Interfaces)
-    bool ReactToPlayerExited();
-    
-    //Declare function must be implemented in c++
-    UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = Interfaces)
-    bool ReactToPlayerEntered();
-    
-    UFUNCTION(BlueprintCallable, BlueprintImplementableEvent,Category = Interfaces)
-    void ObjectInteractedWith();
+    UFUNCTION(BlueprintNativeEvent, BlueprintCallable,Category = Interaction)
+    void EndFocus();
     
 };

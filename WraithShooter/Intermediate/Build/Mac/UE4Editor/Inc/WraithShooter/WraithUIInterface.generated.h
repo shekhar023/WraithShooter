@@ -8,6 +8,7 @@
 #include "UObject/ScriptMacros.h"
 
 PRAGMA_DISABLE_DEPRECATION_WARNINGS
+class AActor;
 #ifdef WRAITHSHOOTER_WraithUIInterface_generated_h
 #error "WraithUIInterface.generated.h already included, missing '#pragma once' in WraithUIInterface.h"
 #endif
@@ -15,37 +16,25 @@ PRAGMA_DISABLE_DEPRECATION_WARNINGS
 
 #define WraithShooter_Source_WraithShooter_Public_WraithUIInterface_h_13_SPARSE_DATA
 #define WraithShooter_Source_WraithShooter_Public_WraithUIInterface_h_13_RPC_WRAPPERS \
-	virtual bool ReactToPlayerEntered_Implementation() { return false; }; \
+	virtual void EndFocus_Implementation() {}; \
+	virtual void StartFocus_Implementation() {}; \
  \
-	DECLARE_FUNCTION(execReactToPlayerEntered);
+	DECLARE_FUNCTION(execEndFocus); \
+	DECLARE_FUNCTION(execStartFocus);
 
 
 #define WraithShooter_Source_WraithShooter_Public_WraithUIInterface_h_13_RPC_WRAPPERS_NO_PURE_DECLS \
-	virtual bool ReactToPlayerEntered_Implementation() { return false; }; \
+	virtual void EndFocus_Implementation() {}; \
+	virtual void StartFocus_Implementation() {}; \
  \
-	DECLARE_FUNCTION(execReactToPlayerEntered);
+	DECLARE_FUNCTION(execEndFocus); \
+	DECLARE_FUNCTION(execStartFocus);
 
 
 #define WraithShooter_Source_WraithShooter_Public_WraithUIInterface_h_13_EVENT_PARMS \
-	struct WraithUIInterface_eventReactToPlayerEntered_Parms \
+	struct WraithUIInterface_eventOnInteract_Parms \
 	{ \
-		bool ReturnValue; \
- \
-		/** Constructor, initializes return property only **/ \
-		WraithUIInterface_eventReactToPlayerEntered_Parms() \
-			: ReturnValue(false) \
-		{ \
-		} \
-	}; \
-	struct WraithUIInterface_eventReactToPlayerExited_Parms \
-	{ \
-		bool ReturnValue; \
- \
-		/** Constructor, initializes return property only **/ \
-		WraithUIInterface_eventReactToPlayerExited_Parms() \
-			: ReturnValue(false) \
-		{ \
-		} \
+		AActor* Caller; \
 	};
 
 
@@ -106,9 +95,9 @@ protected: \
 public: \
 	typedef UWraithUIInterface UClassType; \
 	typedef IWraithUIInterface ThisClass; \
-	static void Execute_ObjectInteractedWith(UObject* O); \
-	static bool Execute_ReactToPlayerEntered(UObject* O); \
-	static bool Execute_ReactToPlayerExited(UObject* O); \
+	static void Execute_EndFocus(UObject* O); \
+	static void Execute_OnInteract(UObject* O, AActor* Caller); \
+	static void Execute_StartFocus(UObject* O); \
 	virtual UObject* _getUObject() const { check(0 && "Missing required implementation."); return nullptr; }
 
 
@@ -118,9 +107,9 @@ protected: \
 public: \
 	typedef UWraithUIInterface UClassType; \
 	typedef IWraithUIInterface ThisClass; \
-	static void Execute_ObjectInteractedWith(UObject* O); \
-	static bool Execute_ReactToPlayerEntered(UObject* O); \
-	static bool Execute_ReactToPlayerExited(UObject* O); \
+	static void Execute_EndFocus(UObject* O); \
+	static void Execute_OnInteract(UObject* O, AActor* Caller); \
+	static void Execute_StartFocus(UObject* O); \
 	virtual UObject* _getUObject() const { check(0 && "Missing required implementation."); return nullptr; }
 
 

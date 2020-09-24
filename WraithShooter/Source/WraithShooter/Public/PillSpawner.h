@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "WraithUIInterface.h"
 #include "PillSpawner.generated.h"
 
 class AMagicPill;
@@ -15,7 +14,7 @@ class USoundBase;
 class UUserWidget;
 
 UCLASS()
-class WRAITHSHOOTER_API APillSpawner : public AActor, public IWraithUIInterface
+class WRAITHSHOOTER_API APillSpawner : public AActor
 {
     GENERATED_BODY()
     
@@ -71,8 +70,6 @@ public:
     
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Spawning)
     USoundBase* RespawnSound;
-    
-    void ObjectInteractedWith();
     
     UPROPERTY(EditAnywhere)
     TSubclassOf<UUserWidget> NotifyClass;

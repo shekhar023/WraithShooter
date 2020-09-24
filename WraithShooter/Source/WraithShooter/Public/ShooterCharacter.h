@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "WraithUIInterface.h"
 #include "Components/TimelineComponent.h"
 #include "GameFramework/Character.h"
 #include "SkillStructures.h"
@@ -25,6 +24,7 @@ class AWraithProjectile;
 class USceneComponent;
 class UFloatingPawnMovement;
 class UWidgetComponent;
+class USHealthComponent;
 
 //MARK:ENUM for sockets
 UENUM()
@@ -45,13 +45,26 @@ enum class EInventorySlot : uint8
 };
 //MARK: ShooterCharacter Class
 UCLASS()
-class WRAITHSHOOTER_API AShooterCharacter : public ACharacter, public IWraithUIInterface, public SkillStructures // inherited IWraithUIInterface and SkillStructures
+class WRAITHSHOOTER_API AShooterCharacter : public ACharacter, public SkillStructures // inherited IWraithUIInterface and SkillStructures
 {
     GENERATED_BODY()
+    
+private:
+    
+    FVector GetDirection();
+    
+    FVector GetEndPoint();
+    
+    FVector GetPlayerWorldPosition();
+    
+    FHitResult GetHitResult();
     
 public:
     // Sets default values for this character's properties
     AShooterCharacter();
+    
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Components)
+    UHealthComponent* HealthComp;
     
 protected:
     // Called when the game starts or when spawned
@@ -76,6 +89,8 @@ protected:
     void TurnRate(float AxisValue);
     
     virtual void Landed(const FHitResult& Hit);
+    
+    void DropWeapon();
     
     //Networking
     UFUNCTION(Server, Reliable)
@@ -108,12 +123,6 @@ public:
     void PickObjects();
     
     void DoubleJump();
-    
-    void StartBackDash();
-    
-    void BackDash();
-    
-    FTimerHandle BackDash_TimerHandle;
     
     UFUNCTION(BlueprintImplementableEvent, Category = ShooterCharacter)
     void Zoom(bool CanZoom);
@@ -172,11 +181,11 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ShooterCharacter,  meta = (ClampMin= 0.0f))
     float MaxEnergy;
     
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ShooterCharacter)
+    /*UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ShooterCharacter)
     float MaxHealth;
     
     UPROPERTY(Replicated,EditAnywhere, BlueprintReadWrite, Category = ShooterCharacter, meta = (ClampMin= 0.0f))
-    float Health;
+    float Health;*/
     
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ShooterCharacter)
     float CharacterScore;
@@ -201,16 +210,6 @@ public:
     
     void CameraEffects();
     
-    //MARK: TimeLine
-    /*   UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = TimeLine)
-     UCurveFloat* CurveFloat;
-     
-     FTimeline BackDashTimeline;
-     
-     UFUNCTION()
-     void BackDashTimelineTrack(float DirectionToDash);
-     */
-    
 public:
     //MARK: Offensive Skills Variables and Data
     
@@ -228,34 +227,6 @@ public:
     
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = DoubleJump)
     FSkillData DoubleJumpData;
-    
-    //MARK: BackDash Variables
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = BackDash)
-    bool bHasBackDash;
-    
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = BackDash)
-    FVector BackDashLeftAmount;
-    
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = BackDash)
-    FVector BackDashRightAmount;
-    
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = BackDash)
-    FVector BackDashForwardAmount;
-    
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = BackDash)
-    FVector BackDashAmount;
-    
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = BackDash)
-    bool bIsBackDashing;
-    
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = BackDash)
-    bool bIsBackDashReady;
-    
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = BackDash)
-    float BackDashCooldown;
-    
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = BackDash)
-    FSkillData BackDashData;
     
     //MARK: Fireball Variables
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Fireball)
@@ -499,6 +470,9 @@ protected:
     AGun* PreviousGun;
     
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gun)
+    float DropWeaponMaxDistance;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gun)
     TArray<TSubclassOf<AGun>> GunClass;
     
     UPROPERTY(Transient)
@@ -516,6 +490,12 @@ protected:
     void EquipWeapon(AGun* Weapon);
     
     void SetCurrentWeapon(AGun* NewWeapon, AGun* LastWeapon);
+
+public:
+    UFUNCTION(BlueprintCallable, Category = Weapon)
+    void AddWeapon(AGun* Weapon);
+    
+    void RemoveWeapon(AGun* Weapon, bool bDestroy);
     
 public:
     
@@ -549,8 +529,8 @@ public:
     UFUNCTION(BlueprintPure)
     bool GetbIsAiming() const;
     
-    UFUNCTION(BlueprintPure)
-    float GetHealth() const;
+   // UFUNCTION(BlueprintPure)
+   // float GetHealth() const;
     
     UFUNCTION(BlueprintPure)
     float GetEnergy() const;
@@ -568,9 +548,6 @@ public:
     float GetScoreValue() const;
     
     UFUNCTION()
-    bool ObjectTrace(FHitResult& Hit, FVector& ShotDirection);
-    
-    UFUNCTION()
     FName GetInventoryAttachPoint(EInventorySlot Slot) const;
     
     void OnEquipSecondaryWeapon();
@@ -579,6 +556,7 @@ public:
     
     void OnEquipSideWeapon();
     
+    UFUNCTION(BlueprintCallable)
     bool WeaponSlotAvailable(EInventorySlot CheckSlot);
     
     UFUNCTION(BlueprintCallable, Category = Animation)
@@ -605,18 +583,8 @@ public:
 public:
     //MARK: Virtual function Take Damage, GetTestName, PostInitializeComponents, ReactToPlayerEntered, ReactToPlayerEntered_Implementation
     
-    //damage function
-    UFUNCTION(BlueprintCallable, Category = ShooterCharacter)
-    virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
-    
-    //Declare override of interface
-    virtual FString GetTestName() override;
-    
-    //Declared function must be implmented in c++
-    bool ReactToPlayerEntered();
-    bool ReactToPlayerEntered_Implementation() override;
-    
-    //void ObjectInteractedWith();
+    UFUNCTION()
+    void OnHealthChanged(UHealthComponent* OwningHealthComp, float Health, float HealthDelta, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser);
     
 public:
     // Called to bind functionality to input
@@ -639,4 +607,9 @@ public:
     void UseElectroSpark();
     
     void RadiusDamage();
+    
+private:
+    AActor* FocusedActor;
+    
+    void SetFocusedActor(AActor* HitActor);
 };

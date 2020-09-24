@@ -13,6 +13,7 @@ class UParticleSystem;
 class UAnimMontage;
 class UAnimationAsset;
 class UNiagaraSystem;
+class AWeaponPickup;
 
 //MARK: Weapon Attributes
 USTRUCT(BlueprintType, Blueprintable)
@@ -37,8 +38,14 @@ public:
     UPROPERTY(EditDefaultsOnly, Category = "Weapon", meta = (ClampMin=0.0f))
     float BulletSpread;
     
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
+    TSubclassOf<UDamageType> DamageType;
+    
     UPROPERTY(EditAnywhere, Category = "Weapon", meta = (ClampMin=0.0f))
     float Damage;
+    
+    UPROPERTY(EditAnywhere, Category = "Weapon", meta = (ClampMin=0.0f))
+    float HeadShotDamage;
     
     UPROPERTY(EditAnywhere,Category = "Weapon", meta = (ClampMin=0.0f))
     int32 StartAmmo;
@@ -78,6 +85,9 @@ public:
     
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
     UParticleSystem* BodyImpactEffect;
+    
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
+    UParticleSystem* HeadImpactEffect;
     
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
     UParticleSystem* MetalImpactEffect;
@@ -133,6 +143,9 @@ public:
     
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
     UAnimMontage* PlayerHipReloadMontage;
+    
+    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
+    UAnimMontage* PlayerHitReloadMontage;
 };
 
 
@@ -151,6 +164,7 @@ private:
     FHitResult GetHitResult();
     
     FHitResult GetHitResultofShotgun();
+    
 public:
     
     //MARK:Structures access Variables
@@ -169,6 +183,15 @@ public:
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = WeaponStructure)
     bool bIsShotgun = false;
     
+    // The class to spawn in the level when dropped
+    UPROPERTY(EditDefaultsOnly, Category = "Weapon")
+    TSubclassOf<AWeaponPickup> WeaponPickupClass;
+    
+    bool IsEquipped() const;
+    
+    bool IsAttachedToPawn() const;
+    
+    void OnLeaveInventory();
 protected:
     
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
@@ -290,6 +313,7 @@ public:
     
     void OnEnterInventory(AShooterCharacter* NewOwner);
     
+    UFUNCTION(BlueprintCallable)
     EInventorySlot GetStorageSlot();
     
     /* The character socket to store this item at. */
@@ -301,6 +325,5 @@ public:
     FTimerHandle EquipFinishedTimerHandle;
     
     FTimerHandle Shotgun_TimerHandle;
-    
     
 };

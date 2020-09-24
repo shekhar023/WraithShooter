@@ -8,6 +8,7 @@
 #include "UObject/ScriptMacros.h"
 
 PRAGMA_DISABLE_DEPRECATION_WARNINGS
+enum class EInventorySlot : uint8;
 class UAnimMontage;
 class UAnimationAsset;
 #ifdef WRAITHSHOOTER_Gun_generated_h
@@ -15,37 +16,38 @@ class UAnimationAsset;
 #endif
 #define WRAITHSHOOTER_Gun_generated_h
 
-#define WraithShooter_Source_WraithShooter_Public_Gun_h_121_GENERATED_BODY \
+#define WraithShooter_Source_WraithShooter_Public_Gun_h_131_GENERATED_BODY \
 	friend struct Z_Construct_UScriptStruct_FPlayerAnimations_Statics; \
 	WRAITHSHOOTER_API static class UScriptStruct* StaticStruct();
 
 
 template<> WRAITHSHOOTER_API UScriptStruct* StaticStruct<struct FPlayerAnimations>();
 
-#define WraithShooter_Source_WraithShooter_Public_Gun_h_102_GENERATED_BODY \
+#define WraithShooter_Source_WraithShooter_Public_Gun_h_112_GENERATED_BODY \
 	friend struct Z_Construct_UScriptStruct_FWeaponAnimations_Statics; \
 	WRAITHSHOOTER_API static class UScriptStruct* StaticStruct();
 
 
 template<> WRAITHSHOOTER_API UScriptStruct* StaticStruct<struct FWeaponAnimations>();
 
-#define WraithShooter_Source_WraithShooter_Public_Gun_h_67_GENERATED_BODY \
+#define WraithShooter_Source_WraithShooter_Public_Gun_h_74_GENERATED_BODY \
 	friend struct Z_Construct_UScriptStruct_FWeaponEffects_Statics; \
 	WRAITHSHOOTER_API static class UScriptStruct* StaticStruct();
 
 
 template<> WRAITHSHOOTER_API UScriptStruct* StaticStruct<struct FWeaponEffects>();
 
-#define WraithShooter_Source_WraithShooter_Public_Gun_h_21_GENERATED_BODY \
+#define WraithShooter_Source_WraithShooter_Public_Gun_h_22_GENERATED_BODY \
 	friend struct Z_Construct_UScriptStruct_FWeaponAttributes_Statics; \
 	WRAITHSHOOTER_API static class UScriptStruct* StaticStruct();
 
 
 template<> WRAITHSHOOTER_API UScriptStruct* StaticStruct<struct FWeaponAttributes>();
 
-#define WraithShooter_Source_WraithShooter_Public_Gun_h_142_SPARSE_DATA
-#define WraithShooter_Source_WraithShooter_Public_Gun_h_142_RPC_WRAPPERS \
+#define WraithShooter_Source_WraithShooter_Public_Gun_h_155_SPARSE_DATA
+#define WraithShooter_Source_WraithShooter_Public_Gun_h_155_RPC_WRAPPERS \
  \
+	DECLARE_FUNCTION(execGetStorageSlot); \
 	DECLARE_FUNCTION(execCanReload); \
 	DECLARE_FUNCTION(execIsPlayerAiming); \
 	DECLARE_FUNCTION(execStopWeaponAnimation); \
@@ -56,8 +58,9 @@ template<> WRAITHSHOOTER_API UScriptStruct* StaticStruct<struct FWeaponAttribute
 	DECLARE_FUNCTION(execGetCurrentAmmoInClip);
 
 
-#define WraithShooter_Source_WraithShooter_Public_Gun_h_142_RPC_WRAPPERS_NO_PURE_DECLS \
+#define WraithShooter_Source_WraithShooter_Public_Gun_h_155_RPC_WRAPPERS_NO_PURE_DECLS \
  \
+	DECLARE_FUNCTION(execGetStorageSlot); \
 	DECLARE_FUNCTION(execCanReload); \
 	DECLARE_FUNCTION(execIsPlayerAiming); \
 	DECLARE_FUNCTION(execStopWeaponAnimation); \
@@ -68,7 +71,7 @@ template<> WRAITHSHOOTER_API UScriptStruct* StaticStruct<struct FWeaponAttribute
 	DECLARE_FUNCTION(execGetCurrentAmmoInClip);
 
 
-#define WraithShooter_Source_WraithShooter_Public_Gun_h_142_INCLASS_NO_PURE_DECLS \
+#define WraithShooter_Source_WraithShooter_Public_Gun_h_155_INCLASS_NO_PURE_DECLS \
 private: \
 	static void StaticRegisterNativesAGun(); \
 	friend struct Z_Construct_UClass_AGun_Statics; \
@@ -77,7 +80,7 @@ public: \
 	DECLARE_SERIALIZER(AGun)
 
 
-#define WraithShooter_Source_WraithShooter_Public_Gun_h_142_INCLASS \
+#define WraithShooter_Source_WraithShooter_Public_Gun_h_155_INCLASS \
 private: \
 	static void StaticRegisterNativesAGun(); \
 	friend struct Z_Construct_UClass_AGun_Statics; \
@@ -86,7 +89,7 @@ public: \
 	DECLARE_SERIALIZER(AGun)
 
 
-#define WraithShooter_Source_WraithShooter_Public_Gun_h_142_STANDARD_CONSTRUCTORS \
+#define WraithShooter_Source_WraithShooter_Public_Gun_h_155_STANDARD_CONSTRUCTORS \
 	/** Standard constructor, called after all reflected properties have been initialized */ \
 	NO_API AGun(const FObjectInitializer& ObjectInitializer); \
 	DEFINE_DEFAULT_OBJECT_INITIALIZER_CONSTRUCTOR_CALL(AGun) \
@@ -99,7 +102,7 @@ private: \
 public:
 
 
-#define WraithShooter_Source_WraithShooter_Public_Gun_h_142_ENHANCED_CONSTRUCTORS \
+#define WraithShooter_Source_WraithShooter_Public_Gun_h_155_ENHANCED_CONSTRUCTORS \
 private: \
 	/** Private move- and copy-constructors, should never be used */ \
 	NO_API AGun(AGun&&); \
@@ -110,7 +113,7 @@ DEFINE_VTABLE_PTR_HELPER_CTOR_CALLER(AGun); \
 	DEFINE_DEFAULT_CONSTRUCTOR_CALL(AGun)
 
 
-#define WraithShooter_Source_WraithShooter_Public_Gun_h_142_PRIVATE_PROPERTY_OFFSET \
+#define WraithShooter_Source_WraithShooter_Public_Gun_h_155_PRIVATE_PROPERTY_OFFSET \
 	FORCEINLINE static uint32 __PPO__Mesh() { return STRUCT_OFFSET(AGun, Mesh); } \
 	FORCEINLINE static uint32 __PPO__bIsFiring() { return STRUCT_OFFSET(AGun, bIsFiring); } \
 	FORCEINLINE static uint32 __PPO__bIsReloading() { return STRUCT_OFFSET(AGun, bIsReloading); } \
@@ -118,27 +121,27 @@ DEFINE_VTABLE_PTR_HELPER_CTOR_CALLER(AGun); \
 	FORCEINLINE static uint32 __PPO__SurfaceType() { return STRUCT_OFFSET(AGun, SurfaceType); }
 
 
-#define WraithShooter_Source_WraithShooter_Public_Gun_h_139_PROLOG
-#define WraithShooter_Source_WraithShooter_Public_Gun_h_142_GENERATED_BODY_LEGACY \
+#define WraithShooter_Source_WraithShooter_Public_Gun_h_152_PROLOG
+#define WraithShooter_Source_WraithShooter_Public_Gun_h_155_GENERATED_BODY_LEGACY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \
 public: \
-	WraithShooter_Source_WraithShooter_Public_Gun_h_142_PRIVATE_PROPERTY_OFFSET \
-	WraithShooter_Source_WraithShooter_Public_Gun_h_142_SPARSE_DATA \
-	WraithShooter_Source_WraithShooter_Public_Gun_h_142_RPC_WRAPPERS \
-	WraithShooter_Source_WraithShooter_Public_Gun_h_142_INCLASS \
-	WraithShooter_Source_WraithShooter_Public_Gun_h_142_STANDARD_CONSTRUCTORS \
+	WraithShooter_Source_WraithShooter_Public_Gun_h_155_PRIVATE_PROPERTY_OFFSET \
+	WraithShooter_Source_WraithShooter_Public_Gun_h_155_SPARSE_DATA \
+	WraithShooter_Source_WraithShooter_Public_Gun_h_155_RPC_WRAPPERS \
+	WraithShooter_Source_WraithShooter_Public_Gun_h_155_INCLASS \
+	WraithShooter_Source_WraithShooter_Public_Gun_h_155_STANDARD_CONSTRUCTORS \
 public: \
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
 
 
-#define WraithShooter_Source_WraithShooter_Public_Gun_h_142_GENERATED_BODY \
+#define WraithShooter_Source_WraithShooter_Public_Gun_h_155_GENERATED_BODY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \
 public: \
-	WraithShooter_Source_WraithShooter_Public_Gun_h_142_PRIVATE_PROPERTY_OFFSET \
-	WraithShooter_Source_WraithShooter_Public_Gun_h_142_SPARSE_DATA \
-	WraithShooter_Source_WraithShooter_Public_Gun_h_142_RPC_WRAPPERS_NO_PURE_DECLS \
-	WraithShooter_Source_WraithShooter_Public_Gun_h_142_INCLASS_NO_PURE_DECLS \
-	WraithShooter_Source_WraithShooter_Public_Gun_h_142_ENHANCED_CONSTRUCTORS \
+	WraithShooter_Source_WraithShooter_Public_Gun_h_155_PRIVATE_PROPERTY_OFFSET \
+	WraithShooter_Source_WraithShooter_Public_Gun_h_155_SPARSE_DATA \
+	WraithShooter_Source_WraithShooter_Public_Gun_h_155_RPC_WRAPPERS_NO_PURE_DECLS \
+	WraithShooter_Source_WraithShooter_Public_Gun_h_155_INCLASS_NO_PURE_DECLS \
+	WraithShooter_Source_WraithShooter_Public_Gun_h_155_ENHANCED_CONSTRUCTORS \
 private: \
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
 

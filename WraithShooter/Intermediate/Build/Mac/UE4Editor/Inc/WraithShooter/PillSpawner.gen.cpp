@@ -24,7 +24,6 @@ void EmptyLinkFunctionForGeneratedCodePillSpawner() {}
 	WRAITHSHOOTER_API UClass* Z_Construct_UClass_AMagicPill_NoRegister();
 	ENGINE_API UClass* Z_Construct_UClass_UDecalComponent_NoRegister();
 	ENGINE_API UClass* Z_Construct_UClass_USphereComponent_NoRegister();
-	WRAITHSHOOTER_API UClass* Z_Construct_UClass_UWraithUIInterface_NoRegister();
 // End Cross Module References
 	void APillSpawner::StaticRegisterNativesAPillSpawner()
 	{
@@ -76,7 +75,6 @@ void EmptyLinkFunctionForGeneratedCodePillSpawner() {}
 #endif
 		static const UE4CodeGen_Private::FObjectPropertyParams NewProp_PillInstance;
 		static const UE4CodeGen_Private::FPropertyParamsBase* const PropPointers[];
-		static const UE4CodeGen_Private::FImplementedInterfaceParams InterfaceParams[];
 		static const FCppClassTypeInfoStatic StaticCppClassTypeInfo;
 		static const UE4CodeGen_Private::FClassParams ClassParams;
 	};
@@ -165,9 +163,6 @@ void EmptyLinkFunctionForGeneratedCodePillSpawner() {}
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_APillSpawner_Statics::NewProp_SphereComp,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UClass_APillSpawner_Statics::NewProp_PillInstance,
 	};
-		const UE4CodeGen_Private::FImplementedInterfaceParams Z_Construct_UClass_APillSpawner_Statics::InterfaceParams[] = {
-			{ Z_Construct_UClass_UWraithUIInterface_NoRegister, (int32)VTABLE_OFFSET(APillSpawner, IWraithUIInterface), false },
-		};
 	const FCppClassTypeInfoStatic Z_Construct_UClass_APillSpawner_Statics::StaticCppClassTypeInfo = {
 		TCppClassTypeTraits<APillSpawner>::IsAbstract,
 	};
@@ -178,11 +173,11 @@ void EmptyLinkFunctionForGeneratedCodePillSpawner() {}
 		DependentSingletons,
 		nullptr,
 		Z_Construct_UClass_APillSpawner_Statics::PropPointers,
-		InterfaceParams,
+		nullptr,
 		UE_ARRAY_COUNT(DependentSingletons),
 		0,
 		UE_ARRAY_COUNT(Z_Construct_UClass_APillSpawner_Statics::PropPointers),
-		UE_ARRAY_COUNT(InterfaceParams),
+		0,
 		0x009000A4u,
 		METADATA_PARAMS(Z_Construct_UClass_APillSpawner_Statics::Class_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UClass_APillSpawner_Statics::Class_MetaDataParams))
 	};
@@ -195,7 +190,7 @@ void EmptyLinkFunctionForGeneratedCodePillSpawner() {}
 		}
 		return OuterClass;
 	}
-	IMPLEMENT_CLASS(APillSpawner, 2053599704);
+	IMPLEMENT_CLASS(APillSpawner, 3945972389);
 	template<> WRAITHSHOOTER_API UClass* StaticClass<APillSpawner>()
 	{
 		return APillSpawner::StaticClass();

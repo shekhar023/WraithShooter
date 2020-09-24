@@ -14,20 +14,20 @@ class AActor;
 #endif
 #define WRAITHSHOOTER_MagicPill_generated_h
 
-#define WraithShooter_Source_WraithShooter_Public_MagicPill_h_14_SPARSE_DATA
-#define WraithShooter_Source_WraithShooter_Public_MagicPill_h_14_RPC_WRAPPERS \
+#define WraithShooter_Source_WraithShooter_Public_MagicPill_h_12_SPARSE_DATA
+#define WraithShooter_Source_WraithShooter_Public_MagicPill_h_12_RPC_WRAPPERS \
  \
 	DECLARE_FUNCTION(execOnRep_PowerupActive); \
 	DECLARE_FUNCTION(execOnTickPowerup);
 
 
-#define WraithShooter_Source_WraithShooter_Public_MagicPill_h_14_RPC_WRAPPERS_NO_PURE_DECLS \
+#define WraithShooter_Source_WraithShooter_Public_MagicPill_h_12_RPC_WRAPPERS_NO_PURE_DECLS \
  \
 	DECLARE_FUNCTION(execOnRep_PowerupActive); \
 	DECLARE_FUNCTION(execOnTickPowerup);
 
 
-#define WraithShooter_Source_WraithShooter_Public_MagicPill_h_14_EVENT_PARMS \
+#define WraithShooter_Source_WraithShooter_Public_MagicPill_h_12_EVENT_PARMS \
 	struct MagicPill_eventOnActivated_Parms \
 	{ \
 		AActor* ActiveFor; \
@@ -38,28 +38,26 @@ class AActor;
 	};
 
 
-#define WraithShooter_Source_WraithShooter_Public_MagicPill_h_14_CALLBACK_WRAPPERS
-#define WraithShooter_Source_WraithShooter_Public_MagicPill_h_14_INCLASS_NO_PURE_DECLS \
+#define WraithShooter_Source_WraithShooter_Public_MagicPill_h_12_CALLBACK_WRAPPERS
+#define WraithShooter_Source_WraithShooter_Public_MagicPill_h_12_INCLASS_NO_PURE_DECLS \
 private: \
 	static void StaticRegisterNativesAMagicPill(); \
 	friend struct Z_Construct_UClass_AMagicPill_Statics; \
 public: \
 	DECLARE_CLASS(AMagicPill, AActor, COMPILED_IN_FLAGS(0 | CLASS_Config), CASTCLASS_None, TEXT("/Script/WraithShooter"), NO_API) \
-	DECLARE_SERIALIZER(AMagicPill) \
-	virtual UObject* _getUObject() const override { return const_cast<AMagicPill*>(this); }
+	DECLARE_SERIALIZER(AMagicPill)
 
 
-#define WraithShooter_Source_WraithShooter_Public_MagicPill_h_14_INCLASS \
+#define WraithShooter_Source_WraithShooter_Public_MagicPill_h_12_INCLASS \
 private: \
 	static void StaticRegisterNativesAMagicPill(); \
 	friend struct Z_Construct_UClass_AMagicPill_Statics; \
 public: \
 	DECLARE_CLASS(AMagicPill, AActor, COMPILED_IN_FLAGS(0 | CLASS_Config), CASTCLASS_None, TEXT("/Script/WraithShooter"), NO_API) \
-	DECLARE_SERIALIZER(AMagicPill) \
-	virtual UObject* _getUObject() const override { return const_cast<AMagicPill*>(this); }
+	DECLARE_SERIALIZER(AMagicPill)
 
 
-#define WraithShooter_Source_WraithShooter_Public_MagicPill_h_14_STANDARD_CONSTRUCTORS \
+#define WraithShooter_Source_WraithShooter_Public_MagicPill_h_12_STANDARD_CONSTRUCTORS \
 	/** Standard constructor, called after all reflected properties have been initialized */ \
 	NO_API AMagicPill(const FObjectInitializer& ObjectInitializer); \
 	DEFINE_DEFAULT_OBJECT_INITIALIZER_CONSTRUCTOR_CALL(AMagicPill) \
@@ -72,7 +70,7 @@ private: \
 public:
 
 
-#define WraithShooter_Source_WraithShooter_Public_MagicPill_h_14_ENHANCED_CONSTRUCTORS \
+#define WraithShooter_Source_WraithShooter_Public_MagicPill_h_12_ENHANCED_CONSTRUCTORS \
 private: \
 	/** Private move- and copy-constructors, should never be used */ \
 	NO_API AMagicPill(AMagicPill&&); \
@@ -83,39 +81,38 @@ DEFINE_VTABLE_PTR_HELPER_CTOR_CALLER(AMagicPill); \
 	DEFINE_DEFAULT_CONSTRUCTOR_CALL(AMagicPill)
 
 
-#define WraithShooter_Source_WraithShooter_Public_MagicPill_h_14_PRIVATE_PROPERTY_OFFSET \
-	FORCEINLINE static uint32 __PPO__InteractMessage() { return STRUCT_OFFSET(AMagicPill, InteractMessage); } \
+#define WraithShooter_Source_WraithShooter_Public_MagicPill_h_12_PRIVATE_PROPERTY_OFFSET \
 	FORCEINLINE static uint32 __PPO__PowerupInterval() { return STRUCT_OFFSET(AMagicPill, PowerupInterval); } \
 	FORCEINLINE static uint32 __PPO__TotalNoOfTicks() { return STRUCT_OFFSET(AMagicPill, TotalNoOfTicks); } \
 	FORCEINLINE static uint32 __PPO__bIsPowerupActive() { return STRUCT_OFFSET(AMagicPill, bIsPowerupActive); }
 
 
-#define WraithShooter_Source_WraithShooter_Public_MagicPill_h_11_PROLOG \
-	WraithShooter_Source_WraithShooter_Public_MagicPill_h_14_EVENT_PARMS
+#define WraithShooter_Source_WraithShooter_Public_MagicPill_h_9_PROLOG \
+	WraithShooter_Source_WraithShooter_Public_MagicPill_h_12_EVENT_PARMS
 
 
-#define WraithShooter_Source_WraithShooter_Public_MagicPill_h_14_GENERATED_BODY_LEGACY \
+#define WraithShooter_Source_WraithShooter_Public_MagicPill_h_12_GENERATED_BODY_LEGACY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \
 public: \
-	WraithShooter_Source_WraithShooter_Public_MagicPill_h_14_PRIVATE_PROPERTY_OFFSET \
-	WraithShooter_Source_WraithShooter_Public_MagicPill_h_14_SPARSE_DATA \
-	WraithShooter_Source_WraithShooter_Public_MagicPill_h_14_RPC_WRAPPERS \
-	WraithShooter_Source_WraithShooter_Public_MagicPill_h_14_CALLBACK_WRAPPERS \
-	WraithShooter_Source_WraithShooter_Public_MagicPill_h_14_INCLASS \
-	WraithShooter_Source_WraithShooter_Public_MagicPill_h_14_STANDARD_CONSTRUCTORS \
+	WraithShooter_Source_WraithShooter_Public_MagicPill_h_12_PRIVATE_PROPERTY_OFFSET \
+	WraithShooter_Source_WraithShooter_Public_MagicPill_h_12_SPARSE_DATA \
+	WraithShooter_Source_WraithShooter_Public_MagicPill_h_12_RPC_WRAPPERS \
+	WraithShooter_Source_WraithShooter_Public_MagicPill_h_12_CALLBACK_WRAPPERS \
+	WraithShooter_Source_WraithShooter_Public_MagicPill_h_12_INCLASS \
+	WraithShooter_Source_WraithShooter_Public_MagicPill_h_12_STANDARD_CONSTRUCTORS \
 public: \
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
 
 
-#define WraithShooter_Source_WraithShooter_Public_MagicPill_h_14_GENERATED_BODY \
+#define WraithShooter_Source_WraithShooter_Public_MagicPill_h_12_GENERATED_BODY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \
 public: \
-	WraithShooter_Source_WraithShooter_Public_MagicPill_h_14_PRIVATE_PROPERTY_OFFSET \
-	WraithShooter_Source_WraithShooter_Public_MagicPill_h_14_SPARSE_DATA \
-	WraithShooter_Source_WraithShooter_Public_MagicPill_h_14_RPC_WRAPPERS_NO_PURE_DECLS \
-	WraithShooter_Source_WraithShooter_Public_MagicPill_h_14_CALLBACK_WRAPPERS \
-	WraithShooter_Source_WraithShooter_Public_MagicPill_h_14_INCLASS_NO_PURE_DECLS \
-	WraithShooter_Source_WraithShooter_Public_MagicPill_h_14_ENHANCED_CONSTRUCTORS \
+	WraithShooter_Source_WraithShooter_Public_MagicPill_h_12_PRIVATE_PROPERTY_OFFSET \
+	WraithShooter_Source_WraithShooter_Public_MagicPill_h_12_SPARSE_DATA \
+	WraithShooter_Source_WraithShooter_Public_MagicPill_h_12_RPC_WRAPPERS_NO_PURE_DECLS \
+	WraithShooter_Source_WraithShooter_Public_MagicPill_h_12_CALLBACK_WRAPPERS \
+	WraithShooter_Source_WraithShooter_Public_MagicPill_h_12_INCLASS_NO_PURE_DECLS \
+	WraithShooter_Source_WraithShooter_Public_MagicPill_h_12_ENHANCED_CONSTRUCTORS \
 private: \
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
 

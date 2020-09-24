@@ -18,7 +18,7 @@ void AKillemAllGameMode::PawnKilled(APawn* PawnKilled)
     AWraithShooterGameModeBase* MyGameMode = Cast<AWraithShooterGameModeBase>(GetWorld()->GetAuthGameMode());
     if(MyGameMode)
     {
-        UE_LOG(LogTemp, Warning, TEXT("Bradcasting"));
+        UE_LOG(LogTemp, Warning, TEXT("Broadcasting"));
         MyGameMode->OnActorKilled.Broadcast(PawnKilled);
     }
     

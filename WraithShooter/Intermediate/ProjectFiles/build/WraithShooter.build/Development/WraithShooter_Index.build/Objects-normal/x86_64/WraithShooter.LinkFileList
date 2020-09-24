@@ -1,10 +1,15 @@
+/Users/Shekhar/Documents/Unreal Projects/WraithShooter/WraithShooter/Intermediate/ProjectFiles/build/WraithShooter.build/Development/WraithShooter_Index.build/Objects-normal/x86_64/PickupActor.o
+/Users/Shekhar/Documents/Unreal Projects/WraithShooter/WraithShooter/Intermediate/ProjectFiles/build/WraithShooter.build/Development/WraithShooter_Index.build/Objects-normal/x86_64/WeaponPickup.o
+/Users/Shekhar/Documents/Unreal Projects/WraithShooter/WraithShooter/Intermediate/ProjectFiles/build/WraithShooter.build/Development/WraithShooter_Index.build/Objects-normal/x86_64/BattleRoyalGameMode.o
 /Users/Shekhar/Documents/Unreal Projects/WraithShooter/WraithShooter/Intermediate/ProjectFiles/build/WraithShooter.build/Development/WraithShooter_Index.build/Objects-normal/x86_64/BTService_PlayerLocation.o
 /Users/Shekhar/Documents/Unreal Projects/WraithShooter/WraithShooter/Intermediate/ProjectFiles/build/WraithShooter.build/Development/WraithShooter_Index.build/Objects-normal/x86_64/BTService_PlayerLocationIfSeen.o
 /Users/Shekhar/Documents/Unreal Projects/WraithShooter/WraithShooter/Intermediate/ProjectFiles/build/WraithShooter.build/Development/WraithShooter_Index.build/Objects-normal/x86_64/BTTask_AimAtPlayer.o
 /Users/Shekhar/Documents/Unreal Projects/WraithShooter/WraithShooter/Intermediate/ProjectFiles/build/WraithShooter.build/Development/WraithShooter_Index.build/Objects-normal/x86_64/BTTask_Shoot.o
 /Users/Shekhar/Documents/Unreal Projects/WraithShooter/WraithShooter/Intermediate/ProjectFiles/build/WraithShooter.build/Development/WraithShooter_Index.build/Objects-normal/x86_64/BTTask_StopShoot.o
 /Users/Shekhar/Documents/Unreal Projects/WraithShooter/WraithShooter/Intermediate/ProjectFiles/build/WraithShooter.build/Development/WraithShooter_Index.build/Objects-normal/x86_64/BTTaskNode_ClearBlackBoardValue.o
+/Users/Shekhar/Documents/Unreal Projects/WraithShooter/WraithShooter/Intermediate/ProjectFiles/build/WraithShooter.build/Development/WraithShooter_Index.build/Objects-normal/x86_64/HealthComponent.o
 /Users/Shekhar/Documents/Unreal Projects/WraithShooter/WraithShooter/Intermediate/ProjectFiles/build/WraithShooter.build/Development/WraithShooter_Index.build/Objects-normal/x86_64/Gun.o
+/Users/Shekhar/Documents/Unreal Projects/WraithShooter/WraithShooter/Intermediate/ProjectFiles/build/WraithShooter.build/Development/WraithShooter_Index.build/Objects-normal/x86_64/WraithShooterHUD.o
 /Users/Shekhar/Documents/Unreal Projects/WraithShooter/WraithShooter/Intermediate/ProjectFiles/build/WraithShooter.build/Development/WraithShooter_Index.build/Objects-normal/x86_64/KillemAllGameMode.o
 /Users/Shekhar/Documents/Unreal Projects/WraithShooter/WraithShooter/Intermediate/ProjectFiles/build/WraithShooter.build/Development/WraithShooter_Index.build/Objects-normal/x86_64/MagicPill.o
 /Users/Shekhar/Documents/Unreal Projects/WraithShooter/WraithShooter/Intermediate/ProjectFiles/build/WraithShooter.build/Development/WraithShooter_Index.build/Objects-normal/x86_64/PillSpawner.o
@@ -13,6 +18,7 @@
 /Users/Shekhar/Documents/Unreal Projects/WraithShooter/WraithShooter/Intermediate/ProjectFiles/build/WraithShooter.build/Development/WraithShooter_Index.build/Objects-normal/x86_64/ShooterPlayerController.o
 /Users/Shekhar/Documents/Unreal Projects/WraithShooter/WraithShooter/Intermediate/ProjectFiles/build/WraithShooter.build/Development/WraithShooter_Index.build/Objects-normal/x86_64/ShooterPlayerState.o
 /Users/Shekhar/Documents/Unreal Projects/WraithShooter/WraithShooter/Intermediate/ProjectFiles/build/WraithShooter.build/Development/WraithShooter_Index.build/Objects-normal/x86_64/SkillStructures.o
+/Users/Shekhar/Documents/Unreal Projects/WraithShooter/WraithShooter/Intermediate/ProjectFiles/build/WraithShooter.build/Development/WraithShooter_Index.build/Objects-normal/x86_64/WraithGameState.o
 /Users/Shekhar/Documents/Unreal Projects/WraithShooter/WraithShooter/Intermediate/ProjectFiles/build/WraithShooter.build/Development/WraithShooter_Index.build/Objects-normal/x86_64/WraithProjectile.o
 /Users/Shekhar/Documents/Unreal Projects/WraithShooter/WraithShooter/Intermediate/ProjectFiles/build/WraithShooter.build/Development/WraithShooter_Index.build/Objects-normal/x86_64/WraithUIInterface.o
 /Users/Shekhar/Documents/Unreal Projects/WraithShooter/WraithShooter/Intermediate/ProjectFiles/build/WraithShooter.build/Development/WraithShooter_Index.build/Objects-normal/x86_64/WraithShooter.o

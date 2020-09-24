@@ -17,39 +17,44 @@ void EmptyLinkFunctionForGeneratedCodeWraithUIInterface() {}
 	WRAITHSHOOTER_API UClass* Z_Construct_UClass_UWraithUIInterface();
 	COREUOBJECT_API UClass* Z_Construct_UClass_UInterface();
 	UPackage* Z_Construct_UPackage__Script_WraithShooter();
+	ENGINE_API UClass* Z_Construct_UClass_AActor_NoRegister();
 // End Cross Module References
-	DEFINE_FUNCTION(IWraithUIInterface::execReactToPlayerEntered)
+	DEFINE_FUNCTION(IWraithUIInterface::execEndFocus)
 	{
 		P_FINISH;
 		P_NATIVE_BEGIN;
-		*(bool*)Z_Param__Result=P_THIS->ReactToPlayerEntered_Implementation();
+		P_THIS->EndFocus_Implementation();
 		P_NATIVE_END;
 	}
-	void IWraithUIInterface::ObjectInteractedWith()
+	DEFINE_FUNCTION(IWraithUIInterface::execStartFocus)
 	{
-		check(0 && "Do not directly call Event functions in Interfaces. Call Execute_ObjectInteractedWith instead.");
+		P_FINISH;
+		P_NATIVE_BEGIN;
+		P_THIS->StartFocus_Implementation();
+		P_NATIVE_END;
 	}
-	bool IWraithUIInterface::ReactToPlayerEntered()
+	void IWraithUIInterface::EndFocus()
 	{
-		check(0 && "Do not directly call Event functions in Interfaces. Call Execute_ReactToPlayerEntered instead.");
-		WraithUIInterface_eventReactToPlayerEntered_Parms Parms;
-		return Parms.ReturnValue;
+		check(0 && "Do not directly call Event functions in Interfaces. Call Execute_EndFocus instead.");
 	}
-	bool IWraithUIInterface::ReactToPlayerExited()
+	void IWraithUIInterface::OnInteract(AActor* Caller)
 	{
-		check(0 && "Do not directly call Event functions in Interfaces. Call Execute_ReactToPlayerExited instead.");
-		WraithUIInterface_eventReactToPlayerExited_Parms Parms;
-		return Parms.ReturnValue;
+		check(0 && "Do not directly call Event functions in Interfaces. Call Execute_OnInteract instead.");
+	}
+	void IWraithUIInterface::StartFocus()
+	{
+		check(0 && "Do not directly call Event functions in Interfaces. Call Execute_StartFocus instead.");
 	}
 	void UWraithUIInterface::StaticRegisterNativesUWraithUIInterface()
 	{
 		UClass* Class = UWraithUIInterface::StaticClass();
 		static const FNameNativePtrPair Funcs[] = {
-			{ "ReactToPlayerEntered", &IWraithUIInterface::execReactToPlayerEntered },
+			{ "EndFocus", &IWraithUIInterface::execEndFocus },
+			{ "StartFocus", &IWraithUIInterface::execStartFocus },
 		};
 		FNativeFunctionRegistrar::RegisterFunctions(Class, Funcs, UE_ARRAY_COUNT(Funcs));
 	}
-	struct Z_Construct_UFunction_UWraithUIInterface_ObjectInteractedWith_Statics
+	struct Z_Construct_UFunction_UWraithUIInterface_EndFocus_Statics
 	{
 #if WITH_METADATA
 		static const UE4CodeGen_Private::FMetaDataPairParam Function_MetaDataParams[];
@@ -57,88 +62,70 @@ void EmptyLinkFunctionForGeneratedCodeWraithUIInterface() {}
 		static const UE4CodeGen_Private::FFunctionParams FuncParams;
 	};
 #if WITH_METADATA
-	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_UWraithUIInterface_ObjectInteractedWith_Statics::Function_MetaDataParams[] = {
-		{ "Category", "Interfaces" },
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_UWraithUIInterface_EndFocus_Statics::Function_MetaDataParams[] = {
+		{ "Category", "Interaction" },
 		{ "ModuleRelativePath", "Public/WraithUIInterface.h" },
 	};
 #endif
-	const UE4CodeGen_Private::FFunctionParams Z_Construct_UFunction_UWraithUIInterface_ObjectInteractedWith_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_UWraithUIInterface, nullptr, "ObjectInteractedWith", nullptr, nullptr, 0, nullptr, 0, RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x0C020800, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_UWraithUIInterface_ObjectInteractedWith_Statics::Function_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UFunction_UWraithUIInterface_ObjectInteractedWith_Statics::Function_MetaDataParams)) };
-	UFunction* Z_Construct_UFunction_UWraithUIInterface_ObjectInteractedWith()
+	const UE4CodeGen_Private::FFunctionParams Z_Construct_UFunction_UWraithUIInterface_EndFocus_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_UWraithUIInterface, nullptr, "EndFocus", nullptr, nullptr, 0, nullptr, 0, RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x0C020C00, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_UWraithUIInterface_EndFocus_Statics::Function_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UFunction_UWraithUIInterface_EndFocus_Statics::Function_MetaDataParams)) };
+	UFunction* Z_Construct_UFunction_UWraithUIInterface_EndFocus()
 	{
 		static UFunction* ReturnFunction = nullptr;
 		if (!ReturnFunction)
 		{
-			UE4CodeGen_Private::ConstructUFunction(ReturnFunction, Z_Construct_UFunction_UWraithUIInterface_ObjectInteractedWith_Statics::FuncParams);
+			UE4CodeGen_Private::ConstructUFunction(ReturnFunction, Z_Construct_UFunction_UWraithUIInterface_EndFocus_Statics::FuncParams);
 		}
 		return ReturnFunction;
 	}
-	struct Z_Construct_UFunction_UWraithUIInterface_ReactToPlayerEntered_Statics
+	struct Z_Construct_UFunction_UWraithUIInterface_OnInteract_Statics
 	{
-		static void NewProp_ReturnValue_SetBit(void* Obj);
-		static const UE4CodeGen_Private::FBoolPropertyParams NewProp_ReturnValue;
+		static const UE4CodeGen_Private::FObjectPropertyParams NewProp_Caller;
 		static const UE4CodeGen_Private::FPropertyParamsBase* const PropPointers[];
 #if WITH_METADATA
 		static const UE4CodeGen_Private::FMetaDataPairParam Function_MetaDataParams[];
 #endif
 		static const UE4CodeGen_Private::FFunctionParams FuncParams;
 	};
-	void Z_Construct_UFunction_UWraithUIInterface_ReactToPlayerEntered_Statics::NewProp_ReturnValue_SetBit(void* Obj)
-	{
-		((WraithUIInterface_eventReactToPlayerEntered_Parms*)Obj)->ReturnValue = 1;
-	}
-	const UE4CodeGen_Private::FBoolPropertyParams Z_Construct_UFunction_UWraithUIInterface_ReactToPlayerEntered_Statics::NewProp_ReturnValue = { "ReturnValue", nullptr, (EPropertyFlags)0x0010000000000580, UE4CodeGen_Private::EPropertyGenFlags::Bool | UE4CodeGen_Private::EPropertyGenFlags::NativeBool, RF_Public|RF_Transient|RF_MarkAsNative, 1, sizeof(bool), sizeof(WraithUIInterface_eventReactToPlayerEntered_Parms), &Z_Construct_UFunction_UWraithUIInterface_ReactToPlayerEntered_Statics::NewProp_ReturnValue_SetBit, METADATA_PARAMS(nullptr, 0) };
-	const UE4CodeGen_Private::FPropertyParamsBase* const Z_Construct_UFunction_UWraithUIInterface_ReactToPlayerEntered_Statics::PropPointers[] = {
-		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UWraithUIInterface_ReactToPlayerEntered_Statics::NewProp_ReturnValue,
+	const UE4CodeGen_Private::FObjectPropertyParams Z_Construct_UFunction_UWraithUIInterface_OnInteract_Statics::NewProp_Caller = { "Caller", nullptr, (EPropertyFlags)0x0010000000000080, UE4CodeGen_Private::EPropertyGenFlags::Object, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(WraithUIInterface_eventOnInteract_Parms, Caller), Z_Construct_UClass_AActor_NoRegister, METADATA_PARAMS(nullptr, 0) };
+	const UE4CodeGen_Private::FPropertyParamsBase* const Z_Construct_UFunction_UWraithUIInterface_OnInteract_Statics::PropPointers[] = {
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UWraithUIInterface_OnInteract_Statics::NewProp_Caller,
 	};
 #if WITH_METADATA
-	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_UWraithUIInterface_ReactToPlayerEntered_Statics::Function_MetaDataParams[] = {
-		{ "Category", "Interfaces" },
-		{ "Comment", "//Declare function must be implemented in c++\n" },
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_UWraithUIInterface_OnInteract_Statics::Function_MetaDataParams[] = {
+		{ "Category", "Interaction" },
 		{ "ModuleRelativePath", "Public/WraithUIInterface.h" },
-		{ "ToolTip", "Declare function must be implemented in c++" },
 	};
 #endif
-	const UE4CodeGen_Private::FFunctionParams Z_Construct_UFunction_UWraithUIInterface_ReactToPlayerEntered_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_UWraithUIInterface, nullptr, "ReactToPlayerEntered", nullptr, nullptr, sizeof(WraithUIInterface_eventReactToPlayerEntered_Parms), Z_Construct_UFunction_UWraithUIInterface_ReactToPlayerEntered_Statics::PropPointers, UE_ARRAY_COUNT(Z_Construct_UFunction_UWraithUIInterface_ReactToPlayerEntered_Statics::PropPointers), RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x0C020C00, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_UWraithUIInterface_ReactToPlayerEntered_Statics::Function_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UFunction_UWraithUIInterface_ReactToPlayerEntered_Statics::Function_MetaDataParams)) };
-	UFunction* Z_Construct_UFunction_UWraithUIInterface_ReactToPlayerEntered()
+	const UE4CodeGen_Private::FFunctionParams Z_Construct_UFunction_UWraithUIInterface_OnInteract_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_UWraithUIInterface, nullptr, "OnInteract", nullptr, nullptr, sizeof(WraithUIInterface_eventOnInteract_Parms), Z_Construct_UFunction_UWraithUIInterface_OnInteract_Statics::PropPointers, UE_ARRAY_COUNT(Z_Construct_UFunction_UWraithUIInterface_OnInteract_Statics::PropPointers), RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x0C020800, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_UWraithUIInterface_OnInteract_Statics::Function_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UFunction_UWraithUIInterface_OnInteract_Statics::Function_MetaDataParams)) };
+	UFunction* Z_Construct_UFunction_UWraithUIInterface_OnInteract()
 	{
 		static UFunction* ReturnFunction = nullptr;
 		if (!ReturnFunction)
 		{
-			UE4CodeGen_Private::ConstructUFunction(ReturnFunction, Z_Construct_UFunction_UWraithUIInterface_ReactToPlayerEntered_Statics::FuncParams);
+			UE4CodeGen_Private::ConstructUFunction(ReturnFunction, Z_Construct_UFunction_UWraithUIInterface_OnInteract_Statics::FuncParams);
 		}
 		return ReturnFunction;
 	}
-	struct Z_Construct_UFunction_UWraithUIInterface_ReactToPlayerExited_Statics
+	struct Z_Construct_UFunction_UWraithUIInterface_StartFocus_Statics
 	{
-		static void NewProp_ReturnValue_SetBit(void* Obj);
-		static const UE4CodeGen_Private::FBoolPropertyParams NewProp_ReturnValue;
-		static const UE4CodeGen_Private::FPropertyParamsBase* const PropPointers[];
 #if WITH_METADATA
 		static const UE4CodeGen_Private::FMetaDataPairParam Function_MetaDataParams[];
 #endif
 		static const UE4CodeGen_Private::FFunctionParams FuncParams;
 	};
-	void Z_Construct_UFunction_UWraithUIInterface_ReactToPlayerExited_Statics::NewProp_ReturnValue_SetBit(void* Obj)
-	{
-		((WraithUIInterface_eventReactToPlayerExited_Parms*)Obj)->ReturnValue = 1;
-	}
-	const UE4CodeGen_Private::FBoolPropertyParams Z_Construct_UFunction_UWraithUIInterface_ReactToPlayerExited_Statics::NewProp_ReturnValue = { "ReturnValue", nullptr, (EPropertyFlags)0x0010000000000580, UE4CodeGen_Private::EPropertyGenFlags::Bool | UE4CodeGen_Private::EPropertyGenFlags::NativeBool, RF_Public|RF_Transient|RF_MarkAsNative, 1, sizeof(bool), sizeof(WraithUIInterface_eventReactToPlayerExited_Parms), &Z_Construct_UFunction_UWraithUIInterface_ReactToPlayerExited_Statics::NewProp_ReturnValue_SetBit, METADATA_PARAMS(nullptr, 0) };
-	const UE4CodeGen_Private::FPropertyParamsBase* const Z_Construct_UFunction_UWraithUIInterface_ReactToPlayerExited_Statics::PropPointers[] = {
-		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UWraithUIInterface_ReactToPlayerExited_Statics::NewProp_ReturnValue,
-	};
 #if WITH_METADATA
-	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_UWraithUIInterface_ReactToPlayerExited_Statics::Function_MetaDataParams[] = {
-		{ "Category", "Interfaces" },
+	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_UWraithUIInterface_StartFocus_Statics::Function_MetaDataParams[] = {
+		{ "Category", "Interaction" },
 		{ "ModuleRelativePath", "Public/WraithUIInterface.h" },
 	};
 #endif
-	const UE4CodeGen_Private::FFunctionParams Z_Construct_UFunction_UWraithUIInterface_ReactToPlayerExited_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_UWraithUIInterface, nullptr, "ReactToPlayerExited", nullptr, nullptr, sizeof(WraithUIInterface_eventReactToPlayerExited_Parms), Z_Construct_UFunction_UWraithUIInterface_ReactToPlayerExited_Statics::PropPointers, UE_ARRAY_COUNT(Z_Construct_UFunction_UWraithUIInterface_ReactToPlayerExited_Statics::PropPointers), RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x0C020800, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_UWraithUIInterface_ReactToPlayerExited_Statics::Function_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UFunction_UWraithUIInterface_ReactToPlayerExited_Statics::Function_MetaDataParams)) };
-	UFunction* Z_Construct_UFunction_UWraithUIInterface_ReactToPlayerExited()
+	const UE4CodeGen_Private::FFunctionParams Z_Construct_UFunction_UWraithUIInterface_StartFocus_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_UWraithUIInterface, nullptr, "StartFocus", nullptr, nullptr, 0, nullptr, 0, RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x0C020C00, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_UWraithUIInterface_StartFocus_Statics::Function_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UFunction_UWraithUIInterface_StartFocus_Statics::Function_MetaDataParams)) };
+	UFunction* Z_Construct_UFunction_UWraithUIInterface_StartFocus()
 	{
 		static UFunction* ReturnFunction = nullptr;
 		if (!ReturnFunction)
 		{
-			UE4CodeGen_Private::ConstructUFunction(ReturnFunction, Z_Construct_UFunction_UWraithUIInterface_ReactToPlayerExited_Statics::FuncParams);
+			UE4CodeGen_Private::ConstructUFunction(ReturnFunction, Z_Construct_UFunction_UWraithUIInterface_StartFocus_Statics::FuncParams);
 		}
 		return ReturnFunction;
 	}
@@ -161,9 +148,9 @@ void EmptyLinkFunctionForGeneratedCodeWraithUIInterface() {}
 		(UObject* (*)())Z_Construct_UPackage__Script_WraithShooter,
 	};
 	const FClassFunctionLinkInfo Z_Construct_UClass_UWraithUIInterface_Statics::FuncInfo[] = {
-		{ &Z_Construct_UFunction_UWraithUIInterface_ObjectInteractedWith, "ObjectInteractedWith" }, // 4250478847
-		{ &Z_Construct_UFunction_UWraithUIInterface_ReactToPlayerEntered, "ReactToPlayerEntered" }, // 3574366759
-		{ &Z_Construct_UFunction_UWraithUIInterface_ReactToPlayerExited, "ReactToPlayerExited" }, // 1398500375
+		{ &Z_Construct_UFunction_UWraithUIInterface_EndFocus, "EndFocus" }, // 4276915832
+		{ &Z_Construct_UFunction_UWraithUIInterface_OnInteract, "OnInteract" }, // 269457561
+		{ &Z_Construct_UFunction_UWraithUIInterface_StartFocus, "StartFocus" }, // 311644748
 	};
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_UWraithUIInterface_Statics::Class_MetaDataParams[] = {
@@ -197,53 +184,55 @@ void EmptyLinkFunctionForGeneratedCodeWraithUIInterface() {}
 		}
 		return OuterClass;
 	}
-	IMPLEMENT_CLASS(UWraithUIInterface, 4230882050);
+	IMPLEMENT_CLASS(UWraithUIInterface, 3090342381);
 	template<> WRAITHSHOOTER_API UClass* StaticClass<UWraithUIInterface>()
 	{
 		return UWraithUIInterface::StaticClass();
 	}
 	static FCompiledInDefer Z_CompiledInDefer_UClass_UWraithUIInterface(Z_Construct_UClass_UWraithUIInterface, &UWraithUIInterface::StaticClass, TEXT("/Script/WraithShooter"), TEXT("UWraithUIInterface"), false, nullptr, nullptr, nullptr);
 	DEFINE_VTABLE_PTR_HELPER_CTOR(UWraithUIInterface);
-	static FName NAME_UWraithUIInterface_ObjectInteractedWith = FName(TEXT("ObjectInteractedWith"));
-	void IWraithUIInterface::Execute_ObjectInteractedWith(UObject* O)
+	static FName NAME_UWraithUIInterface_EndFocus = FName(TEXT("EndFocus"));
+	void IWraithUIInterface::Execute_EndFocus(UObject* O)
 	{
 		check(O != NULL);
 		check(O->GetClass()->ImplementsInterface(UWraithUIInterface::StaticClass()));
-		UFunction* const Func = O->FindFunction(NAME_UWraithUIInterface_ObjectInteractedWith);
+		UFunction* const Func = O->FindFunction(NAME_UWraithUIInterface_EndFocus);
 		if (Func)
 		{
 			O->ProcessEvent(Func, NULL);
 		}
+		else if (auto I = (IWraithUIInterface*)(O->GetNativeInterfaceAddress(UWraithUIInterface::StaticClass())))
+		{
+			I->EndFocus_Implementation();
+		}
 	}
-	static FName NAME_UWraithUIInterface_ReactToPlayerEntered = FName(TEXT("ReactToPlayerEntered"));
-	bool IWraithUIInterface::Execute_ReactToPlayerEntered(UObject* O)
+	static FName NAME_UWraithUIInterface_OnInteract = FName(TEXT("OnInteract"));
+	void IWraithUIInterface::Execute_OnInteract(UObject* O, AActor* Caller)
 	{
 		check(O != NULL);
 		check(O->GetClass()->ImplementsInterface(UWraithUIInterface::StaticClass()));
-		WraithUIInterface_eventReactToPlayerEntered_Parms Parms;
-		UFunction* const Func = O->FindFunction(NAME_UWraithUIInterface_ReactToPlayerEntered);
+		WraithUIInterface_eventOnInteract_Parms Parms;
+		UFunction* const Func = O->FindFunction(NAME_UWraithUIInterface_OnInteract);
 		if (Func)
 		{
+			Parms.Caller=Caller;
 			O->ProcessEvent(Func, &Parms);
+		}
+	}
+	static FName NAME_UWraithUIInterface_StartFocus = FName(TEXT("StartFocus"));
+	void IWraithUIInterface::Execute_StartFocus(UObject* O)
+	{
+		check(O != NULL);
+		check(O->GetClass()->ImplementsInterface(UWraithUIInterface::StaticClass()));
+		UFunction* const Func = O->FindFunction(NAME_UWraithUIInterface_StartFocus);
+		if (Func)
+		{
+			O->ProcessEvent(Func, NULL);
 		}
 		else if (auto I = (IWraithUIInterface*)(O->GetNativeInterfaceAddress(UWraithUIInterface::StaticClass())))
 		{
-			Parms.ReturnValue = I->ReactToPlayerEntered_Implementation();
+			I->StartFocus_Implementation();
 		}
-		return Parms.ReturnValue;
-	}
-	static FName NAME_UWraithUIInterface_ReactToPlayerExited = FName(TEXT("ReactToPlayerExited"));
-	bool IWraithUIInterface::Execute_ReactToPlayerExited(UObject* O)
-	{
-		check(O != NULL);
-		check(O->GetClass()->ImplementsInterface(UWraithUIInterface::StaticClass()));
-		WraithUIInterface_eventReactToPlayerExited_Parms Parms;
-		UFunction* const Func = O->FindFunction(NAME_UWraithUIInterface_ReactToPlayerExited);
-		if (Func)
-		{
-			O->ProcessEvent(Func, &Parms);
-		}
-		return Parms.ReturnValue;
 	}
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
 #ifdef _MSC_VER
